@@ -3799,6 +3799,7 @@ const STORAGE_KEY = 'pts-maths-state-v1';
 
 const defaultState = {
   user: { name:'', classLevel:'premiere', onboarded:false },
+  installDismissedISO: null,  // ISO date du dernier "Plus tard" sur la proposition d'install
   xp: 0,
   streak: { count:0, lastDayISO:null },
   soundEnabled: true,
@@ -4111,6 +4112,8 @@ function setupOnboarding() {
     touchStreak(); saveState(); audio.play('success');
     applyWallpaper();
     showScreen('home-screen'); renderHome();
+    // Propose l'installation PWA juste après l'onboarding
+    setTimeout(() => maybeShowInstallPrompt('post-onboarding'), 1800);
   });
 }
 
@@ -5620,21 +5623,103 @@ function setupSettings() {
 // PWA INSTALL
 // ---------------------------------------------------------------------
 let deferredInstallPrompt = null;
+
+function isAppInstalled() {
+  // Standalone display = déjà installé
+  if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) return true;
+  if (window.navigator && window.navigator.standalone === true) return true;
+  return false;
+}
+
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredInstallPrompt = e;
   document.querySelectorAll('#install-btn').forEach((b) => b.classList.remove('hidden'));
+  // Si l'utilisateur est déjà onboarded ET pas en mode jeu/exo, on lui propose
+  setTimeout(() => maybeShowInstallPrompt('beforeinstall'), 1500);
 });
-document.addEventListener('click', async (e) => {
-  if (e.target.id === 'install-btn' && deferredInstallPrompt) {
-    deferredInstallPrompt.prompt();
+
+async function triggerInstallPrompt() {
+  if (!deferredInstallPrompt) return false;
+  deferredInstallPrompt.prompt();
+  try {
     const { outcome } = await deferredInstallPrompt.userChoice;
-    if (outcome === 'accepted') toast("Installation en cours…");
-    deferredInstallPrompt = null;
-    document.querySelectorAll('#install-btn').forEach((b) => b.classList.add('hidden'));
+    if (outcome === 'accepted') {
+      toast('Installation en cours…', 'success');
+    } else {
+      state.installDismissedISO = new Date().toISOString();
+      saveState();
+    }
+  } catch (_) { /* ignore */ }
+  deferredInstallPrompt = null;
+  document.querySelectorAll('#install-btn').forEach((b) => b.classList.add('hidden'));
+  return true;
+}
+
+document.addEventListener('click', (e) => {
+  if (e.target && e.target.id === 'install-btn') {
+    triggerInstallPrompt();
   }
 });
-window.addEventListener('appinstalled', () => toast('Installation réussie ! 🎉', 'success'));
+
+window.addEventListener('appinstalled', () => {
+  toast('Installation réussie ! 🎉', 'success');
+  deferredInstallPrompt = null;
+});
+
+// Modale d'invitation à installer l'app — montrée auto après onboarding/au boot si dispo
+function maybeShowInstallPrompt(source) {
+  if (isAppInstalled()) return;
+  if (!deferredInstallPrompt) return;
+  if (!state.user.onboarded) return;
+  // Ne pas re-prompt si l'utilisateur a dit "Plus tard" il y a < 7 jours
+  if (state.installDismissedISO) {
+    const dismissedDate = new Date(state.installDismissedISO);
+    const diffDays = (Date.now() - dismissedDate.getTime()) / (1000 * 60 * 60 * 24);
+    if (diffDays < 7) return;
+  }
+  // Évite si déjà affichée
+  if (document.getElementById('install-modal')) return;
+  // N'affiche pas pendant un mini-jeu en cours
+  const activeScreen = document.querySelector('.screen:not(.hidden)');
+  if (activeScreen && (activeScreen.id === 'baskets-screen' || activeScreen.id === 'racing-screen' || activeScreen.id === 'exercise-screen')) return;
+  showInstallModal();
+}
+
+function showInstallModal() {
+  const modal = document.createElement('div');
+  modal.id = 'install-modal';
+  modal.className = 'fixed inset-0 z-[70] bg-ink/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in';
+  modal.innerHTML = '' +
+    '<div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-glow max-w-md w-full">' +
+      '<div class="text-center mb-5">' +
+        '<div class="text-6xl mb-3">📱</div>' +
+        '<h2 class="text-2xl font-extrabold text-ink dark:text-white mb-2">Installer PTS-Maths</h2>' +
+        '<p class="text-sm text-slate-600 dark:text-slate-300">Installe l\'app sur ton appareil pour y accéder en un clic, même sans connexion.</p>' +
+      '</div>' +
+      '<div class="space-y-2 mb-6 text-sm">' +
+        '<div class="flex items-center gap-3 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl p-3"><span class="text-xl">⚡</span><span class="text-emerald-800 dark:text-emerald-200 font-semibold">Plus rapide qu\'un site web</span></div>' +
+        '<div class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl p-3"><span class="text-xl">📶</span><span class="text-blue-800 dark:text-blue-200 font-semibold">Fonctionne hors-ligne (cours déjà visités)</span></div>' +
+        '<div class="flex items-center gap-3 bg-purple-50 dark:bg-purple-900/30 rounded-xl p-3"><span class="text-xl">🏠</span><span class="text-purple-800 dark:text-purple-200 font-semibold">Icône sur ton écran d\'accueil</span></div>' +
+      '</div>' +
+      '<div class="flex gap-3">' +
+        '<button id="install-modal-later" class="flex-1 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 font-bold text-slate-700 dark:text-slate-200 transition">Plus tard</button>' +
+        '<button id="install-modal-accept" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-brand-600 to-pink-600 hover:from-brand-700 hover:to-pink-700 text-white font-bold shadow-card transition">Installer</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(modal);
+  document.getElementById('install-modal-accept').addEventListener('click', async () => {
+    audio.play('click');
+    modal.remove();
+    await triggerInstallPrompt();
+  });
+  document.getElementById('install-modal-later').addEventListener('click', () => {
+    audio.play('click');
+    state.installDismissedISO = new Date().toISOString();
+    saveState();
+    modal.remove();
+  });
+}
 
 // ---------------------------------------------------------------------
 // SERVICE WORKER
@@ -5702,6 +5787,7 @@ function boot() {
     touchStreak();
     showScreen('home-screen');
     renderHome();
+    setTimeout(() => maybeShowInstallPrompt('boot'), 2500);
   }
   window.PTS = {
     gainXp,
@@ -6146,6 +6232,13 @@ function initBasketsGame() {
   const H = window.innerHeight;
   const startY = H * BASKETS_CONFIG.SCREEN_BALL_Y_RATIO;
 
+  // Calcule la zone safe sous la barre question (pour ne pas cacher les billboards)
+  const qBox = document.getElementById('baskets-question-box');
+  const qRect = qBox ? qBox.getBoundingClientRect() : { bottom: 100 };
+  const safeTopY = (qRect.bottom || 100) + 90; // 90px = hauteur billboard + marge
+  // Distance entre niveaux = écart maximal pour que le panier reste sous safeTopY
+  const dynamicGap = Math.max(160, Math.min(BASKETS_CONFIG.LEVEL_GAP, startY - safeTopY));
+
   basketsGame = {
     canvas, ctx, W, H,
     ball: {
@@ -6171,7 +6264,9 @@ function initBasketsGame() {
     particles: [],
     floatTexts: [],
     cameraY: 0, cameraTargetY: 0,
-    nextLevelY: startY - BASKETS_CONFIG.LEVEL_GAP,
+    nextLevelY: startY - dynamicGap,
+    levelGap: dynamicGap,
+    safeTopY: safeTopY,
     flashTime: 0, flashColor: null,
     perfectFlash: 0,
     lastFrameTime: performance.now()
@@ -6541,7 +6636,7 @@ function onBasketsHit(game, hoop, isPerfect) {
   if (game.oldHoops.length > 4) game.oldHoops.shift();
 
   game.cameraTargetY = game.ball.y - game.H * BASKETS_CONFIG.SCREEN_BALL_Y_RATIO;
-  game.nextLevelY = game.ball.y - BASKETS_CONFIG.LEVEL_GAP;
+  game.nextLevelY = game.ball.y - game.levelGap;
 
   game.state = 'transition';
   setTimeout(function () {
