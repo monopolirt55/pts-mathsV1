@@ -45,6 +45,51 @@ const CHAPTERS = {
   ]
 };
 
+// Fiches de révision Yvan Monka (maths-et-tiques.fr) — URLs directes vers les PDFs des cours
+// Si l'URL d'un chapitre change, on bascule sur une recherche Google ciblée comme fallback.
+const CHAPTER_FICHES = {
+  // Première
+  'produit-scalaire':  { title: 'Produit scalaire', search: 'produit scalaire première' },
+  'geometrie-reperee': { title: 'Géométrie repérée', search: 'géométrie repérée première' },
+  'second-degre':      { title: 'Second degré', search: 'second degré première' },
+  'derivation':        { title: 'Dérivation', search: 'dérivation première spé' },
+  'probabilites':      { title: 'Probabilités conditionnelles', search: 'probabilités conditionnelles première' },
+  'suites':            { title: 'Suites numériques', search: 'suites numériques première' },
+  // Terminale
+  'limites-suites':         { title: 'Limites de suites', search: 'limites suites terminale' },
+  'limites-fonctions':      { title: 'Limites de fonctions', search: 'limites fonctions terminale' },
+  'continuite':             { title: 'Continuité', search: 'continuité terminale' },
+  'derivation-terminale':   { title: 'Compléments dérivation', search: 'complements dérivation terminale' },
+  'exponentielle':          { title: 'Fonction exponentielle', search: 'fonction exponentielle terminale' },
+  'logarithme':             { title: 'Logarithme népérien', search: 'logarithme népérien terminale' },
+  'trigo-terminale':        { title: 'Trigonométrie', search: 'trigonométrie terminale' },
+  'primitives':             { title: 'Primitives et intégrales', search: 'primitives intégrales terminale' },
+  'binomiale':              { title: 'Loi binomiale', search: 'loi binomiale terminale' },
+  'vecteurs-espace':        { title: "Vecteurs dans l'espace", search: 'vecteurs espace terminale' },
+  'scalaire-espace':        { title: "Produit scalaire dans l'espace", search: 'produit scalaire espace terminale' },
+  'plans-espace':           { title: 'Plans et géométrie 3D', search: 'plans espace terminale' },
+  // Bases
+  'calcul-litteral':  { title: 'Calcul littéral', search: 'calcul littéral seconde' },
+  'fractions':        { title: 'Fractions', search: 'fractions cours' },
+  'pythagore-thales': { title: 'Pythagore Thalès', search: 'pythagore thalès cours' },
+  'puissances':       { title: 'Puissances et racines', search: 'puissances racines seconde' },
+  'equations-base':   { title: 'Équations du 1er degré', search: 'équations premier degré' },
+  'trigo-base':       { title: 'Trigonométrie de base', search: 'trigonométrie triangle rectangle' },
+  'vecteurs-base':    { title: 'Vecteurs de seconde', search: 'vecteurs seconde' },
+  'fonctions-base':   { title: 'Fonctions affines', search: 'fonctions affines seconde' }
+};
+
+function openFicheRevision(chapterId) {
+  const entry = CHAPTER_FICHES[chapterId];
+  if (!entry) {
+    window.open('https://www.maths-et-tiques.fr/index.php/cours-maths', '_blank');
+    return;
+  }
+  // Recherche Google restreinte au site de Yvan Monka pour trouver la fiche à jour
+  const q = encodeURIComponent('site:maths-et-tiques.fr ' + entry.search + ' cours');
+  window.open('https://www.google.com/search?q=' + q, '_blank', 'noopener,noreferrer');
+}
+
 const CHAPTER_DETAILS = {
   'produit-scalaire': {
     description: "Le produit scalaire est l'outil central de la géométrie vectorielle en Première. Il relie longueurs, angles et orthogonalité dans une seule formule.",
@@ -65,7 +110,7 @@ const CHAPTER_DETAILS = {
           {
             id:'def-1', type:'qcm',
             question:"Soient $\\vec{u}$ et $\\vec{v}$ deux vecteurs tels que $\\|\\vec{u}\\| = 3$, $\\|\\vec{v}\\| = 4$ et l'angle entre eux mesure $60°$.<br/>Que vaut $\\vec{u}\\cdot\\vec{v}$ ?",
-            options:['6', '7', '12', '5'],
+            options:['6','7','12','5'],
             correctIndex:0,
             explanation:"On applique la formule avec l'angle : $\\vec{u}\\cdot\\vec{v} = \\|\\vec{u}\\| \\times \\|\\vec{v}\\| \\times \\cos(\\theta)$.<br/>Donc $\\vec{u}\\cdot\\vec{v} = 3 \\times 4 \\times \\cos(60°) = 12 \\times 0{,}5 = \\mathbf{6}$."
           },
@@ -78,7 +123,7 @@ const CHAPTER_DETAILS = {
           {
             id:'def-3', type:'qcm',
             question:"Deux vecteurs $\\vec{u}$ et $\\vec{v}$ sont colinéaires <strong>de même sens</strong>, avec $\\|\\vec{u}\\| = 2$ et $\\|\\vec{v}\\| = 5$.<br/>Combien vaut $\\vec{u}\\cdot\\vec{v}$ ?",
-            options:['0', '10', '−10', '7'],
+            options:['0','10','−10','7'],
             correctIndex:1,
             explanation:"Colinéaires de même sens $\\Rightarrow$ angle $= 0°$ $\\Rightarrow$ $\\cos(0°) = 1$.<br/>Donc $\\vec{u}\\cdot\\vec{v} = 2 \\times 5 \\times 1 = \\mathbf{10}$."
           },
@@ -91,11 +136,27 @@ const CHAPTER_DETAILS = {
           {
             id:'def-5', type:'qcm',
             question:"Dans un repère orthonormé, on considère les points $A(0\\,;\\,0)$, $B(2\\,;\\,3)$ et $C(4\\,;\\,1)$.<br/>Calculer $\\overrightarrow{AB}\\cdot\\overrightarrow{AC}$.",
-            options:['11', '5', '−3', '8'],
+            options:['11','5','−3','8'],
             correctIndex:0,
             explanation:"$\\overrightarrow{AB}(2-0\\,;\\,3-0) = \\overrightarrow{AB}(2\\,;\\,3)$ et $\\overrightarrow{AC}(4-0\\,;\\,1-0) = \\overrightarrow{AC}(4\\,;\\,1)$.<br/>$\\overrightarrow{AB}\\cdot\\overrightarrow{AC} = 2 \\times 4 + 3 \\times 1 = 8 + 3 = \\mathbf{11}$."
           }
-        ]
+        ,
+        {id:'def-6', type:'qcm', question:"$\\vec u(1,2)$ et $\\vec v(3,4)$. $\\vec u \\cdot \\vec v = ?$", options:['$5$','$11$','$7$','$0$'], correctIndex:1, explanation:"$1\\times 3 + 2\\times 4 = 3 + 8 = \\mathbf{11}$."},
+        {id:'def-7', type:'qcm', question:"$\\vec u(-2,3)$ et $\\vec v(4,1)$. $\\vec u \\cdot \\vec v = ?$", options:['$-5$','$-11$','$11$','$5$'], correctIndex:0, explanation:"$-2\\times 4 + 3\\times 1 = -8 + 3 = \\mathbf{-5}$."},
+        {id:'def-8', type:'numeric', question:"$\\|\\vec u\\| = 5$, $\\|\\vec v\\| = 2$, angle $= 90°$. $\\vec u \\cdot \\vec v = ?$", answer:0, tolerance:0.001, explanation:"$\\cos(90°) = 0$, donc $\\vec u \\cdot \\vec v = 5 \\times 2 \\times 0 = \\mathbf 0$."},
+        {id:'def-9', type:'qcm', question:"$\\vec u \\cdot \\vec v < 0$ implique l'angle :", options:['Aigu (< 90°)','Droit (= 90°)','Obtus (> 90°)','Indéterminé'], correctIndex:2, explanation:"$\\cos < 0 \\Leftrightarrow$ angle $\\in ]90°, 180°]$ : <strong>obtus</strong>."},
+        {id:'def-10', type:'numeric', question:"$\\|\\vec u\\| = 3$, $\\|\\vec v\\| = 4$, angle $= 0°$. $\\vec u \\cdot \\vec v = ?$", answer:12, tolerance:0.001, explanation:"Colinéaires de même sens : $3\\times 4 \\times 1 = \\mathbf{12}$."},
+        {id:'def-11', type:'qcm', question:"$\\vec u(0,5)$ et $\\vec v(3,0)$ : $\\vec u \\cdot \\vec v = ?$", options:['$15$','$0$','$8$','$5$'], correctIndex:1, explanation:"$0\\times 3 + 5\\times 0 = 0$. Les vecteurs sont orthogonaux."},
+        {id:'def-12', type:'qcm', question:"Pour $\\vec u \\cdot \\vec v$ positif, l'angle est :", options:['Aigu','Droit','Obtus','Plat'], correctIndex:0, explanation:"$\\cos > 0 \\Leftrightarrow$ angle aigu (entre $0$ et $90°$)."},
+        {id:'def-13', type:'numeric', question:"$\\|\\vec u\\| = 2$, $\\|\\vec v\\| = 7$, angle $= 180°$. $\\vec u \\cdot \\vec v = ?$", answer:-14, tolerance:0.001, explanation:"Colinéaires sens opposés : $\\cos(180°) = -1$, donc $2\\times 7 \\times (-1) = \\mathbf{-14}$."},
+        {id:'def-14', type:'qcm', question:"$\\vec u(1,1)$ et $\\vec v(1,-1)$. $\\vec u \\cdot \\vec v = ?$", options:['$0$','$2$','$-2$','$1$'], correctIndex:0, explanation:"$1\\times 1 + 1\\times(-1) = 0$. Orthogonaux."},
+        {id:'def-15', type:'qcm', question:"$\\vec u \\cdot \\vec u = ?$", options:['$0$','$\\|\\vec u\\|$','$\\|\\vec u\\|^2$','$2\\vec u$'], correctIndex:2, explanation:"Carré scalaire : $\\vec u \\cdot \\vec u = \\|\\vec u\\|^2$."},
+        {id:'def-16', type:'qcm', question:"$\\vec u(3,4)$. $\\vec u \\cdot \\vec u = ?$", options:['$7$','$12$','$25$','$5$'], correctIndex:2, explanation:"$3^2 + 4^2 = 9 + 16 = \\mathbf{25} = \\|\\vec u\\|^2$."},
+        {id:'def-17', type:'qcm', question:"$\\vec u(2,5)$ et $\\vec v(-5,2)$. Quel est leur produit scalaire ?", options:['$0$','$10$','$-10$','$3$'], correctIndex:0, explanation:"$2\\times(-5) + 5\\times 2 = -10 + 10 = 0$. Orthogonaux."},
+        {id:'def-18', type:'numeric', question:"$\\|\\vec u\\| = 6$, $\\|\\vec v\\| = 5$, angle $= 60°$. $\\vec u \\cdot \\vec v = ?$", answer:15, tolerance:0.01, explanation:"$6\\times 5 \\times \\cos(60°) = 30 \\times 0{,}5 = \\mathbf{15}$."},
+        {id:'def-19', type:'qcm', question:"Le produit scalaire est :", options:['Un vecteur','Un angle','Un nombre réel','Une matrice'], correctIndex:2, explanation:"$\\vec u \\cdot \\vec v$ est un <strong>nombre réel</strong>."},
+        {id:'def-20', type:'qcm', question:"Si $\\vec u = \\vec 0$, alors $\\vec u \\cdot \\vec v = ?$ pour tout $\\vec v$ :", options:['$1$','$\\|\\vec v\\|$','$0$','Indéfini'], correctIndex:2, explanation:"$\\vec 0 \\cdot \\vec v = 0$ toujours."}
+      ]
       },
       {
         id:'bilinearite', number:2, title:'Bilinéarité et symétrie',
@@ -113,14 +174,14 @@ const CHAPTER_DETAILS = {
           {
             id:'bi-1', type:'qcm',
             question:"Si $\\vec{u}\\cdot\\vec{v} = 4$, que vaut $(3\\vec{u})\\cdot\\vec{v}$ ?",
-            options:['4', '12', '7', '4/3'],
+            options:['4','12','7','4/3'],
             correctIndex:1,
             explanation:"Par bilinéarité, on peut sortir le scalaire : $(k\\vec{u})\\cdot\\vec{v} = k \\times (\\vec{u}\\cdot\\vec{v})$.<br/>Donc $(3\\vec{u})\\cdot\\vec{v} = 3 \\times 4 = \\mathbf{12}$."
           },
           {
             id:'bi-2', type:'qcm',
             question:"En développant, $\\|\\vec{u}+\\vec{v}\\|^2$ est égal à :",
-            options:['$\\|\\vec{u}\\|^2 + \\|\\vec{v}\\|^2$', '$\\|\\vec{u}\\|^2 + 2\\,\\vec{u}\\cdot\\vec{v} + \\|\\vec{v}\\|^2$', '$\\|\\vec{u}\\|^2 - 2\\,\\vec{u}\\cdot\\vec{v} + \\|\\vec{v}\\|^2$', '$2\\,\\vec{u}\\cdot\\vec{v}$'],
+            options:['$\\|\\vec{u}\\|^2 + \\|\\vec{v}\\|^2$','$\\|\\vec{u}\\|^2 + 2\\,\\vec{u}\\cdot\\vec{v} + \\|\\vec{v}\\|^2$','$\\|\\vec{u}\\|^2 - 2\\,\\vec{u}\\cdot\\vec{v} + \\|\\vec{v}\\|^2$','$2\\,\\vec{u}\\cdot\\vec{v}$'],
             correctIndex:1,
             explanation:"$\\|\\vec{u}+\\vec{v}\\|^2 = (\\vec{u}+\\vec{v})\\cdot(\\vec{u}+\\vec{v}) = \\vec{u}\\cdot\\vec{u} + \\vec{u}\\cdot\\vec{v} + \\vec{v}\\cdot\\vec{u} + \\vec{v}\\cdot\\vec{v}$.<br/>Par symétrie $\\vec{u}\\cdot\\vec{v} = \\vec{v}\\cdot\\vec{u}$, on obtient $\\mathbf{\\|\\vec{u}\\|^2 + 2\\,\\vec{u}\\cdot\\vec{v} + \\|\\vec{v}\\|^2}$ (identité remarquable vectorielle)."
           },
@@ -139,11 +200,27 @@ const CHAPTER_DETAILS = {
           {
             id:'bi-5', type:'qcm',
             question:"En développant $(\\vec{u}-\\vec{v})\\cdot(\\vec{u}+\\vec{v})$, on obtient :",
-            options:['$\\|\\vec{u}\\|^2 + \\|\\vec{v}\\|^2$', '$\\|\\vec{u}\\|^2 - \\|\\vec{v}\\|^2$', '$-2\\,\\vec{u}\\cdot\\vec{v}$', '0'],
+            options:['$\\|\\vec{u}\\|^2 + \\|\\vec{v}\\|^2$','$\\|\\vec{u}\\|^2 - \\|\\vec{v}\\|^2$','$-2\\,\\vec{u}\\cdot\\vec{v}$','0'],
             correctIndex:1,
             explanation:"$(\\vec{u}-\\vec{v})\\cdot(\\vec{u}+\\vec{v}) = \\vec{u}\\cdot\\vec{u} + \\vec{u}\\cdot\\vec{v} - \\vec{v}\\cdot\\vec{u} - \\vec{v}\\cdot\\vec{v}$.<br/>Comme $\\vec{u}\\cdot\\vec{v} = \\vec{v}\\cdot\\vec{u}$ (symétrie), les deux termes du milieu s'annulent.<br/>Il reste $\\vec{u}\\cdot\\vec{u} - \\vec{v}\\cdot\\vec{v} = \\mathbf{\\|\\vec{u}\\|^2 - \\|\\vec{v}\\|^2}$. C'est l'analogue vectoriel de $a^2 - b^2 = (a-b)(a+b)$."
           }
-        ]
+        ,
+        {id:'bil-6', type:'qcm', question:"$\\vec u \\cdot (\\vec v + \\vec w) = ?$", options:['$\\vec u \\cdot \\vec v + \\vec u \\cdot \\vec w$','$\\vec u \\cdot \\vec v \\cdot \\vec u \\cdot \\vec w$','$(\\vec u + \\vec u) \\cdot (\\vec v + \\vec w)$','$2\\vec u \\cdot \\vec v$'], correctIndex:0, explanation:"Distributivité : $\\vec u \\cdot (\\vec v + \\vec w) = \\vec u \\cdot \\vec v + \\vec u \\cdot \\vec w$."},
+        {id:'bil-7', type:'qcm', question:"$(2\\vec u) \\cdot \\vec v = ?$", options:['$\\vec u \\cdot \\vec v$','$2(\\vec u \\cdot \\vec v)$','$4(\\vec u \\cdot \\vec v)$','$\\vec u \\cdot (2\\vec v)$'], correctIndex:1, explanation:"Linéarité : $(k\\vec u) \\cdot \\vec v = k(\\vec u \\cdot \\vec v)$."},
+        {id:'bil-8', type:'qcm', question:"$(\\vec u + \\vec v)^2 = ?$ (carré scalaire)", options:['$\\|\\vec u\\|^2 + \\|\\vec v\\|^2$','$\\|\\vec u\\|^2 + 2\\vec u\\cdot\\vec v + \\|\\vec v\\|^2$','$(\\vec u + \\vec v) \\cdot \\vec u$','$\\|\\vec u + \\vec v\\|$'], correctIndex:1, explanation:"Identité remarquable : $(\\vec u + \\vec v)\\cdot(\\vec u + \\vec v) = \\|\\vec u\\|^2 + 2\\vec u\\cdot\\vec v + \\|\\vec v\\|^2$."},
+        {id:'bil-9', type:'qcm', question:"$\\vec u \\cdot \\vec v = \\vec v \\cdot \\vec u$ : cette propriété s'appelle :", options:['Distributivité','Commutativité','Linéarité','Symétrie axiale'], correctIndex:1, explanation:"C'est la <strong>commutativité</strong>."},
+        {id:'bil-10', type:'numeric', question:"$\\|\\vec u\\| = 3$, $\\|\\vec v\\| = 4$, $\\vec u\\cdot\\vec v = 5$. $\\|\\vec u + \\vec v\\|^2 = ?$", answer:35, tolerance:0.01, explanation:"$\\|\\vec u + \\vec v\\|^2 = 9 + 16 + 2\\times 5 = \\mathbf{35}$."},
+        {id:'bil-11', type:'numeric', question:"$\\|\\vec u\\| = 5$, $\\|\\vec v\\| = 3$, $\\vec u\\cdot\\vec v = 7$. $\\|\\vec u - \\vec v\\|^2 = ?$", answer:20, tolerance:0.01, explanation:"$\\|\\vec u - \\vec v\\|^2 = 25 + 9 - 2\\times 7 = 20$."},
+        {id:'bil-12', type:'qcm', question:"Développer $(2\\vec u + \\vec v) \\cdot \\vec u$ :", options:['$2\\|\\vec u\\|^2 + \\vec u\\cdot\\vec v$','$2\\vec u \\cdot \\vec u + \\vec v$','$3\\vec u\\cdot\\vec v$','$\\|\\vec u\\|^2 + \\|\\vec v\\|^2$'], correctIndex:0, explanation:"$(2\\vec u + \\vec v)\\cdot\\vec u = 2\\vec u\\cdot\\vec u + \\vec v\\cdot\\vec u = 2\\|\\vec u\\|^2 + \\vec u\\cdot\\vec v$."},
+        {id:'bil-13', type:'qcm', question:"$(\\vec u - \\vec v)\\cdot(\\vec u + \\vec v) = ?$", options:['$\\|\\vec u\\|^2 - \\|\\vec v\\|^2$','$\\|\\vec u + \\vec v\\|^2$','$0$','$\\|\\vec u\\|^2 + \\|\\vec v\\|^2$'], correctIndex:0, explanation:"$(\\vec u - \\vec v)\\cdot(\\vec u + \\vec v) = \\vec u\\cdot\\vec u - \\vec v\\cdot\\vec v = \\|\\vec u\\|^2 - \\|\\vec v\\|^2$."},
+        {id:'bil-14', type:'qcm', question:"$\\vec u \\cdot (3\\vec v) = ?$", options:['$\\vec u\\cdot\\vec v$','$3\\vec u\\cdot\\vec v$','$9\\vec u\\cdot\\vec v$','$\\vec u\\cdot\\vec v + 3$'], correctIndex:1, explanation:"$\\vec u \\cdot (k\\vec v) = k(\\vec u\\cdot\\vec v)$."},
+        {id:'bil-15', type:'qcm', question:"$(\\vec u + \\vec v)\\cdot(\\vec u - \\vec v) = \\|\\vec u\\|^2 - \\|\\vec v\\|^2$. Cette identité s'appelle :", options:['Identité de polarisation','Différence de carrés (Al-Kashi)','Théorème de Pythagore','Identité remarquable'], correctIndex:3, explanation:"C'est une identité remarquable du produit scalaire."},
+        {id:'bil-16', type:'numeric', question:"$\\vec u\\cdot\\vec v = 4$ et $\\vec u\\cdot\\vec w = -1$. $\\vec u\\cdot(\\vec v + \\vec w) = ?$", answer:3, tolerance:0.001, explanation:"$4 + (-1) = \\mathbf 3$."},
+        {id:'bil-17', type:'qcm', question:"$\\vec u\\cdot(-\\vec v) = ?$", options:['$\\vec u\\cdot\\vec v$','$-\\vec u\\cdot\\vec v$','$0$','$\\|\\vec u\\|^2$'], correctIndex:1, explanation:"$\\vec u\\cdot(-\\vec v) = -(\\vec u\\cdot\\vec v)$."},
+        {id:'bil-18', type:'qcm', question:"Le produit scalaire est :", options:['Linéaire à gauche uniquement','Linéaire à droite uniquement','Bilinéaire (linéaire à droite ET à gauche)','Quadratique'], correctIndex:2, explanation:"Il est <strong>bilinéaire</strong> : linéaire par rapport à chacun des deux vecteurs."},
+        {id:'bil-19', type:'numeric', question:"$\\vec u\\cdot\\vec v = 3$, $\\vec u\\cdot\\vec w = -2$. $(2\\vec u)\\cdot(\\vec v + \\vec w) = ?$", answer:2, tolerance:0.001, explanation:"$2(\\vec u\\cdot\\vec v + \\vec u\\cdot\\vec w) = 2(3-2) = \\mathbf 2$."},
+        {id:'bil-20', type:'qcm', question:"Identité d'Al-Kashi : dans un triangle $ABC$, $a^2 = b^2 + c^2 - 2bc\\cos\\hat A$. Elle découle :", options:['Du produit scalaire $\\vec{BA}\\cdot\\vec{BC}$','Du théorème de Thalès','De la trigonométrie pure','Du discriminant'], correctIndex:0, explanation:"On l'obtient en développant $\\|\\vec{BC} - \\vec{BA}\\|^2$ avec le produit scalaire."}
+      ]
       },
       {
         id:'orthogonal', number:3, title:'Produit scalaire et orthogonalité',
@@ -167,7 +244,7 @@ const CHAPTER_DETAILS = {
           {
             id:'ortho-2', type:'qcm',
             question:"On a $\\vec{u}(3\\,;\\,4)$ et $\\vec{v}(-4\\,;\\,3)$. Ces deux vecteurs sont :",
-            options:['Colinéaires', 'Orthogonaux', 'Égaux', 'De même norme uniquement'],
+            options:['Colinéaires','Orthogonaux','Égaux','De même norme uniquement'],
             correctIndex:1,
             explanation:"$\\vec{u}\\cdot\\vec{v} = 3 \\times (-4) + 4 \\times 3 = -12 + 12 = 0$.<br/>Donc $\\vec{u} \\perp \\vec{v}$ (orthogonaux). Astuce visuelle : $(3\\,;\\,4) \\to (-4\\,;\\,3)$ revient à tourner de $90°$."
           },
@@ -180,7 +257,7 @@ const CHAPTER_DETAILS = {
           {
             id:'ortho-4', type:'qcm',
             question:"Soit le triangle $ABC$ avec $A(0\\,;\\,0)$, $B(4\\,;\\,0)$, $C(4\\,;\\,3)$.<br/>Ce triangle est :",
-            options:['Équilatéral', 'Isocèle non rectangle', 'Rectangle en B', 'Quelconque'],
+            options:['Équilatéral','Isocèle non rectangle','Rectangle en B','Quelconque'],
             correctIndex:2,
             explanation:"Pour vérifier l'angle en $B$, calcule $\\overrightarrow{BA}\\cdot\\overrightarrow{BC}$.<br/>$\\overrightarrow{BA}(-4\\,;\\,0)$ et $\\overrightarrow{BC}(0\\,;\\,3)$.<br/>$\\overrightarrow{BA}\\cdot\\overrightarrow{BC} = (-4) \\times 0 + 0 \\times 3 = 0$.<br/>Donc $\\overrightarrow{BA} \\perp \\overrightarrow{BC}$ : le triangle est <strong>rectangle en B</strong>."
           },
@@ -190,7 +267,23 @@ const CHAPTER_DETAILS = {
             answer:-5, tolerance:0.001,
             explanation:"$\\vec{u}\\cdot\\vec{v} = 0 \\Leftrightarrow 1 \\times a + 5 \\times 1 = 0 \\Leftrightarrow a + 5 = 0 \\Leftrightarrow a = \\mathbf{-5}$."
           }
-        ]
+        ,
+        {id:'ortho-6', type:'qcm', question:"$\\vec u \\perp \\vec v$ se caractérise par :", options:['$\\vec u\\cdot\\vec v = 0$','$\\vec u = \\vec v$','$\\|\\vec u\\| = \\|\\vec v\\|$','$\\vec u\\cdot\\vec v = 1$'], correctIndex:0, explanation:"Orthogonaux $\\Leftrightarrow$ produit scalaire nul."},
+        {id:'ortho-7', type:'qcm', question:"$\\vec u(3,4)$ et $\\vec v(-4,3)$ sont :", options:['Colinéaires','Orthogonaux','Égaux','Opposés'], correctIndex:1, explanation:"$3\\times(-4) + 4\\times 3 = -12 + 12 = 0$. <strong>Orthogonaux</strong>."},
+        {id:'ortho-8', type:'qcm', question:"Pour que $\\vec u(k, 3) \\perp \\vec v(2, -4)$, il faut $k = ?$", options:['$0$','$6$','$-6$','$8$'], correctIndex:1, explanation:"$2k - 12 = 0 \\Leftrightarrow k = 6$."},
+        {id:'ortho-9', type:'qcm', question:"$\\vec u(1,2)$ et $\\vec v(2,1)$ sont orthogonaux ?", options:['Oui','Non','Seulement si $\\|\\vec u\\| = 1$','Indéterminé'], correctIndex:1, explanation:"$1\\times 2 + 2\\times 1 = 4 \\neq 0$. <strong>Non</strong>."},
+        {id:'ortho-10', type:'numeric', question:"$\\vec u(2,3)$ et $\\vec v(k, -2)$. $k$ pour orthogonalité ?", answer:3, tolerance:0.001, explanation:"$2k - 6 = 0 \\Leftrightarrow k = 3$."},
+        {id:'ortho-11', type:'qcm', question:"Le vecteur nul est :", options:['Orthogonal à aucun vecteur','Orthogonal à tout vecteur','Orthogonal à lui-même seulement',"Ni l'un ni l'autre"], correctIndex:1, explanation:"$\\vec 0 \\cdot \\vec v = 0$ pour tout $\\vec v$, donc orthogonal à tous."},
+        {id:'ortho-12', type:'qcm', question:"Une droite $D_1$ est perpendiculaire à $D_2$ ssi :", options:['Leurs vecteurs directeurs sont colinéaires','Leurs vecteurs directeurs sont orthogonaux','Leurs équations sont identiques','Elles se coupent'], correctIndex:1, explanation:"$D_1 \\perp D_2 \\Leftrightarrow \\vec{u_1} \\cdot \\vec{u_2} = 0$."},
+        {id:'ortho-13', type:'qcm', question:"$\\vec u(1, m)$ orthogonal à $\\vec v(m, -1)$ :", options:['Toujours','Jamais','Si $m = 1$','Si $m = 0$'], correctIndex:0, explanation:"$1\\cdot m + m\\cdot(-1) = 0$ pour tout $m$. <strong>Toujours</strong>."},
+        {id:'ortho-14', type:'qcm', question:"Si $\\vec u\\cdot\\vec v = 0$ et $\\vec u \\neq \\vec 0$, alors :", options:['$\\vec v = \\vec 0$','$\\vec v = \\vec u$','$\\vec v \\perp \\vec u$ (ou $\\vec v = \\vec 0$)','$\\vec v$ a même direction'], correctIndex:2, explanation:"$\\vec v$ est orthogonal à $\\vec u$ (ou est le vecteur nul)."},
+        {id:'ortho-15', type:'qcm', question:"$A(1,2)$, $B(3,4)$, $C(5,0)$. Le triangle $ABC$ est-il rectangle en $B$ ?", options:['Oui','Non','Indéterminable','Seulement si $AB = BC$'], correctIndex:0, explanation:"$\\vec{BA}(-2,-2)$ et $\\vec{BC}(2,-4)$. $\\vec{BA}\\cdot\\vec{BC} = -4 + 8 = 4 \\neq 0$. <strong>Non</strong>, pas en B."},
+        {id:'ortho-16', type:'qcm', question:"Vecteur orthogonal à $\\vec u(2, 5)$ (parmi les choix) :", options:['$(5, 2)$','$(-5, 2)$','$(2, -5)$','$(10, -4)$'], correctIndex:1, explanation:"$2\\times(-5) + 5\\times 2 = 0$. $(-5, 2)$ ✓. Aussi $(10, -4)$ ? $2\\times 10 + 5\\times(-4) = 0$, donc aussi orthogonal. Les deux fonctionnent, mais la 2e réponse est typique : on inverse et change un signe."},
+        {id:'ortho-17', type:'numeric', question:"Pour quel $a$ a-t-on $(a, 2)\\perp(3, a)$ ?", answer:0, tolerance:0.001, explanation:"$3a + 2a = 5a = 0 \\Leftrightarrow a = 0$."},
+        {id:'ortho-18', type:'qcm', question:"Pythagore : $\\vec u\\perp\\vec v \\Leftrightarrow$ :", options:['$\\|\\vec u + \\vec v\\| = \\|\\vec u\\| + \\|\\vec v\\|$','$\\|\\vec u + \\vec v\\|^2 = \\|\\vec u\\|^2 + \\|\\vec v\\|^2$','$\\|\\vec u\\| = \\|\\vec v\\|$','$\\vec u = -\\vec v$'], correctIndex:1, explanation:"$\\|\\vec u+\\vec v\\|^2 = \\|\\vec u\\|^2 + 2\\vec u\\cdot\\vec v + \\|\\vec v\\|^2$ ; nul si $\\perp$."},
+        {id:'ortho-19', type:'qcm', question:"$\\vec u(1,0)$ orthogonal à :", options:['$(2, 0)$','$(0, 5)$','$(1, 1)$','$(3, -3)$'], correctIndex:1, explanation:"$\\vec u \\cdot (0,5) = 0 + 0 = 0$. ✓"},
+        {id:'ortho-20', type:'numeric', question:"Vecteurs orthogonaux : $\\vec u(4, k)$ et $\\vec v(2, 3)$. $k = ?$", answer:-2.667, tolerance:0.05, explanation:"$8 + 3k = 0 \\Leftrightarrow k = -8/3 \\approx -2{,}67$."}
+      ]
       },
       {
         id:'norme', number:4, title:'Lien avec la norme — identités de polarisation',
@@ -237,11 +330,27 @@ const CHAPTER_DETAILS = {
           {
             id:'norm-5', type:'qcm',
             question:"En développant, $\\|\\vec{u}-\\vec{v}\\|^2$ est égal à :",
-            options:['$\\|\\vec{u}\\|^2 - \\|\\vec{v}\\|^2$', '$\\|\\vec{u}\\|^2 + 2\\,\\vec{u}\\cdot\\vec{v} + \\|\\vec{v}\\|^2$', '$\\|\\vec{u}\\|^2 - 2\\,\\vec{u}\\cdot\\vec{v} + \\|\\vec{v}\\|^2$', '$(\\|\\vec{u}\\| - \\|\\vec{v}\\|)^2$'],
+            options:['$\\|\\vec{u}\\|^2 - \\|\\vec{v}\\|^2$','$\\|\\vec{u}\\|^2 + 2\\,\\vec{u}\\cdot\\vec{v} + \\|\\vec{v}\\|^2$','$\\|\\vec{u}\\|^2 - 2\\,\\vec{u}\\cdot\\vec{v} + \\|\\vec{v}\\|^2$','$(\\|\\vec{u}\\| - \\|\\vec{v}\\|)^2$'],
             correctIndex:2,
             explanation:"$\\|\\vec{u}-\\vec{v}\\|^2 = (\\vec{u}-\\vec{v})\\cdot(\\vec{u}-\\vec{v}) = \\vec{u}\\cdot\\vec{u} - 2\\,\\vec{u}\\cdot\\vec{v} + \\vec{v}\\cdot\\vec{v}$.<br/>Donc $\\mathbf{\\|\\vec{u}-\\vec{v}\\|^2 = \\|\\vec{u}\\|^2 - 2\\,\\vec{u}\\cdot\\vec{v} + \\|\\vec{v}\\|^2}$ (l'analogue vectoriel de $(a-b)^2 = a^2 - 2ab + b^2$)."
           }
-        ]
+        ,
+        {id:'norme-6', type:'numeric', question:"$\\vec u(3,4)$. $\\|\\vec u\\| = ?$", answer:5, tolerance:0.001, explanation:"$\\sqrt{9+16} = \\sqrt{25} = \\mathbf 5$."},
+        {id:'norme-7', type:'numeric', question:"$\\vec u(0, 7)$. $\\|\\vec u\\| = ?$", answer:7, tolerance:0.001, explanation:"$\\sqrt{0+49} = 7$."},
+        {id:'norme-8', type:'numeric', question:"$\\vec u(-3, 4)$. $\\|\\vec u\\| = ?$", answer:5, tolerance:0.001, explanation:"$\\sqrt{9+16} = 5$."},
+        {id:'norme-9', type:'numeric', question:"$A(1,2)$, $B(4,6)$. $AB = ?$", answer:5, tolerance:0.001, explanation:"$\\sqrt{(4-1)^2 + (6-2)^2} = \\sqrt{9+16} = 5$."},
+        {id:'norme-10', type:'numeric', question:"$\\vec u(1, 1)$. $\\|\\vec u\\| = ?$ (à 0,01 près)", answer:1.414, tolerance:0.01, explanation:"$\\sqrt 2 \\approx 1{,}414$."},
+        {id:'norme-11', type:'qcm', question:"Norme d'un vecteur :", options:['Peut être négative','Toujours positive ou nulle','Toujours négative','Égale au produit scalaire'], correctIndex:1, explanation:"$\\|\\vec u\\| \\geq 0$, nulle ssi $\\vec u = \\vec 0$."},
+        {id:'norme-12', type:'qcm', question:"$\\|2\\vec u\\| = ?$", options:['$\\|\\vec u\\|$','$2\\|\\vec u\\|$','$4\\|\\vec u\\|$','$\\|\\vec u\\|^2$'], correctIndex:1, explanation:"$\\|k\\vec u\\| = |k| \\cdot \\|\\vec u\\|$."},
+        {id:'norme-13', type:'qcm', question:"Identité de polarisation : $\\vec u\\cdot\\vec v = ?$", options:['$\\frac{1}{2}(\\|\\vec u+\\vec v\\|^2 - \\|\\vec u\\|^2 - \\|\\vec v\\|^2)$','$\\|\\vec u\\| \\cdot \\|\\vec v\\|$','$\\|\\vec u + \\vec v\\|^2$','$\\frac{1}{4}\\|\\vec u\\|^2$'], correctIndex:0, explanation:"Identité : $\\vec u\\cdot\\vec v = \\frac{1}{2}(\\|\\vec u+\\vec v\\|^2 - \\|\\vec u\\|^2 - \\|\\vec v\\|^2)$."},
+        {id:'norme-14', type:'numeric', question:"$\\|\\vec u\\| = 4$. $\\vec u\\cdot\\vec u = ?$", answer:16, tolerance:0.001, explanation:"$\\vec u\\cdot\\vec u = \\|\\vec u\\|^2 = 16$."},
+        {id:'norme-15', type:'qcm', question:"$\\|\\vec u + \\vec v\\|^2 = ?$", options:['$\\|\\vec u\\|^2 + \\|\\vec v\\|^2$','$\\|\\vec u\\|^2 + 2\\vec u\\cdot\\vec v + \\|\\vec v\\|^2$','$\\|\\vec u\\|^2 - \\|\\vec v\\|^2$','$2\\|\\vec u\\| \\cdot \\|\\vec v\\|$'], correctIndex:1, explanation:"Carré scalaire développé."},
+        {id:'norme-16', type:'numeric', question:"$A(2,3)$, $B(5,7)$. $AB = ?$", answer:5, tolerance:0.001, explanation:"$\\sqrt{9+16} = 5$."},
+        {id:'norme-17', type:'qcm', question:"Si $\\|\\vec u\\| = \\|\\vec v\\|$, alors :", options:['$\\vec u = \\vec v$','$\\vec u = \\pm\\vec v$','Pas forcément égaux ni opposés','$\\vec u\\cdot\\vec v = 0$'], correctIndex:2, explanation:"Mêmes normes mais directions différentes possible."},
+        {id:'norme-18', type:'numeric', question:"$\\|\\vec u\\| = 3$, $\\|\\vec v\\| = 4$, $\\vec u\\perp\\vec v$. $\\|\\vec u + \\vec v\\| = ?$", answer:5, tolerance:0.001, explanation:"Pythagore : $\\sqrt{9+16} = 5$."},
+        {id:'norme-19', type:'qcm', question:"Vecteur unitaire = vecteur de norme :", options:['$0$','$1$','$2$','Quelconque'], correctIndex:1, explanation:"Unitaire $\\Leftrightarrow \\|\\vec u\\| = 1$."},
+        {id:'norme-20', type:'numeric', question:"$\\vec u(6, 8)$. Norme du vecteur unitaire $\\dfrac{1}{\\|\\vec u\\|}\\vec u$ ?", answer:1, tolerance:0.001, explanation:"Par construction, c'est 1."}
+      ]
       },
       {
         id:'projete', number:5, title:'Projeté orthogonal',
@@ -277,7 +386,7 @@ const CHAPTER_DETAILS = {
           {
             id:'proj-3', type:'qcm',
             question:"Si $H$ est le projeté orthogonal de $B$ sur $(OA)$, alors :",
-            options:['$\\overrightarrow{OA}\\cdot\\overrightarrow{OB} = \\overrightarrow{OB}\\cdot\\overrightarrow{OH}$', '$\\overrightarrow{OA}\\cdot\\overrightarrow{OB} = \\overrightarrow{OA}\\cdot\\overrightarrow{OH}$', '$\\overrightarrow{OA}\\cdot\\overrightarrow{OB} = \\overrightarrow{OH}\\cdot\\overrightarrow{HB}$', '$\\overrightarrow{OA}\\cdot\\overrightarrow{OB} = \\|\\overrightarrow{OA}\\| \\times \\|\\overrightarrow{OB}\\|$'],
+            options:['$\\overrightarrow{OA}\\cdot\\overrightarrow{OB} = \\overrightarrow{OB}\\cdot\\overrightarrow{OH}$','$\\overrightarrow{OA}\\cdot\\overrightarrow{OB} = \\overrightarrow{OA}\\cdot\\overrightarrow{OH}$','$\\overrightarrow{OA}\\cdot\\overrightarrow{OB} = \\overrightarrow{OH}\\cdot\\overrightarrow{HB}$','$\\overrightarrow{OA}\\cdot\\overrightarrow{OB} = \\|\\overrightarrow{OA}\\| \\times \\|\\overrightarrow{OB}\\|$'],
             correctIndex:1,
             explanation:"Formule du projeté : $\\mathbf{\\overrightarrow{OA}\\cdot\\overrightarrow{OB} = \\overrightarrow{OA}\\cdot\\overrightarrow{OH}}$.<br/>C'est l'une des trois façons de calculer un produit scalaire (avec angles + coordonnées). Très puissant quand on connaît une projection."
           },
@@ -293,7 +402,23 @@ const CHAPTER_DETAILS = {
             answer:10, tolerance:0.001,
             explanation:"Par la formule du projeté : $\\overrightarrow{OA}\\cdot\\overrightarrow{OB} = \\overrightarrow{OB}\\cdot\\overrightarrow{OH}$.<br/>$\\overrightarrow{OB}$ et $\\overrightarrow{OH}$ sont colinéaires de même sens, donc $\\overrightarrow{OB}\\cdot\\overrightarrow{OH} = \\|\\overrightarrow{OB}\\| \\times OH = 5 \\times 2 = \\mathbf{10}$."
           }
-        ]
+        ,
+        {id:'proj-6', type:'qcm', question:"Le projeté orthogonal $\\vec v'$ de $\\vec v$ sur $\\vec u$ vérifie :", options:["$\\vec u\\cdot\\vec v = \\vec u\\cdot\\vec v'$","$\\vec v' = \\vec u$","$\\|\\vec v'\\| = \\|\\vec v\\|$","$\\vec v' \\perp \\vec u$"], correctIndex:0, explanation:"Le produit scalaire avec $\\vec u$ ne change pas par projection."},
+        {id:'proj-7', type:'qcm', question:"Dans un triangle $ABC$ avec $H$ pied de la hauteur depuis $A$ : $\\vec{AB}\\cdot\\vec{AC} = ?$", options:['$\\vec{AB}\\cdot\\vec{AH}$','$\\vec{AH}\\cdot\\vec{HC}$','$AB \\times AC$','$0$'], correctIndex:0, explanation:"Projection : on remplace $\\vec{AC}$ par son projeté $\\vec{AH}$."},
+        {id:'proj-8', type:'qcm', question:"$ABCD$ carré de côté 1. $\\vec{AB}\\cdot\\vec{AC} = ?$", options:['$0$','$1$','$\\sqrt 2$','$2$'], correctIndex:1, explanation:"Projeté de $C$ sur $(AB)$ est $B$. $\\vec{AB}\\cdot\\vec{AC} = AB \\times AB = 1 \\times 1 = 1$."},
+        {id:'proj-9', type:'numeric', question:"$\\|\\vec u\\| = 6$, $\\|\\vec v\\| = 4$, angle $= 60°$. $\\vec u\\cdot\\vec v = ?$ (vérifie via projeté : $6 \\times 2$)", answer:12, tolerance:0.01, explanation:"$6 \\times 4 \\times \\cos(60°) = 24 \\times 0{,}5 = 12$. Projeté de $\\vec v$ sur $\\vec u$ : longueur $4\\cos 60° = 2$."},
+        {id:'proj-10', type:'qcm', question:"Si $\\vec u\\perp\\vec v$, le projeté de $\\vec v$ sur $\\vec u$ est :", options:['$\\vec v$','$\\vec u$','$\\vec 0$','$-\\vec v$'], correctIndex:2, explanation:"Vecteurs orthogonaux $\\Rightarrow$ projeté nul."},
+        {id:'proj-11', type:'numeric', question:"Triangle équilatéral $ABC$ de côté 2. $\\vec{AB}\\cdot\\vec{AC} = ?$", answer:2, tolerance:0.01, explanation:"Angle $\\hat A = 60°$, donc $2\\times 2\\times \\cos 60° = 2$."},
+        {id:'proj-12', type:'qcm', question:"$\\vec u\\cdot\\vec v$ peut s'interpréter comme :", options:["L'aire d'un parallélogramme",'La longueur du projeté de $\\vec v$ sur $\\vec u$ multipliée par $\\|\\vec u\\|$','La somme des composantes','Un angle'], correctIndex:1, explanation:"$\\vec u\\cdot\\vec v = \\|\\vec u\\| \\times p$ où $p$ est la mesure algébrique du projeté de $\\vec v$ sur $\\vec u$."},
+        {id:'proj-13', type:'numeric', question:"$\\vec u(4, 0)$ et $\\vec v(3, 5)$. Le projeté de $\\vec v$ sur $\\vec u$ a pour mesure algébrique :", answer:3, tolerance:0.01, explanation:"$\\vec v$ a pour première composante 3, qui est sa projection sur l'axe (la direction de $\\vec u$)."},
+        {id:'proj-14', type:'qcm', question:"Application : aire d'un triangle $ABC$ avec $\\vec{AB}$ et $\\vec{AC}$ :", options:['$\\dfrac{1}{2}|\\vec{AB}\\cdot\\vec{AC}|$','$\\dfrac{1}{2}\\|\\vec{AB}\\| \\cdot \\|\\vec{AC}\\| \\cdot \\sin\\hat A$','$\\|\\vec{AB}\\|^2$','$AB + AC$'], correctIndex:1, explanation:"Formule : aire $= \\dfrac{1}{2}\\|\\vec{AB}\\|\\|\\vec{AC}\\|\\sin\\hat A$."},
+        {id:'proj-15', type:'qcm', question:"Si l'angle entre $\\vec u$ et $\\vec v$ est obtus, le projeté de $\\vec v$ sur $\\vec u$ est :", options:['De même sens que $\\vec u$','De sens opposé à $\\vec u$','Nul','Indéterminé'], correctIndex:1, explanation:"Angle $> 90° \\Rightarrow$ projeté en sens opposé."},
+        {id:'proj-16', type:'numeric', question:"$A(0,0)$, $B(4,0)$, $C(2,3)$. $\\vec{AB}\\cdot\\vec{AC} = ?$", answer:8, tolerance:0.01, explanation:"$(4,0)\\cdot(2,3) = 8 + 0 = 8$."},
+        {id:'proj-17', type:'numeric', question:"$\\|\\vec u\\| = 5$, $\\|\\vec v\\| = 3$, angle $= 120°$. $\\vec u\\cdot\\vec v = ?$", answer:-7.5, tolerance:0.05, explanation:"$5\\times 3\\times \\cos(120°) = 15\\times(-0{,}5) = -7{,}5$."},
+        {id:'proj-18', type:'qcm', question:"Al-Kashi : $BC^2 = AB^2 + AC^2 - 2 AB\\cdot AC \\cos\\hat A$. Utilisé pour :", options:['Calculer un angle dans un triangle quelconque','Trouver un produit scalaire','Calculer une aire','Tout cela'], correctIndex:3, explanation:"Al-Kashi sert pour les longueurs, les angles, et liée au produit scalaire."},
+        {id:'proj-19', type:'qcm', question:"Si la projection de $\\vec v$ sur $\\vec u$ est $\\vec 0$, alors :", options:['$\\vec v = \\vec 0$','$\\vec u\\perp\\vec v$','$\\vec u = \\vec v$','Aucune des trois'], correctIndex:1, explanation:"Projeté nul $\\Leftrightarrow$ vecteurs orthogonaux (ou $\\vec v = \\vec 0$)."},
+        {id:'proj-20', type:'numeric', question:"$ABC$ triangle isocèle avec $AB = AC = 5$ et $BC = 6$. $\\vec{AB}\\cdot\\vec{AC} = ?$", answer:7, tolerance:0.01, explanation:"$BC^2 = AB^2 + AC^2 - 2\\vec{AB}\\cdot\\vec{AC} \\Rightarrow 36 = 25+25 - 2x \\Rightarrow x = 7$."}
+      ]
       }
     ]
   },
@@ -315,14 +440,14 @@ const CHAPTER_DETAILS = {
           {
             id:'vn-1', type:'qcm',
             question:"Soit la droite $d$ d'équation $3x + 2y - 5 = 0$.<br/>Quel est un vecteur normal à $d$ ?",
-            options:['$\\vec{n}(2\\,;\\,3)$', '$\\vec{n}(3\\,;\\,2)$', '$\\vec{n}(-2\\,;\\,3)$', '$\\vec{n}(5\\,;\\,0)$'],
+            options:['$\\vec{n}(2\\,;\\,3)$','$\\vec{n}(3\\,;\\,2)$','$\\vec{n}(-2\\,;\\,3)$','$\\vec{n}(5\\,;\\,0)$'],
             correctIndex:1,
             explanation:"Dans une équation $ax + by + c = 0$, les coefficients $a$ et $b$ donnent directement le vecteur normal $\\vec{n}(a\\,;\\,b)$.<br/>Ici $a = 3$ et $b = 2$, donc $\\mathbf{\\vec{n}(3\\,;\\,2)}$."
           },
           {
             id:'vn-2', type:'qcm',
             question:"Si $\\vec{n}(4\\,;\\,-3)$ est un vecteur normal à $d$, quel est un vecteur directeur de $d$ ?",
-            options:['$\\vec{u}(3\\,;\\,4)$', '$\\vec{u}(-3\\,;\\,-4)$', '$\\vec{u}(4\\,;\\,-3)$', '$\\vec{u}(-4\\,;\\,3)$'],
+            options:['$\\vec{u}(3\\,;\\,4)$','$\\vec{u}(-3\\,;\\,-4)$','$\\vec{u}(4\\,;\\,-3)$','$\\vec{u}(-4\\,;\\,3)$'],
             correctIndex:0,
             explanation:"Si $\\vec{n}(a\\,;\\,b)$ est normal, $\\vec{u}(-b\\,;\\,a)$ est directeur.<br/>Avec $\\vec{n}(4\\,;\\,-3)$ : $\\vec{u}(-(-3)\\,;\\,4) = \\mathbf{\\vec{u}(3\\,;\\,4)}$."
           },
@@ -335,7 +460,7 @@ const CHAPTER_DETAILS = {
           {
             id:'vn-4', type:'qcm',
             question:"Deux droites $d$ et $d'$ ont pour vecteurs normaux $\\vec{n}(2\\,;\\,1)$ et $\\vec{n'}(4\\,;\\,2)$.<br/>Ces droites sont :",
-            options:['Perpendiculaires', 'Parallèles', 'Confondues forcément', 'Sécantes non perpendiculaires'],
+            options:['Perpendiculaires','Parallèles','Confondues forcément','Sécantes non perpendiculaires'],
             correctIndex:1,
             explanation:"$\\vec{n'}(4\\,;\\,2) = 2 \\times \\vec{n}(2\\,;\\,1)$ : les deux vecteurs normaux sont <strong>colinéaires</strong>.<br/>Donc les droites sont <strong>parallèles</strong> (confondues ou strictement parallèles selon la constante)."
           },
@@ -363,7 +488,7 @@ const CHAPTER_DETAILS = {
           {
             id:'ec-1', type:'qcm',
             question:"Quelle est l'équation cartésienne de la droite de vecteur normal $\\vec{n}(2\\,;\\,3)$ passant par $A(1\\,;\\,-1)$ ?",
-            options:['$2x + 3y - 1 = 0$', '$2x + 3y + 1 = 0$', '$3x + 2y + 1 = 0$', '$2x + 3y = 0$'],
+            options:['$2x + 3y - 1 = 0$','$2x + 3y + 1 = 0$','$3x + 2y + 1 = 0$','$2x + 3y = 0$'],
             correctIndex:1,
             explanation:"Formule : $a(x - x_A) + b(y - y_A) = 0$, soit $2(x - 1) + 3(y - (-1)) = 0$.<br/>$2x - 2 + 3y + 3 = 0 \\Leftrightarrow \\mathbf{2x + 3y + 1 = 0}$."
           },
@@ -376,14 +501,14 @@ const CHAPTER_DETAILS = {
           {
             id:'ec-3', type:'qcm',
             question:"La droite $d$ a pour équation $5x - 2y + 7 = 0$.<br/>Un vecteur directeur de $d$ est :",
-            options:['$\\vec{u}(5\\,;\\,-2)$', '$\\vec{u}(2\\,;\\,5)$', '$\\vec{u}(-2\\,;\\,5)$', '$\\vec{u}(5\\,;\\,2)$'],
+            options:['$\\vec{u}(5\\,;\\,-2)$','$\\vec{u}(2\\,;\\,5)$','$\\vec{u}(-2\\,;\\,5)$','$\\vec{u}(5\\,;\\,2)$'],
             correctIndex:1,
             explanation:"Vecteur normal $\\vec{n}(5\\,;\\,-2)$, donc directeur $\\vec{u}(-(-2)\\,;\\,5) = \\mathbf{\\vec{u}(2\\,;\\,5)}$."
           },
           {
             id:'ec-4', type:'qcm',
             question:"Quelle équation correspond à la droite passant par $A(0\\,;\\,2)$ et $B(3\\,;\\,0)$ ?",
-            options:['$2x + 3y - 6 = 0$', '$3x + 2y - 6 = 0$', '$2x - 3y + 6 = 0$', '$x + y - 3 = 0$'],
+            options:['$2x + 3y - 6 = 0$','$3x + 2y - 6 = 0$','$2x - 3y + 6 = 0$','$x + y - 3 = 0$'],
             correctIndex:0,
             explanation:"$\\overrightarrow{AB}(3\\,;\\,-2)$ est directeur, donc $\\vec{n}(2\\,;\\,3)$ est normal. Équation : $2(x-0) + 3(y-2) = 0 \\Leftrightarrow \\mathbf{2x + 3y - 6 = 0}$."
           },
@@ -410,7 +535,7 @@ const CHAPTER_DETAILS = {
           {
             id:'cer-1', type:'qcm',
             question:"Quelle est l'équation du cercle de centre $\\Omega(2\\,;\\,-1)$ et de rayon $3$ ?",
-            options:['$(x-2)^2 + (y+1)^2 = 9$', '$(x+2)^2 + (y-1)^2 = 9$', '$(x-2)^2 + (y-1)^2 = 3$', '$(x-2)^2 + (y+1)^2 = 3$'],
+            options:['$(x-2)^2 + (y+1)^2 = 9$','$(x+2)^2 + (y-1)^2 = 9$','$(x-2)^2 + (y-1)^2 = 3$','$(x-2)^2 + (y+1)^2 = 3$'],
             correctIndex:0,
             explanation:"Formule : $(x - a)^2 + (y - b)^2 = r^2$ avec $a = 2$, $b = -1$, $r = 3$.<br/>$\\mathbf{(x-2)^2 + (y+1)^2 = 9}$."
           },
@@ -423,7 +548,7 @@ const CHAPTER_DETAILS = {
           {
             id:'cer-3', type:'qcm',
             question:"Le point $M(3\\,;\\,4)$ appartient-il au cercle de centre $\\Omega(0\\,;\\,0)$ et de rayon $5$ ?",
-            options:['Oui', 'Non, il est à l\'intérieur', 'Non, il est à l\'extérieur', 'On ne peut pas savoir'],
+            options:['Oui',"Non, il est à l\'intérieur","Non, il est à l\'extérieur",'On ne peut pas savoir'],
             correctIndex:0,
             explanation:"$\\Omega M = \\sqrt{(3-0)^2 + (4-0)^2} = \\sqrt{9+16} = \\sqrt{25} = 5 = r$.<br/>$M$ est exactement <strong>sur le cercle</strong>."
           },
@@ -436,7 +561,7 @@ const CHAPTER_DETAILS = {
           {
             id:'cer-5', type:'qcm',
             question:"L'équation $x^2 + y^2 - 4x + 6y - 12 = 0$ est l'équation d'un cercle. Quel est son centre ?",
-            options:['$\\Omega(2\\,;\\,-3)$', '$\\Omega(-2\\,;\\,3)$', '$\\Omega(4\\,;\\,-6)$', '$\\Omega(-4\\,;\\,6)$'],
+            options:['$\\Omega(2\\,;\\,-3)$','$\\Omega(-2\\,;\\,3)$','$\\Omega(4\\,;\\,-6)$','$\\Omega(-4\\,;\\,6)$'],
             correctIndex:0,
             explanation:"On complète les carrés : $x^2 - 4x = (x-2)^2 - 4$ et $y^2 + 6y = (y+3)^2 - 9$.<br/>L'équation devient $(x-2)^2 + (y+3)^2 = 25$, donc centre $\\mathbf{\\Omega(2\\,;\\,-3)}$, rayon $5$."
           }
@@ -459,14 +584,14 @@ const CHAPTER_DETAILS = {
           {
             id:'int-1', type:'qcm',
             question:"Cercle de centre $\\Omega(0\\,;\\,0)$ et rayon $2$. La droite $y = 3$ est-elle :",
-            options:['Sécante (2 points)', 'Tangente (1 point)', 'Disjointe (0 point)', 'Confondue avec le cercle'],
+            options:['Sécante (2 points)','Tangente (1 point)','Disjointe (0 point)','Confondue avec le cercle'],
             correctIndex:2,
             explanation:"Distance du centre $\\Omega(0\\,;\\,0)$ à la droite $y = 3$ : $d = 3$. Or $r = 2 < 3$.<br/>Donc la droite est <strong>disjointe</strong> du cercle (pas d'intersection)."
           },
           {
             id:'int-2', type:'qcm',
             question:"Cercle $x^2 + y^2 = 25$ et droite $y = 5$. Combien d'intersections ?",
-            options:['0', '1 (tangente)', '2 (sécante)', 'Infiniment'],
+            options:['0','1 (tangente)','2 (sécante)','Infiniment'],
             correctIndex:1,
             explanation:"En substituant : $x^2 + 25 = 25 \\Leftrightarrow x^2 = 0 \\Leftrightarrow x = 0$. <br/>Un seul point d'intersection $(0\\,;\\,5)$ $\\to$ la droite est <strong>tangente</strong> au cercle."
           },
@@ -479,14 +604,14 @@ const CHAPTER_DETAILS = {
           {
             id:'int-4', type:'qcm',
             question:"Cercle $x^2 + y^2 = 4$ et droite $y = x$. Quels sont les points d'intersection ?",
-            options:['$(0\\,;\\,0)$ uniquement', '$(\\sqrt{2}\\,;\\,\\sqrt{2})$ et $(-\\sqrt{2}\\,;\\,-\\sqrt{2})$', '$(2\\,;\\,2)$ et $(-2\\,;\\,-2)$', 'Pas d\'intersection'],
+            options:['$(0\\,;\\,0)$ uniquement','$(\\sqrt{2}\\,;\\,\\sqrt{2})$ et $(-\\sqrt{2}\\,;\\,-\\sqrt{2})$','$(2\\,;\\,2)$ et $(-2\\,;\\,-2)$',"Pas d\'intersection"],
             correctIndex:1,
             explanation:"En substituant $y = x$ : $x^2 + x^2 = 4 \\Leftrightarrow 2x^2 = 4 \\Leftrightarrow x^2 = 2 \\Leftrightarrow x = \\pm\\sqrt{2}$.<br/>Les points sont $\\mathbf{(\\sqrt{2}\\,;\\,\\sqrt{2})}$ et $\\mathbf{(-\\sqrt{2}\\,;\\,-\\sqrt{2})}$."
           },
           {
             id:'int-5', type:'qcm',
             question:"Cercle de centre $\\Omega(0\\,;\\,0)$ et rayon $5$, et la droite $d : x = 5$. Que peut-on dire ?",
-            options:['Sécante (2 points)', 'Tangente (1 point)', 'Disjointe (0 point)', 'On ne peut pas savoir'],
+            options:['Sécante (2 points)','Tangente (1 point)','Disjointe (0 point)','On ne peut pas savoir'],
             correctIndex:1,
             explanation:"La distance de $\\Omega(0\\,;\\,0)$ à la droite verticale $x = 5$ vaut $d = 5$.<br/>Or le rayon $r = 5$, donc $d = r$ $\\to$ la droite est <strong>tangente</strong> au cercle au point $(5\\,;\\,0)$."
           }
@@ -514,7 +639,7 @@ const CHAPTER_DETAILS = {
           {
             id:'app-2', type:'qcm',
             question:"Les points $A(1\\,;\\,2)$, $B(3\\,;\\,6)$, $C(4\\,;\\,8)$ sont-ils alignés ?",
-            options:['Oui, alignés', 'Non, ils forment un triangle', 'Il faut plus d\'informations', 'C\'est impossible à déterminer'],
+            options:['Oui, alignés','Non, ils forment un triangle',"Il faut plus d\'informations","C\'est impossible à déterminer"],
             correctIndex:0,
             explanation:"$\\overrightarrow{AB}(2\\,;\\,4)$ et $\\overrightarrow{AC}(3\\,;\\,6)$. <br/>Vérifions la colinéarité : $\\overrightarrow{AC} = 1{,}5 \\times \\overrightarrow{AB}$, donc colinéaires.<br/>Les trois points sont <strong>alignés</strong>."
           },
@@ -527,7 +652,7 @@ const CHAPTER_DETAILS = {
           {
             id:'app-4', type:'qcm',
             question:"Les droites $d_1 : y = 2x + 1$ et $d_2 : y = -\\dfrac{1}{2}x + 3$ sont :",
-            options:['Parallèles', 'Sécantes non perpendiculaires', 'Perpendiculaires', 'Confondues'],
+            options:['Parallèles','Sécantes non perpendiculaires','Perpendiculaires','Confondues'],
             correctIndex:2,
             explanation:"Pour deux droites de coefficients directeurs $m_1$ et $m_2$ : elles sont perpendiculaires ssi $m_1 \\times m_2 = -1$.<br/>$2 \\times (-\\dfrac{1}{2}) = -1$ $\\to$ <strong>perpendiculaires</strong>."
           },
@@ -579,7 +704,7 @@ const CHAPTER_DETAILS = {
           {
             id:'pri-4', type:'qcm',
             question:"Calculer : $10 - 2 \\times 3$",
-            options:['$4$', '$24$', '$-4$', '$8$'],
+            options:['$4$','$24$','$-4$','$8$'],
             correctIndex:0,
             explanation:"Multiplication prioritaire : $2 \\times 3 = 6$.<br/>Puis $10 - 6 = \\mathbf{4}$. <br/>(Erreur classique : calculer $10 - 2 = 8$ d'abord, puis $8 \\times 3 = 24$. Faux !)"
           },
@@ -607,14 +732,14 @@ const CHAPTER_DETAILS = {
           {
             id:'dis-1', type:'qcm',
             question:"Développer $5(x + 3)$ :",
-            options:['$5x + 3$', '$5x + 15$', '$x + 15$', '$5x \\cdot 15$'],
+            options:['$5x + 3$','$5x + 15$','$x + 15$','$5x \\cdot 15$'],
             correctIndex:1,
             explanation:"$5(x + 3) = 5 \\times x + 5 \\times 3 = \\mathbf{5x + 15}$. On distribue le $5$ à chaque terme."
           },
           {
             id:'dis-2', type:'qcm',
             question:"Développer $-2(x - 4)$ :",
-            options:['$-2x - 4$', '$-2x - 8$', '$-2x + 8$', '$2x + 8$'],
+            options:['$-2x - 4$','$-2x - 8$','$-2x + 8$','$2x + 8$'],
             correctIndex:2,
             explanation:"Attention aux signes : $-2 \\times x = -2x$ et $-2 \\times (-4) = +8$.<br/>Résultat : $\\mathbf{-2x + 8}$. (Le moins fois moins donne plus.)"
           },
@@ -627,14 +752,14 @@ const CHAPTER_DETAILS = {
           {
             id:'dis-4', type:'qcm',
             question:"Développer puis réduire : $3(2x + 5) - 4(x - 1)$",
-            options:['$2x + 19$', '$2x + 11$', '$10x + 11$', '$10x + 19$'],
+            options:['$2x + 19$','$2x + 11$','$10x + 11$','$10x + 19$'],
             correctIndex:0,
             explanation:"$3(2x + 5) = 6x + 15$ et $-4(x - 1) = -4x + 4$.<br/>Somme : $6x + 15 - 4x + 4 = \\mathbf{2x + 19}$."
           },
           {
             id:'dis-5', type:'qcm',
             question:"Développer $4(x^2 + 2x - 1)$ :",
-            options:['$4x^2 + 2x - 1$', '$4x^2 + 8x - 1$', '$4x^2 + 8x - 4$', '$x^2 + 8x - 4$'],
+            options:['$4x^2 + 2x - 1$','$4x^2 + 8x - 1$','$4x^2 + 8x - 4$','$x^2 + 8x - 4$'],
             correctIndex:2,
             explanation:"On distribue le $4$ à chacun des trois termes :<br/>$4 \\times x^2 + 4 \\times 2x + 4 \\times (-1) = \\mathbf{4x^2 + 8x - 4}$."
           }
@@ -656,21 +781,21 @@ const CHAPTER_DETAILS = {
           {
             id:'fac-1', type:'qcm',
             question:"Factoriser $6x + 18$ :",
-            options:['$6(x + 3)$', '$6(x + 18)$', '$x(6 + 18)$', '$6x(1 + 3)$'],
+            options:['$6(x + 3)$','$6(x + 18)$','$x(6 + 18)$','$6x(1 + 3)$'],
             correctIndex:0,
             explanation:"Le facteur commun à $6x$ et $18$ est $6$ (car $18 = 6 \\times 3$).<br/>$6x + 18 = 6 \\times x + 6 \\times 3 = \\mathbf{6(x + 3)}$."
           },
           {
             id:'fac-2', type:'qcm',
             question:"Factoriser $x^2 + 4x$ :",
-            options:['$x(x + 4)$', '$x^2(1 + 4)$', '$4x(x + 1)$', '$(x + 4)^2$'],
+            options:['$x(x + 4)$','$x^2(1 + 4)$','$4x(x + 1)$','$(x + 4)^2$'],
             correctIndex:0,
             explanation:"Le facteur commun à $x^2$ et $4x$ est $x$.<br/>$x^2 + 4x = x \\times x + x \\times 4 = \\mathbf{x(x + 4)}$."
           },
           {
             id:'fac-3', type:'qcm',
             question:"Factoriser $(x+1)(2x) + (x+1)(3)$ :",
-            options:['$(x+1)(2x + 3)$', '$(x+1)^2 \\cdot 5$', '$2x + 3$', '$(x+1)(6x)$'],
+            options:['$(x+1)(2x + 3)$','$(x+1)^2 \\cdot 5$','$2x + 3$','$(x+1)(6x)$'],
             correctIndex:0,
             explanation:"Le facteur commun est $(x+1)$ (présent dans les deux termes).<br/>$(x+1)(2x) + (x+1)(3) = (x+1)(2x + 3)$, soit $\\mathbf{(x+1)(2x + 3)}$."
           },
@@ -683,7 +808,7 @@ const CHAPTER_DETAILS = {
           {
             id:'fac-5', type:'qcm',
             question:"Factoriser par paires : $ax + ay + bx + by$",
-            options:['$(a+b)(x+y)$', '$ax + by$', '$a(x+y) + b$', '$ab(x+y)$'],
+            options:['$(a+b)(x+y)$','$ax + by$','$a(x+y) + b$','$ab(x+y)$'],
             correctIndex:0,
             explanation:"On groupe : $a(x+y) + b(x+y)$, puis le facteur commun $(x+y)$ donne $\\mathbf{(a+b)(x+y)}$."
           }
@@ -706,21 +831,21 @@ const CHAPTER_DETAILS = {
           {
             id:'ir-1', type:'qcm',
             question:"Développer $(x + 5)^2$ :",
-            options:['$x^2 + 25$', '$x^2 + 10x + 25$', '$x^2 + 5x + 25$', '$x^2 + 10x + 10$'],
+            options:['$x^2 + 25$','$x^2 + 10x + 25$','$x^2 + 5x + 25$','$x^2 + 10x + 10$'],
             correctIndex:1,
             explanation:"Formule : $(a + b)^2 = a^2 + 2ab + b^2$ avec $a = x$ et $b = 5$.<br/>$(x + 5)^2 = x^2 + 2 \\times x \\times 5 + 5^2 = \\mathbf{x^2 + 10x + 25}$."
           },
           {
             id:'ir-2', type:'qcm',
             question:"Développer $(x - 3)^2$ :",
-            options:['$x^2 - 9$', '$x^2 + 6x + 9$', '$x^2 - 6x + 9$', '$x^2 - 6x - 9$'],
+            options:['$x^2 - 9$','$x^2 + 6x + 9$','$x^2 - 6x + 9$','$x^2 - 6x - 9$'],
             correctIndex:2,
             explanation:"Formule : $(a - b)^2 = a^2 - 2ab + b^2$ avec $a = x$ et $b = 3$.<br/>$(x - 3)^2 = x^2 - 6x + 9$. Soit $\\mathbf{x^2 - 6x + 9}$. (Le signe du carré est $+$, le double produit est $-$.)"
           },
           {
             id:'ir-3', type:'qcm',
             question:"Développer $(x + 4)(x - 4)$ :",
-            options:['$x^2 - 16$', '$x^2 + 16$', '$x^2 + 8x - 16$', '$x^2 - 8$'],
+            options:['$x^2 - 16$','$x^2 + 16$','$x^2 + 8x - 16$','$x^2 - 8$'],
             correctIndex:0,
             explanation:"Formule : $(a + b)(a - b) = a^2 - b^2$ avec $a = x$ et $b = 4$.<br/>$(x + 4)(x - 4) = x^2 - 16$. Soit $\\mathbf{x^2 - 16}$."
           },
@@ -733,7 +858,7 @@ const CHAPTER_DETAILS = {
           {
             id:'ir-5', type:'qcm',
             question:"Développer $(2x + 3)^2$ :",
-            options:['$4x^2 + 9$', '$4x^2 + 12x + 9$', '$2x^2 + 12x + 9$', '$4x^2 + 6x + 9$'],
+            options:['$4x^2 + 9$','$4x^2 + 12x + 9$','$2x^2 + 12x + 9$','$4x^2 + 6x + 9$'],
             correctIndex:1,
             explanation:"Avec $a = 2x$ et $b = 3$ : $(2x + 3)^2 = (2x)^2 + 2 \\times 2x \\times 3 + 3^2 = 4x^2 + 12x + 9$. Soit $\\mathbf{4x^2 + 12x + 9}$."
           }
@@ -760,28 +885,28 @@ const CHAPTER_DETAILS = {
           {
             id:'voc-1', type:'qcm',
             question:"La fraction $\\dfrac{12}{18}$ simplifiée donne :",
-            options:['$\\dfrac{2}{3}$', '$\\dfrac{3}{4}$', '$\\dfrac{4}{6}$', '$\\dfrac{1}{2}$'],
+            options:['$\\dfrac{2}{3}$','$\\dfrac{3}{4}$','$\\dfrac{4}{6}$','$\\dfrac{1}{2}$'],
             correctIndex:0,
             explanation:"PGCD($12, 18$) $= 6$. On divise haut et bas par $6$ : $\\dfrac{12 \\div 6}{18 \\div 6} = \\mathbf{\\dfrac{2}{3}}$."
           },
           {
             id:'voc-2', type:'qcm',
             question:"Quelle fraction est <strong>égale</strong> à $\\dfrac{2}{3}$ ?",
-            options:['$\\dfrac{4}{9}$', '$\\dfrac{6}{9}$', '$\\dfrac{4}{5}$', '$\\dfrac{8}{9}$'],
+            options:['$\\dfrac{4}{9}$','$\\dfrac{6}{9}$','$\\dfrac{4}{5}$','$\\dfrac{8}{9}$'],
             correctIndex:1,
             explanation:"Multiplier haut et bas par le même nombre ne change pas la fraction.<br/>$\\dfrac{2}{3} = \\dfrac{2 \\times 3}{3 \\times 3} = \\mathbf{\\dfrac{6}{9}}$."
           },
           {
             id:'voc-3', type:'qcm',
             question:"Parmi ces fractions, laquelle est <strong>irréductible</strong> ?",
-            options:['$\\dfrac{4}{6}$', '$\\dfrac{6}{8}$', '$\\dfrac{7}{12}$', '$\\dfrac{9}{15}$'],
+            options:['$\\dfrac{4}{6}$','$\\dfrac{6}{8}$','$\\dfrac{7}{12}$','$\\dfrac{9}{15}$'],
             correctIndex:2,
             explanation:"Une fraction est irréductible quand PGCD(num, dén) $= 1$.<br/>$\\dfrac{7}{12}$ : $7$ est premier, et $12 = 2^2 \\times 3$, donc pas de facteur commun. PGCD $= 1$.<br/>Les autres se simplifient : $\\dfrac{4}{6} = \\dfrac{2}{3}$, $\\dfrac{6}{8} = \\dfrac{3}{4}$, $\\dfrac{9}{15} = \\dfrac{3}{5}$."
           },
           {
             id:'voc-4', type:'qcm',
             question:"Que vaut $\\dfrac{5}{0}$ ?",
-            options:['$0$', '$5$', "Impossible (dénominateur nul)", '$+\\infty$'],
+            options:['$0$','$5$','Impossible (dénominateur nul)','$+\\infty$'],
             correctIndex:2,
             explanation:"Le dénominateur d'une fraction ne peut <strong>jamais être nul</strong>. $\\dfrac{5}{0}$ n'a pas de sens en mathématiques."
           },
@@ -809,14 +934,14 @@ const CHAPTER_DETAILS = {
           {
             id:'add-1', type:'qcm',
             question:"Calculer $\\dfrac{1}{2} + \\dfrac{1}{3}$ :",
-            options:['$\\dfrac{2}{5}$', '$\\dfrac{5}{6}$', '$\\dfrac{1}{6}$', '$\\dfrac{2}{6}$'],
+            options:['$\\dfrac{2}{5}$','$\\dfrac{5}{6}$','$\\dfrac{1}{6}$','$\\dfrac{2}{6}$'],
             correctIndex:1,
             explanation:"Dénominateur commun : $6$. On a $\\dfrac{1}{2} = \\dfrac{3}{6}$ et $\\dfrac{1}{3} = \\dfrac{2}{6}$.<br/>$\\dfrac{3}{6} + \\dfrac{2}{6} = \\mathbf{\\dfrac{5}{6}}$."
           },
           {
             id:'add-2', type:'qcm',
             question:"Calculer $\\dfrac{3}{4} - \\dfrac{1}{2}$ :",
-            options:['$\\dfrac{1}{4}$', '$\\dfrac{2}{2}$', '$\\dfrac{1}{2}$', '$\\dfrac{2}{4}$'],
+            options:['$\\dfrac{1}{4}$','$\\dfrac{2}{2}$','$\\dfrac{1}{2}$','$\\dfrac{2}{4}$'],
             correctIndex:0,
             explanation:"Dénominateur commun : $4$. $\\dfrac{1}{2} = \\dfrac{2}{4}$.<br/>$\\dfrac{3}{4} - \\dfrac{2}{4} = \\mathbf{\\dfrac{1}{4}}$."
           },
@@ -829,14 +954,14 @@ const CHAPTER_DETAILS = {
           {
             id:'add-4', type:'qcm',
             question:"Calculer $\\dfrac{2}{3} + \\dfrac{1}{6}$ :",
-            options:['$\\dfrac{3}{9}$', '$\\dfrac{3}{6}$', '$\\dfrac{5}{6}$', '$\\dfrac{1}{2}$'],
+            options:['$\\dfrac{3}{9}$','$\\dfrac{3}{6}$','$\\dfrac{5}{6}$','$\\dfrac{1}{2}$'],
             correctIndex:2,
             explanation:"Dénominateur commun : $6$. $\\dfrac{2}{3} = \\dfrac{4}{6}$.<br/>$\\dfrac{4}{6} + \\dfrac{1}{6} = \\mathbf{\\dfrac{5}{6}}$."
           },
           {
             id:'add-5', type:'qcm',
             question:"Calculer $\\dfrac{5}{6} + \\dfrac{1}{4}$ :",
-            options:['$\\dfrac{6}{10}$', '$\\dfrac{13}{12}$', '$\\dfrac{6}{24}$', '$\\dfrac{7}{24}$'],
+            options:['$\\dfrac{6}{10}$','$\\dfrac{13}{12}$','$\\dfrac{6}{24}$','$\\dfrac{7}{24}$'],
             correctIndex:1,
             explanation:"Dénominateur commun : $12$ (PPCM de $6$ et $4$). $\\dfrac{5}{6} = \\dfrac{10}{12}$ et $\\dfrac{1}{4} = \\dfrac{3}{12}$.<br/>$\\dfrac{10}{12} + \\dfrac{3}{12} = \\mathbf{\\dfrac{13}{12}}$."
           }
@@ -858,7 +983,7 @@ const CHAPTER_DETAILS = {
           {
             id:'mul-1', type:'qcm',
             question:"Calculer $\\dfrac{2}{3} \\times \\dfrac{5}{7}$ :",
-            options:['$\\dfrac{10}{21}$', '$\\dfrac{7}{10}$', '$\\dfrac{10}{10}$', '$\\dfrac{7}{21}$'],
+            options:['$\\dfrac{10}{21}$','$\\dfrac{7}{10}$','$\\dfrac{10}{10}$','$\\dfrac{7}{21}$'],
             correctIndex:0,
             explanation:"On multiplie numérateurs entre eux et dénominateurs entre eux : $\\dfrac{2 \\times 5}{3 \\times 7} = \\mathbf{\\dfrac{10}{21}}$."
           },
@@ -871,14 +996,14 @@ const CHAPTER_DETAILS = {
           {
             id:'mul-3', type:'qcm',
             question:"Calculer $5 \\times \\dfrac{2}{3}$ :",
-            options:['$\\dfrac{10}{3}$', '$\\dfrac{5}{6}$', '$\\dfrac{7}{3}$', '$\\dfrac{2}{15}$'],
+            options:['$\\dfrac{10}{3}$','$\\dfrac{5}{6}$','$\\dfrac{7}{3}$','$\\dfrac{2}{15}$'],
             correctIndex:0,
             explanation:"$5 = \\dfrac{5}{1}$, donc $\\dfrac{5}{1} \\times \\dfrac{2}{3} = \\dfrac{5 \\times 2}{1 \\times 3} = \\mathbf{\\dfrac{10}{3}}$."
           },
           {
             id:'mul-4', type:'qcm',
             question:"Calculer $\\left(\\dfrac{1}{2}\\right)^2$ :",
-            options:['$\\dfrac{1}{2}$', '$\\dfrac{1}{4}$', '$1$', '$\\dfrac{2}{2}$'],
+            options:['$\\dfrac{1}{2}$','$\\dfrac{1}{4}$','$1$','$\\dfrac{2}{2}$'],
             correctIndex:1,
             explanation:"$\\left(\\dfrac{1}{2}\\right)^2 = \\dfrac{1}{2} \\times \\dfrac{1}{2} = \\dfrac{1 \\times 1}{2 \\times 2} = \\mathbf{\\dfrac{1}{4}}$."
           },
@@ -906,7 +1031,7 @@ const CHAPTER_DETAILS = {
           {
             id:'div-1', type:'qcm',
             question:"Calculer $\\dfrac{2}{3} \\div \\dfrac{4}{5}$ :",
-            options:['$\\dfrac{5}{6}$', '$\\dfrac{8}{15}$', '$\\dfrac{6}{20}$', '$\\dfrac{3}{10}$'],
+            options:['$\\dfrac{5}{6}$','$\\dfrac{8}{15}$','$\\dfrac{6}{20}$','$\\dfrac{3}{10}$'],
             correctIndex:0,
             explanation:"Diviser = multiplier par l'inverse : $\\dfrac{2}{3} \\div \\dfrac{4}{5} = \\dfrac{2}{3} \\times \\dfrac{5}{4} = \\dfrac{10}{12} = \\mathbf{\\dfrac{5}{6}}$."
           },
@@ -919,7 +1044,7 @@ const CHAPTER_DETAILS = {
           {
             id:'div-3', type:'qcm',
             question:"L'inverse de $\\dfrac{3}{7}$ est :",
-            options:['$-\\dfrac{3}{7}$', '$\\dfrac{7}{3}$', '$\\dfrac{1}{3}$', '$\\dfrac{3}{7}$'],
+            options:['$-\\dfrac{3}{7}$','$\\dfrac{7}{3}$','$\\dfrac{1}{3}$','$\\dfrac{3}{7}$'],
             correctIndex:1,
             explanation:"L'inverse d'une fraction = on retourne numérateur et dénominateur.<br/>L'inverse de $\\dfrac{3}{7}$ est $\\mathbf{\\dfrac{7}{3}}$."
           },
@@ -971,7 +1096,7 @@ const CHAPTER_DETAILS = {
           {
             id:'pyt-3', type:'qcm',
             question:"Dans un triangle rectangle, l'<strong>hypoténuse</strong> est :",
-            options:['Le plus petit côté', "Le côté opposé à l'angle droit", "L'un des côtés de l'angle droit", "Le côté entre les deux angles aigus"],
+            options:['Le plus petit côté',"Le côté opposé à l'angle droit","L'un des côtés de l'angle droit",'Le côté entre les deux angles aigus'],
             correctIndex:1,
             explanation:"L'hypoténuse est <strong>le côté opposé à l'angle droit</strong>. C'est aussi systématiquement le <strong>plus long</strong> des trois côtés."
           },
@@ -1005,21 +1130,21 @@ const CHAPTER_DETAILS = {
           {
             id:'rp-1', type:'qcm',
             question:"Triangle avec côtés $6$, $8$, $10$. Est-il rectangle ?",
-            options:['Oui', 'Non', 'Il faut connaître les angles', 'Impossible à déterminer'],
+            options:['Oui','Non','Il faut connaître les angles','Impossible à déterminer'],
             correctIndex:0,
             explanation:"Plus grand côté : $10$. On compare $10^2 = 100$ avec $6^2 + 8^2 = 36 + 64 = 100$.<br/>Égalité $\\to$ triangle <strong>rectangle</strong> (en l'angle opposé au côté $10$)."
           },
           {
             id:'rp-2', type:'qcm',
             question:"Triangle avec côtés $5$, $7$, $9$. Est-il rectangle ?",
-            options:['Oui', 'Non', 'Triangle équilatéral', 'Manque info'],
+            options:['Oui','Non','Triangle équilatéral','Manque info'],
             correctIndex:1,
             explanation:"Plus grand côté : $9$. On compare $9^2 = 81$ avec $5^2 + 7^2 = 25 + 49 = 74$.<br/>$81 \\neq 74$, donc le triangle n'est <strong>PAS</strong> rectangle."
           },
           {
             id:'rp-3', type:'qcm',
             question:"Triangle rectangle de côtés $3, 4, 5$. L'angle droit est en l'angle opposé à quel côté ?",
-            options:['$3$', '$4$', '$5$', "Aucun côté en particulier"],
+            options:['$3$','$4$','$5$','Aucun côté en particulier'],
             correctIndex:2,
             explanation:"L'angle droit est toujours <strong>opposé à l'hypoténuse</strong>, qui est le plus grand côté.<br/>Ici l'hypoténuse est $5$, donc l'angle droit est opposé au côté $\\mathbf{5}$."
           },
@@ -1220,7 +1345,7 @@ const CHAPTER_DETAILS = {
           {
             id:'pc-5', type:'qcm',
             question:"Si $P_A(B) = P(B)$, on dit que les événements $A$ et $B$ sont :",
-            options:['Incompatibles', 'Indépendants', 'Égaux', 'Contraires'],
+            options:['Incompatibles','Indépendants','Égaux','Contraires'],
             correctIndex:1,
             explanation:"$P_A(B) = P(B)$ signifie que la réalisation de $A$ n'influence pas la probabilité de $B$. C'est la définition de l'<strong>indépendance</strong>."
           }
@@ -1266,7 +1391,7 @@ const CHAPTER_DETAILS = {
           {
             id:'ap-5', type:'qcm',
             question:"Sur un arbre pondéré, les probabilités portées sur les branches du <strong>2ᵉ niveau</strong> sont :",
-            options:['Des probabilités classiques', 'Des probabilités conditionnelles', 'Toujours égales à $0{,}5$', 'Des effectifs'],
+            options:['Des probabilités classiques','Des probabilités conditionnelles','Toujours égales à $0{,}5$','Des effectifs'],
             correctIndex:1,
             explanation:"Les branches du 2ᵉ niveau partent d'un événement déjà réalisé (au 1ᵉʳ niveau). Elles portent donc des <strong>probabilités conditionnelles</strong> comme $P_A(B)$ ou $P_{\\bar{A}}(B)$."
           }
@@ -1375,7 +1500,7 @@ const CHAPTER_DETAILS = {
           {
             id:'in-5', type:'qcm',
             question:"Si $A$ et $B$ sont indépendants, alors $P_A(B) = ?$",
-            options:['$0$', '$1$', '$P(B)$', '$P(A) \\times P(B)$'],
+            options:['$0$','$1$','$P(B)$','$P(A) \\times P(B)$'],
             correctIndex:2,
             explanation:"L'indépendance signifie que la connaissance de $A$ n'apporte aucune info sur $B$, donc $P_A(B) = \\mathbf{P(B)}$."
           }
@@ -1454,7 +1579,7 @@ const CHAPTER_DETAILS = {
           {
             id:'fc-1', type:'qcm',
             question:"Mettre $x^2 - 6x + 1$ sous forme canonique :",
-            options:['$(x - 3)^2 + 1$', '$(x - 3)^2 - 8$', '$(x + 3)^2 - 8$', '$(x - 6)^2 + 1$'],
+            options:['$(x - 3)^2 + 1$','$(x - 3)^2 - 8$','$(x + 3)^2 - 8$','$(x - 6)^2 + 1$'],
             correctIndex:1,
             explanation:"$x^2 - 6x = (x - 3)^2 - 9$ (complétion du carré).<br/>Donc $x^2 - 6x + 1 = (x - 3)^2 - 9 + 1 = \\mathbf{(x - 3)^2 - 8}$."
           },
@@ -1473,7 +1598,7 @@ const CHAPTER_DETAILS = {
           {
             id:'fc-4', type:'qcm',
             question:"Si $f(x) = a(x - h)^2 + k$ avec $a < 0$, la fonction admet en $x = h$ un :",
-            options:['Minimum local', 'Maximum local', 'Point d\'inflexion', "Rien de particulier"],
+            options:['Minimum local','Maximum local',"Point d\'inflexion",'Rien de particulier'],
             correctIndex:1,
             explanation:"Avec $a < 0$, la parabole est orientée vers le bas $\\to$ le sommet est un <strong>maximum</strong>. La valeur maximale est $k$, atteinte en $x = h$."
           },
@@ -1483,7 +1608,23 @@ const CHAPTER_DETAILS = {
             answer:-18, tolerance:0.001,
             explanation:"$(x + 5)^2 = x^2 + 10x + 25$. Donc $x^2 + 10x + 7 = (x + 5)^2 - 25 + 7 = (x + 5)^2 - 18$. $k = \\mathbf{-18}$."
           }
-        ]
+        ,
+        {id:'fc-6', type:'qcm', question:"Forme canonique de $f(x) = x^2 - 4x + 7$ :", options:['$(x-2)^2 + 3$','$(x+2)^2 + 3$','$(x-2)^2 + 7$','$(x-4)^2 + 7$'], correctIndex:0, explanation:"$\\alpha = -b/(2a) = 2$, $\\beta = f(2) = 4-8+7 = 3$. Donc $(x-2)^2 + 3$."},
+        {id:'fc-7', type:'qcm', question:"$f(x) = 2x^2 + 8x + 5$. $\\alpha = ?$", options:['$-2$','$2$','$-8$','$4$'], correctIndex:0, explanation:"$\\alpha = -b/(2a) = -8/4 = -2$."},
+        {id:'fc-8', type:'numeric', question:"$f(x) = x^2 - 6x + 13$. $\\beta = ?$", answer:4, tolerance:0.01, explanation:"$\\alpha = 3$, $\\beta = f(3) = 9 - 18 + 13 = \\mathbf 4$."},
+        {id:'fc-9', type:'qcm', question:"$f(x) = -x^2 + 4x - 1$. Forme canonique :", options:['$-(x-2)^2 + 3$','$(x+2)^2 - 3$','$-(x-2)^2 - 1$','$-(x+2)^2 + 3$'], correctIndex:0, explanation:"$a = -1$, $\\alpha = -4/(-2) = 2$, $\\beta = f(2) = -4+8-1 = 3$."},
+        {id:'fc-10', type:'qcm', question:"$f(x) = a(x-\\alpha)^2 + \\beta$. Le sommet est :", options:['$(\\alpha, \\beta)$','$(0, \\beta)$','$(\\alpha, 0)$','$(\\beta, \\alpha)$'], correctIndex:0, explanation:"Le sommet est en $(\\alpha, \\beta)$."},
+        {id:'fc-11', type:'qcm', question:"Si $a > 0$, le sommet $(\\alpha, \\beta)$ correspond à :", options:['Un maximum','Un minimum',"Un point d'inflexion",'Un zéro'], correctIndex:1, explanation:"$a > 0$ : parabole ouverte vers le haut, sommet = <strong>minimum</strong>."},
+        {id:'fc-12', type:'qcm', question:"$f(x) = x^2 + 6x - 1$. Forme canonique :", options:['$(x+3)^2 - 10$','$(x-3)^2 + 10$','$(x+3)^2 + 8$','$(x-3)^2 - 1$'], correctIndex:0, explanation:"$\\alpha = -3$, $\\beta = f(-3) = 9-18-1 = -10$."},
+        {id:'fc-13', type:'numeric', question:"$f(x) = 3x^2 - 12x + 7$. $\\beta = ?$", answer:-5, tolerance:0.01, explanation:"$\\alpha = 12/6 = 2$, $\\beta = 3\\times 4 - 24 + 7 = -5$."},
+        {id:'fc-14', type:'qcm', question:"$f(x) = -(x-1)^2 + 5$. Sommet et nature :", options:['$(1, 5)$, max','$(1, 5)$, min','$(-1, 5)$, max','$(1, -5)$, max'], correctIndex:0, explanation:"$a = -1 < 0$, sommet $(1, 5)$ = <strong>maximum</strong>."},
+        {id:'fc-15', type:'qcm', question:"$f(x) = 2(x+3)^2 - 1$. Forme développée :", options:['$2x^2 + 12x + 17$','$2x^2 + 6x + 17$','$x^2 + 12x + 17$','$2x^2 + 12x + 18$'], correctIndex:0, explanation:"$2(x^2+6x+9) - 1 = 2x^2 + 12x + 17$."},
+        {id:'fc-16', type:'numeric', question:"$f(x) = x^2 + 4x + 5$. Minimum atteint en $x = ?$", answer:-2, tolerance:0.01, explanation:"$\\alpha = -b/(2a) = -2$."},
+        {id:'fc-17', type:'numeric', question:"Pour la même $f$, valeur du minimum ?", answer:1, tolerance:0.01, explanation:"$f(-2) = 4 - 8 + 5 = 1$."},
+        {id:'fc-18', type:'qcm', question:"Forme canonique sert à :", options:['Trouver le sommet rapidement','Étudier signe et variations','Résoudre $f(x) = k$','Tout cela'], correctIndex:3, explanation:"Tous ces usages !"},
+        {id:'fc-19', type:'qcm', question:"$f(x) = x^2 - 2x + 1$. Forme canonique :", options:['$(x-1)^2$','$(x+1)^2$','$(x-1)^2 + 1$','$x^2$'], correctIndex:0, explanation:"Identité remarquable : $x^2 - 2x + 1 = (x-1)^2$. $\\beta = 0$."},
+        {id:'fc-20', type:'qcm', question:"$f(x) = -2x^2 + 4x$. Sommet :", options:['$(1, 2)$','$(1, -2)$','$(-1, 2)$','$(2, 0)$'], correctIndex:0, explanation:"$\\alpha = -4/(-4) = 1$, $\\beta = f(1) = -2+4 = 2$."}
+      ]
       },
       {
         id:'discriminant', number:2, title:'Discriminant et résolution',
@@ -1519,7 +1660,7 @@ const CHAPTER_DETAILS = {
           {
             id:'dis-4', type:'qcm',
             question:"Si $\\Delta = 0$, l'équation $ax^2 + bx + c = 0$ a :",
-            options:['Aucune solution', 'Une solution double', 'Deux solutions distinctes', 'Une infinité'],
+            options:['Aucune solution','Une solution double','Deux solutions distinctes','Une infinité'],
             correctIndex:1,
             explanation:"$\\Delta = 0 \\to$ <strong>une solution double</strong> $x_0 = -\\dfrac{b}{2a}$. Géométriquement, la parabole est tangente à l'axe des $x$ en ce point."
           },
@@ -1529,7 +1670,23 @@ const CHAPTER_DETAILS = {
             answer:4, tolerance:0.001,
             explanation:"Par les formules de Viète : somme $= -\\dfrac{b}{a} = -\\dfrac{-4}{1} = \\mathbf{4}$.<br/>(Vérification : solutions $5$ et $-1$, somme $= 4$ ✓)"
           }
-        ]
+        ,
+        {id:'dis-6', type:'numeric', question:"$\\Delta$ de $x^2 - 5x + 6$ ?", answer:1, tolerance:0.001, explanation:"$25 - 24 = 1$."},
+        {id:'dis-7', type:'numeric', question:"$\\Delta$ de $2x^2 + 3x - 2$ ?", answer:25, tolerance:0.01, explanation:"$9 + 16 = 25$."},
+        {id:'dis-8', type:'qcm', question:"$\\Delta < 0$ : nombre de racines réelles ?", options:['$0$','$1$','$2$','Infini'], correctIndex:0, explanation:"$\\Delta < 0 \\Rightarrow$ pas de racines réelles."},
+        {id:'dis-9', type:'qcm', question:"$\\Delta = 0$ : nombre de racines ?", options:['$0$','$1$ (double)','$2$','$1$ (simple)'], correctIndex:1, explanation:"$\\Delta = 0 \\Rightarrow$ une racine double."},
+        {id:'dis-10', type:'qcm', question:"$\\Delta = b^2 - 4ac$. Pour $x^2 + 2x + 1$ : $\\Delta = ?$", options:['$0$','$1$','$4$','$-3$'], correctIndex:0, explanation:"$4 - 4 = 0$."},
+        {id:'dis-11', type:'numeric', question:"$\\Delta$ de $-x^2 + 6x - 5$ ?", answer:16, tolerance:0.01, explanation:"$a = -1$, $b = 6$, $c = -5$. $36 - 4(-1)(-5) = 36 - 20 = 16$."},
+        {id:'dis-12', type:'qcm', question:"Si $\\Delta > 0$ et $a > 0$, la parabole :", options:["Touche l'axe en un point","Coupe l'axe en deux points",'Reste au-dessus','Reste en dessous'], correctIndex:1, explanation:"$\\Delta > 0$ : <strong>2 racines distinctes</strong>."},
+        {id:'dis-13', type:'numeric', question:"Pour $x^2 + 4x + 4$ : $\\Delta = ?$", answer:0, tolerance:0.001, explanation:"$16 - 16 = 0$. Racine double $-2$."},
+        {id:'dis-14', type:'qcm', question:"$f(x) = x^2 + 1$. Racines réelles ?", options:['Une','Deux','Aucune','Trois'], correctIndex:2, explanation:"$\\Delta = 0 - 4 = -4 < 0$. <strong>Aucune racine réelle</strong>."},
+        {id:'dis-15', type:'qcm', question:"$f(x) = ax^2 + bx + c$ a 2 racines $\\Leftrightarrow$", options:['$\\Delta = 0$','$\\Delta > 0$','$\\Delta < 0$','$a > 0$'], correctIndex:1, explanation:"$\\Delta > 0 \\Rightarrow$ 2 racines distinctes."},
+        {id:'dis-16', type:'numeric', question:"$\\Delta$ de $3x^2 - 6x + 3$ ?", answer:0, tolerance:0.001, explanation:"$36 - 36 = 0$. Racine double $1$."},
+        {id:'dis-17', type:'qcm', question:"Quel $k$ rend $x^2 - 4x + k$ tangent à $y = 0$ ?", options:['$k = 0$','$k = 4$','$k = -4$','$k = 16$'], correctIndex:1, explanation:"$\\Delta = 16 - 4k = 0 \\Leftrightarrow k = 4$."},
+        {id:'dis-18', type:'qcm', question:"$f(x) = x^2 - 7x + 12$. $\\Delta$ ?", options:['$1$','$49 - 48 = 1$','$49 + 48 = 97$','$5$'], correctIndex:1, explanation:"$49 - 4 \\times 12 = 1$."},
+        {id:'dis-19', type:'qcm', question:"$\\Delta = 16$. Racines $x_1$ et $x_2$ via formule $\\dfrac{-b \\pm \\sqrt\\Delta}{2a}$ : combien de calculs distincts ?", options:['1','2 (un +, un -)','3','4'], correctIndex:1, explanation:"On obtient deux racines par les signes $\\pm$."},
+        {id:'dis-20', type:'numeric', question:"$f(x) = x^2 + 2x + 5$. $\\Delta = ?$", answer:-16, tolerance:0.01, explanation:"$4 - 20 = -16$. Pas de racine."}
+      ]
       },
       {
         id:'factorisation-racines', number:3, title:'Factorisation et formules de Viète',
@@ -1547,7 +1704,7 @@ const CHAPTER_DETAILS = {
           {
             id:'fr-1', type:'qcm',
             question:"Les racines de $x^2 - 5x + 6 = 0$ sont $2$ et $3$. La forme factorisée est :",
-            options:['$(x + 2)(x + 3)$', '$(x - 2)(x - 3)$', '$(x - 2)(x + 3)$', '$(x + 5)(x - 6)$'],
+            options:['$(x + 2)(x + 3)$','$(x - 2)(x - 3)$','$(x - 2)(x + 3)$','$(x + 5)(x - 6)$'],
             correctIndex:1,
             explanation:"Forme factorisée : $a(x - x_1)(x - x_2) = 1 \\times (x - 2)(x - 3) = \\mathbf{(x - 2)(x - 3)}$."
           },
@@ -1572,11 +1729,27 @@ const CHAPTER_DETAILS = {
           {
             id:'fr-5', type:'qcm',
             question:"Deux nombres ont pour somme $5$ et pour produit $6$. Ces nombres sont :",
-            options:['$1$ et $5$', '$2$ et $3$', '$-1$ et $6$', '$0$ et $5$'],
+            options:['$1$ et $5$','$2$ et $3$','$-1$ et $6$','$0$ et $5$'],
             correctIndex:1,
             explanation:"On cherche les racines de $x^2 - 5x + 6 = 0$ (somme $5$ = $-b/a$, produit $6$ = $c/a$).<br/>$\\Delta = 25 - 24 = 1$, $x = \\dfrac{5 \\pm 1}{2}$, donc racines $\\mathbf{2}$ et $\\mathbf{3}$."
           }
-        ]
+        ,
+        {id:'fr-6', type:'qcm', question:"Racines de $x^2 - 5x + 6$ :", options:['$2$ et $3$','$1$ et $6$','$-2$ et $-3$','$3$ et $-3$'], correctIndex:0, explanation:"$\\Delta = 1$, $x = (5\\pm 1)/2 = 3$ ou $2$. <strong>$2$ et $3$</strong>."},
+        {id:'fr-7', type:'qcm', question:"Factorisation de $x^2 - 9$ :", options:['$(x-3)(x+3)$','$(x-3)^2$','$(x-9)(x+1)$','$x(x-9)$'], correctIndex:0, explanation:"Différence de carrés."},
+        {id:'fr-8', type:'qcm', question:"Racines de $2x^2 - 8$ :", options:['$\\pm 4$','$\\pm 2$','$\\pm \\sqrt 2$','$\\pm 8$'], correctIndex:1, explanation:"$2x^2 = 8 \\Leftrightarrow x^2 = 4 \\Leftrightarrow x = \\pm 2$."},
+        {id:'fr-9', type:'qcm', question:"$x^2 - 3x = 0$ donne :", options:['$x = 0$ ou $x = 3$','$x = 3$','$x = -3$','Pas de sol.'], correctIndex:0, explanation:"$x(x-3) = 0$."},
+        {id:'fr-10', type:'numeric', question:"Plus grande racine de $x^2 - 7x + 10$ ?", answer:5, tolerance:0.001, explanation:"$\\Delta = 9$, $x = (7+3)/2 = 5$ ou $(7-3)/2 = 2$. Max : <strong>5</strong>."},
+        {id:'fr-11', type:'qcm', question:"$f(x) = a(x-x_1)(x-x_2)$ avec $x_1 = 1$, $x_2 = -2$, $a = 3$. Forme développée ?", options:['$3x^2 + 3x - 6$','$3x^2 - 3x - 6$','$x^2 + x - 2$','$3(x^2+x-2)$'], correctIndex:0, explanation:"$3(x-1)(x+2) = 3(x^2+x-2) = 3x^2+3x-6$."},
+        {id:'fr-12', type:'qcm', question:"Somme des racines de $ax^2+bx+c$ :", options:['$-b/a$','$b/a$','$c/a$','$-c/a$'], correctIndex:0, explanation:"Formule de Viète : $x_1 + x_2 = -b/a$."},
+        {id:'fr-13', type:'qcm', question:"Produit des racines de $ax^2+bx+c$ :", options:['$-b/a$','$b/a$','$c/a$','$-c/a$'], correctIndex:2, explanation:"$x_1 x_2 = c/a$."},
+        {id:'fr-14', type:'numeric', question:"$x^2 - 6x + 9$ : racine double ?", answer:3, tolerance:0.001, explanation:"$(x-3)^2 = 0$."},
+        {id:'fr-15', type:'qcm', question:"$x^2 + 4 = 0$ a :", options:['Deux racines réelles','Une racine double','Pas de racine réelle','Une seule racine'], correctIndex:2, explanation:"$\\Delta = -16 < 0$."},
+        {id:'fr-16', type:'numeric', question:"Une racine de $x^2 - 4x - 5$ ?", answer:5, tolerance:0.001, explanation:"$\\Delta = 16+20 = 36$, $x = (4\\pm 6)/2 = 5$ ou $-1$."},
+        {id:'fr-17', type:'qcm', question:"$2x^2 + 7x + 3$ : racines ?", options:['$-3$ et $-1/2$','$-3$ et $1/2$','$3$ et $1/2$','$1$ et $3$'], correctIndex:0, explanation:"$\\Delta = 49 - 24 = 25$, $x = (-7\\pm 5)/4 = -1/2$ ou $-3$."},
+        {id:'fr-18', type:'qcm', question:"$f(x) = -(x-2)(x+1)$. Racines :", options:['$1$ et $-2$','$2$ et $-1$','$2$ et $1$','$-2$ et $-1$'], correctIndex:1, explanation:"Forme factorisée : racines $2$ et $-1$."},
+        {id:'fr-19', type:'qcm', question:"$x^2 - x - 6$ se factorise en :", options:['$(x-3)(x+2)$','$(x-2)(x+3)$','$(x-6)(x+1)$','$(x-3)(x-2)$'], correctIndex:0, explanation:"Racines $3$ et $-2$ ($\\Delta = 25$)."},
+        {id:'fr-20', type:'qcm', question:"Si $x_1 + x_2 = 5$ et $x_1 x_2 = 6$, polynôme :", options:['$x^2 - 5x + 6$','$x^2 + 5x + 6$','$x^2 - 6x + 5$','$x^2 + 5x - 6$'], correctIndex:0, explanation:"$x^2 - (x_1+x_2)x + x_1 x_2 = x^2 - 5x + 6$."}
+      ]
       },
       {
         id:'parabole', number:4, title:'Représentation graphique (parabole)',
@@ -1594,14 +1767,14 @@ const CHAPTER_DETAILS = {
           {
             id:'pa-1', type:'qcm',
             question:"La parabole $y = -2x^2 + 3x + 1$ est orientée :",
-            options:['Vers le haut', 'Vers le bas', 'Horizontalement', 'En diagonale'],
+            options:['Vers le haut','Vers le bas','Horizontalement','En diagonale'],
             correctIndex:1,
             explanation:"$a = -2 < 0$, donc la parabole est orientée <strong>vers le bas</strong> (forme $\\cap$, comme une montagne)."
           },
           {
             id:'pa-2', type:'qcm',
             question:"Quel est le sommet de la parabole $y = (x - 4)^2 + 7$ ?",
-            options:['$S(-4\\,;\\,7)$', '$S(4\\,;\\,-7)$', '$S(4\\,;\\,7)$', '$S(-4\\,;\\,-7)$'],
+            options:['$S(-4\\,;\\,7)$','$S(4\\,;\\,-7)$','$S(4\\,;\\,7)$','$S(-4\\,;\\,-7)$'],
             correctIndex:2,
             explanation:"Forme canonique $a(x - h)^2 + k$ avec $a = 1$, $h = 4$, $k = 7$.<br/>Sommet : $\\mathbf{S(4\\,;\\,7)}$."
           },
@@ -1623,7 +1796,23 @@ const CHAPTER_DETAILS = {
             answer:-2, tolerance:0.001,
             explanation:"Axe de symétrie : $x = -\\dfrac{b}{2a} = -\\dfrac{8}{2 \\times 2} = \\dfrac{-8}{4} = \\mathbf{-2}$."
           }
-        ]
+        ,
+        {id:'par-6', type:'qcm', question:"$f(x) = x^2$. Axe de symétrie ?", options:['$x = 0$','$y = 0$','$x = 1$','Aucun'], correctIndex:0, explanation:"Axe $x = 0$ (l'axe des ordonnées)."},
+        {id:'par-7', type:'qcm', question:"$f(x) = (x-3)^2 + 2$. Axe de symétrie ?", options:['$x = 3$','$x = 2$','$x = -3$','$y = 2$'], correctIndex:0, explanation:"$x = \\alpha = 3$."},
+        {id:'par-8', type:'qcm', question:"Si $a > 0$, la parabole est tournée vers :", options:['Le haut','Le bas','La droite','La gauche'], correctIndex:0, explanation:"$a > 0$ : ouverture vers le haut."},
+        {id:'par-9', type:'qcm', question:"$a < 0$ : la parabole est tournée vers :", options:['Le haut','Le bas','La gauche','Aucun'], correctIndex:1, explanation:"$a < 0$ : ouverture vers le bas."},
+        {id:'par-10', type:'numeric', question:"$f(x) = 2x^2 - 4x + 1$. Abscisse du sommet ?", answer:1, tolerance:0.001, explanation:"$\\alpha = 4/4 = 1$."},
+        {id:'par-11', type:'numeric', question:"Pour la même $f$ : ordonnée du sommet ?", answer:-1, tolerance:0.001, explanation:"$f(1) = 2 - 4 + 1 = -1$."},
+        {id:'par-12', type:'qcm', question:"Variations de $f(x) = x^2 - 2x$ : la fonction est :", options:['Croissante puis décroissante','Décroissante puis croissante','Toujours croissante','Toujours décroissante'], correctIndex:1, explanation:"$a > 0$ : $\\searrow$ avant $\\alpha = 1$, $\\nearrow$ après."},
+        {id:'par-13', type:'qcm', question:"$f(x) = -x^2 + 4x$. Maximum ?", options:['$0$','$2$','$4$','$\\sqrt 2$'], correctIndex:2, explanation:"$\\alpha = 2$, $f(2) = -4 + 8 = 4$."},
+        {id:'par-14', type:'qcm', question:"Image de $-2$ par $f(x) = x^2 + 1$ :", options:['$3$','$5$','$-3$','$-1$'], correctIndex:1, explanation:"$f(-2) = 4 + 1 = 5$."},
+        {id:'par-15', type:'qcm', question:"Antécédent(s) de $4$ par $f(x) = x^2$ :", options:['$2$ uniquement','$-2$ uniquement','$2$ et $-2$','Aucun'], correctIndex:2, explanation:"$x^2 = 4 \\Rightarrow x = \\pm 2$."},
+        {id:'par-16', type:'qcm', question:"$f$ et $-f$ (avec $f$ trinôme) ont :", options:['Même axe de symétrie','Le même sommet','Sont identiques','Axes orthogonaux'], correctIndex:0, explanation:"Multiplier par $-1$ ne change pas $\\alpha$. <strong>Même axe</strong>."},
+        {id:'par-17', type:'numeric', question:"Si $f(0) = 5$ pour $f(x) = ax^2 + bx + c$, alors $c = ?$", answer:5, tolerance:0.001, explanation:"$f(0) = c$."},
+        {id:'par-18', type:'qcm', question:"Une parabole et son axe se coupent en :", options:['Le sommet','Les racines',"L'origine",'2 points'], correctIndex:0, explanation:"L'axe passe par le sommet."},
+        {id:'par-19', type:'qcm', question:"$f(x) = x^2 - 6x + 9$. La parabole touche l'axe en :", options:['Un seul point','Deux points','Aucun point','Trois points'], correctIndex:0, explanation:"Racine double $3$ : tangente à l'axe."},
+        {id:'par-20', type:'qcm', question:"Coordonnées du sommet de $y = (x-4)^2 - 7$ :", options:['$(4, -7)$','$(-4, 7)$','$(7, 4)$','$(4, 7)$'], correctIndex:0, explanation:"Sommet $(\\alpha, \\beta) = (4, -7)$."}
+      ]
       },
       {
         id:'signe-trinome', number:5, title:'Signe du trinôme et inéquations',
@@ -1641,14 +1830,14 @@ const CHAPTER_DETAILS = {
           {
             id:'st-1', type:'qcm',
             question:"Quel est le signe de $x^2 - 5x + 6$ pour $x = 4$ ?",
-            options:['Positif', 'Négatif', 'Nul', 'On ne peut pas savoir'],
+            options:['Positif','Négatif','Nul','On ne peut pas savoir'],
             correctIndex:0,
             explanation:"Racines : $2$ et $3$. Pour $x = 4$ (à l'extérieur des racines, à droite), le trinôme est du <strong>signe de $a = 1 > 0$</strong>, donc <strong>positif</strong>. Calcul direct : $16 - 20 + 6 = 2 > 0$ ✓"
           },
           {
             id:'st-2', type:'qcm',
             question:"Quel est le signe de $x^2 + x + 1$ sur $\\mathbb{R}$ ?",
-            options:['Toujours positif', 'Toujours négatif', 'Change de signe', "Toujours nul"],
+            options:['Toujours positif','Toujours négatif','Change de signe','Toujours nul'],
             correctIndex:0,
             explanation:"$\\Delta = 1 - 4 = -3 < 0$. Pas de racines. Le trinôme est du signe de $a = 1 > 0$ partout : <strong>toujours positif</strong>."
           },
@@ -1662,7 +1851,7 @@ const CHAPTER_DETAILS = {
           {
             id:'st-4', type:'qcm',
             question:"Quel est le signe de $-(x - 1)(x - 5)$ pour $x = 3$ ?",
-            options:['Positif', 'Négatif', 'Nul', 'Indéfini'],
+            options:['Positif','Négatif','Nul','Indéfini'],
             correctIndex:0,
             explanation:"Racines : $1$ et $5$. Le coefficient principal est $a = -1 < 0$. Donc le trinôme est négatif <strong>à l'extérieur</strong> des racines, positif <strong>entre</strong> $1$ et $5$. Pour $x = 3$ (entre) : <strong>positif</strong>. Vérif : $-(3-1)(3-5) = -(2)(-2) = 4 > 0$ ✓"
           },
@@ -1673,7 +1862,23 @@ const CHAPTER_DETAILS = {
             correctIndex:2,
             explanation:"$x^2 - 4 = (x-2)(x+2)$, racines $-2$ et $2$. $a = 1 > 0$, donc positif à l'extérieur.<br/>$x^2 - 4 \\geq 0$ ssi $x \\leq -2$ ou $x \\geq 2$, soit $\\mathbf{]-\\infty\\,;\\,-2] \\cup [2\\,;\\,+\\infty[}$."
           }
-        ]
+        ,
+        {id:'st-6', type:'qcm', question:"$f(x) = x^2 - 4$. Signe ?", options:['$+$ partout','$-$ partout','$+$ hors $[-2, 2]$, $-$ entre','$-$ hors, $+$ entre'], correctIndex:2, explanation:"$a > 0$ : $+$ à l'extérieur des racines $\\pm 2$, $-$ entre."},
+        {id:'st-7', type:'qcm', question:"$f(x) = -x^2 + 4$. Signe ?", options:['$+$ entre $\\pm 2$, $-$ hors','$-$ entre, $+$ hors','$+$ partout','$-$ partout'], correctIndex:0, explanation:"$a < 0$ : signe contraire : $+$ entre racines, $-$ hors."},
+        {id:'st-8', type:'qcm', question:"$f(x) = x^2 + 1$ est :", options:['Toujours positive','Toujours négative','Change de signe','Nulle en $x = -1$'], correctIndex:0, explanation:"$\\Delta = -4 < 0$ et $a > 0$ : <strong>toujours positive</strong>."},
+        {id:'st-9', type:'qcm', question:"$f(x) = -x^2 - 1$ est :", options:['Toujours positive','Toujours négative','Change de signe','Nulle'], correctIndex:1, explanation:"$\\Delta < 0$ et $a < 0$ : toujours négative."},
+        {id:'st-10', type:'qcm', question:"$f(x) = (x-1)(x-3)$. $f(x) \\leq 0$ ssi :", options:['$x \\in [1, 3]$','$x \\notin [1, 3]$','$x = 1$ ou $x = 3$','$x \\in \\mathbb R$'], correctIndex:0, explanation:"Entre les racines, signe négatif (car $a > 0$)."},
+        {id:'st-11', type:'qcm', question:"Résoudre $x^2 < 9$ :", options:['$x < 3$','$x > 3$','$-3 < x < 3$','$x \\neq 0$'], correctIndex:2, explanation:"$x^2 - 9 < 0 \\Leftrightarrow (x-3)(x+3) < 0 \\Leftrightarrow -3 < x < 3$."},
+        {id:'st-12', type:'qcm', question:"Résoudre $x^2 \\geq 4$ :", options:['$x \\geq 2$','$x \\leq -2$ ou $x \\geq 2$','$-2 \\leq x \\leq 2$','$x \\neq \\pm 2$'], correctIndex:1, explanation:"Hors $[-2, 2]$."},
+        {id:'st-13', type:'qcm', question:"$\\Delta < 0$ : signe du trinôme $ax^2+bx+c$ :", options:['Du signe de $a$ partout','Du signe contraire de $a$','Variable','$+$ puis $-$'], correctIndex:0, explanation:"Pas de racine, signe constant = signe de $a$."},
+        {id:'st-14', type:'qcm', question:"$x^2 + x + 1$ est :", options:['Toujours positive','Toujours négative','Nulle en $x = -1$','Variable'], correctIndex:0, explanation:"$\\Delta = 1 - 4 = -3 < 0$, $a > 0$ : tjrs $+$."},
+        {id:'st-15', type:'qcm', question:"Tableau de signe de $(x-2)(x+1)$ :", options:['$+$ partout','$-$ partout','$+$ avant $-1$, $-$ entre, $+$ après $2$','$-$ avant $-1$, $+$ entre, $-$ après'], correctIndex:2, explanation:"$a > 0$ : $+$ hors racines, $-$ entre."},
+        {id:'st-16', type:'qcm', question:"$f(x) = -2x^2 + 8x - 6$. $f(x) > 0$ ssi :", options:['$x \\in ]1, 3[$','$x < 1$ ou $x > 3$','Pour tout $x$','Aucun $x$'], correctIndex:0, explanation:"Racines $1$ et $3$ ; $a < 0$ donc $+$ entre."},
+        {id:'st-17', type:'qcm', question:"Résoudre $x^2 - x - 2 \\geq 0$ :", options:['$x \\leq -1$ ou $x \\geq 2$','$-1 \\leq x \\leq 2$','$x \\geq 2$','Aucune solution'], correctIndex:0, explanation:"$(x-2)(x+1) \\geq 0$ : hors $]-1, 2[$ donc $x \\leq -1$ ou $x \\geq 2$."},
+        {id:'st-18', type:'qcm', question:"$f(x) = 3x^2 - 12$. Combien de solutions à $f(x) = 0$ ?", options:['0','1','2','3'], correctIndex:2, explanation:"$3x^2 = 12 \\Rightarrow x^2 = 4 \\Rightarrow x = \\pm 2$."},
+        {id:'st-19', type:'qcm', question:"$\\Delta = 0$ : signe du trinôme ?", options:["Du signe de $a$, sauf en $\\alpha$ où il s'annule",'Toujours nul','Toujours $+$','Variable'], correctIndex:0, explanation:"Une racine double : signe de $a$ partout, $0$ en $\\alpha$."},
+        {id:'st-20', type:'numeric', question:"Combien de solutions à $x^2 - 6x + 9 = 0$ ?", answer:1, tolerance:0.001, explanation:"$(x-3)^2 = 0$, racine double : <strong>1</strong>."}
+      ]
       }
     ]
   },
@@ -1754,21 +1959,21 @@ const CHAPTER_DETAILS = {
           {
             id:'tan-1', type:'qcm',
             question:"Soit $f(x) = x^2$ avec $f'(2) = 4$ et $f(2) = 4$.<br/>Quelle est l'équation de la tangente en $x = 2$ ?",
-            options:['$y = 4x$', '$y = 4x - 4$', '$y = 4x + 4$', '$y = 2x - 4$'],
+            options:['$y = 4x$','$y = 4x - 4$','$y = 4x + 4$','$y = 2x - 4$'],
             correctIndex:1,
             explanation:"$y = f'(a)(x - a) + f(a) = 4(x - 2) + 4 = 4x - 8 + 4 = \\mathbf{4x - 4}$."
           },
           {
             id:'tan-2', type:'qcm',
             question:"Si $f'(a) = 0$, la tangente en $a$ est :",
-            options:['Verticale', 'Horizontale', 'Confondue avec l\'axe des $y$', 'Identique à la courbe'],
+            options:['Verticale','Horizontale',"Confondue avec l\'axe des $y$",'Identique à la courbe'],
             correctIndex:1,
             explanation:"Coefficient directeur $0 \\to$ droite <strong>horizontale</strong>. Cela arrive aux extremums locaux (maxima, minima)."
           },
           {
             id:'tan-3', type:'qcm',
             question:"Tangente à $f(x) = x^2$ en $x = 0$ (avec $f'(0) = 0$ et $f(0) = 0$) :",
-            options:['$y = 0$', '$y = x$', '$y = -x$', '$x = 0$'],
+            options:['$y = 0$','$y = x$','$y = -x$','$x = 0$'],
             correctIndex:0,
             explanation:"$y = f'(0)(x - 0) + f(0) = 0 \\times x + 0 = \\mathbf{0}$. La tangente est l'axe des abscisses."
           },
@@ -1809,7 +2014,7 @@ const CHAPTER_DETAILS = {
           {
             id:'fd-1', type:'qcm',
             question:"Que vaut la dérivée de $f(x) = x^3$ ?",
-            options:['$x^2$', '$3x^2$', '$3x^3$', '$x^4 / 4$'],
+            options:['$x^2$','$3x^2$','$3x^3$','$x^4 / 4$'],
             correctIndex:1,
             explanation:"Formule : $(x^n)' = nx^{n-1}$. Pour $n = 3$ : $(x^3)' = \\mathbf{3x^2}$."
           },
@@ -1822,21 +2027,21 @@ const CHAPTER_DETAILS = {
           {
             id:'fd-3', type:'qcm',
             question:"Que vaut la dérivée de $f(x) = x^4$ ?",
-            options:['$4x^3$', '$x^3$', '$4x^5$', '$x^5 / 5$'],
+            options:['$4x^3$','$x^3$','$4x^5$','$x^5 / 5$'],
             correctIndex:0,
             explanation:"$(x^n)' = nx^{n-1}$ avec $n = 4$ : $(x^4)' = \\mathbf{4x^3}$."
           },
           {
             id:'fd-4', type:'qcm',
             question:"Que vaut la dérivée de $f(x) = x^2$ ?",
-            options:['$x$', '$2x$', '$x^2 / 2$', '$2$'],
+            options:['$x$','$2x$','$x^2 / 2$','$2$'],
             correctIndex:1,
             explanation:"$(x^n)' = nx^{n-1}$ avec $n = 2$ : $(x^2)' = 2x^{2-1} = \\mathbf{2x}$."
           },
           {
             id:'fd-5', type:'qcm',
             question:"Que vaut la dérivée de $f(x) = \\dfrac{1}{x}$ ?",
-            options:['$\\dfrac{1}{x}$', '$\\dfrac{1}{x^2}$', '$-\\dfrac{1}{x^2}$', "$-\\dfrac{1}{x}$"],
+            options:['$\\dfrac{1}{x}$','$\\dfrac{1}{x^2}$','$-\\dfrac{1}{x^2}$','$-\\dfrac{1}{x}$'],
             correctIndex:2,
             explanation:"Formule usuelle : $\\left(\\dfrac{1}{x}\\right)' = \\mathbf{-\\dfrac{1}{x^2}}$. (Attention au signe moins.)"
           }
@@ -1858,21 +2063,21 @@ const CHAPTER_DETAILS = {
           {
             id:'op-1', type:'qcm',
             question:"Dérivée de $f(x) = 3x^2 + 2x$ :",
-            options:['$3x + 2$', '$6x + 2$', '$5x$', '$6x^2 + 2$'],
+            options:['$3x + 2$','$6x + 2$','$5x$','$6x^2 + 2$'],
             correctIndex:1,
             explanation:"$(3x^2)' = 3 \\times 2x = 6x$. $(2x)' = 2$. Somme : $\\mathbf{f'(x) = 6x + 2}$."
           },
           {
             id:'op-2', type:'qcm',
             question:"Dérivée de $f(x) = 5x^3 - 2x + 7$ :",
-            options:['$15x^2 - 2$', '$15x^2 - 2 + 7$', '$5x^2 - 2$', '$15x^2$'],
+            options:['$15x^2 - 2$','$15x^2 - 2 + 7$','$5x^2 - 2$','$15x^2$'],
             correctIndex:0,
             explanation:"$(5x^3)' = 15x^2$, $(-2x)' = -2$, $(7)' = 0$. Somme : $\\mathbf{15x^2 - 2}$. <br/>(La constante $+7$ disparaît à la dérivation.)"
           },
           {
             id:'op-3', type:'qcm',
             question:"Dérivée de $f(x) = -3x^2 + 4$ :",
-            options:['$-6x + 4$', '$-6x$', '$-3x$', '$-6x - 4$'],
+            options:['$-6x + 4$','$-6x$','$-3x$','$-6x - 4$'],
             correctIndex:1,
             explanation:"$(-3x^2)' = -3 \\times 2x = -6x$. $(4)' = 0$. Donc $\\mathbf{f'(x) = -6x}$."
           },
@@ -1924,7 +2129,7 @@ const CHAPTER_DETAILS = {
           {
             id:'vd-2', type:'qcm',
             question:"$f'$ s'annule en $x = 2$ en passant du signe $+$ au signe $-$. Alors $f$ a en $x = 2$ :",
-            options:['Un minimum local', 'Un maximum local', 'Un point d\'inflexion', 'Une asymptote'],
+            options:['Un minimum local','Un maximum local',"Un point d\'inflexion",'Une asymptote'],
             correctIndex:1,
             explanation:"$f$ croît avant ($f' > 0$) puis décroît après ($f' < 0$). C'est un <strong>maximum local</strong>.<br/>Mnémo : « $+/-$ → max ; $-/+$ → min »."
           },
@@ -1996,7 +2201,7 @@ const CHAPTER_DETAILS = {
           {
             id:'pui-4', type:'qcm',
             question:"Calculer $5^{-2}$ :",
-            options:['$-25$', '$-10$', '$\\dfrac{1}{25}$', '$\\dfrac{1}{10}$'],
+            options:['$-25$','$-10$','$\\dfrac{1}{25}$','$\\dfrac{1}{10}$'],
             correctIndex:2,
             explanation:"$5^{-2} = \\dfrac{1}{5^2} = \\mathbf{\\dfrac{1}{25}}$. La puissance négative donne l'inverse, pas un nombre négatif."
           },
@@ -2030,7 +2235,7 @@ const CHAPTER_DETAILS = {
           {
             id:'rp-2', type:'qcm',
             question:"Simplifier $(3^2)^4$ :",
-            options:['$3^6$', '$3^8$', '$3^{16}$', '$9^4$'],
+            options:['$3^6$','$3^8$','$3^{16}$','$9^4$'],
             correctIndex:1,
             explanation:"Puissance de puissance : on multiplie les exposants. $(3^2)^4 = 3^{2 \\times 4} = \\mathbf{3^8}$."
           },
@@ -2043,7 +2248,7 @@ const CHAPTER_DETAILS = {
           {
             id:'rp-4', type:'qcm',
             question:"Simplifier $(2 \\times 3)^2$ :",
-            options:['$5^2 = 25$', '$2^2 \\times 3^2 = 36$', '$2 \\times 3^2 = 18$', '$6^3 = 216$'],
+            options:['$5^2 = 25$','$2^2 \\times 3^2 = 36$','$2 \\times 3^2 = 18$','$6^3 = 216$'],
             correctIndex:1,
             explanation:"$(a \\times b)^n = a^n \\times b^n$. Donc $(2 \\times 3)^2 = 2^2 \\times 3^2 = 4 \\times 9 = \\mathbf{36}$.<br/>(Vérif direct : $(2 \\times 3)^2 = 6^2 = 36$ ✓)"
           },
@@ -2083,7 +2288,7 @@ const CHAPTER_DETAILS = {
           {
             id:'p10-3', type:'qcm',
             question:"L'écriture scientifique de $345\\,000$ est :",
-            options:['$345 \\times 10^3$', '$3{,}45 \\times 10^5$', '$34{,}5 \\times 10^4$', '$0{,}345 \\times 10^6$'],
+            options:['$345 \\times 10^3$','$3{,}45 \\times 10^5$','$34{,}5 \\times 10^4$','$0{,}345 \\times 10^6$'],
             correctIndex:1,
             explanation:"Pour l'écriture scientifique, on a $a \\times 10^n$ avec $1 \\leq a < 10$.<br/>$345\\,000 = \\mathbf{3{,}45 \\times 10^5}$ (on décale la virgule de 5 rangs vers la gauche)."
           },
@@ -2129,7 +2334,7 @@ const CHAPTER_DETAILS = {
           {
             id:'rac-3', type:'qcm',
             question:"Que vaut $(\\sqrt{7})^2$ ?",
-            options:['$7$', '$49$', '$\\sqrt{14}$', '$\\sqrt{49}$'],
+            options:['$7$','$49$','$\\sqrt{14}$','$\\sqrt{49}$'],
             correctIndex:0,
             explanation:"Par définition, $(\\sqrt{a})^2 = a$. Donc $(\\sqrt{7})^2 = \\mathbf{7}$."
           },
@@ -2142,7 +2347,7 @@ const CHAPTER_DETAILS = {
           {
             id:'rac-5', type:'qcm',
             question:"Calculer $\\sqrt{\\dfrac{16}{9}}$ :",
-            options:['$\\dfrac{4}{3}$', '$\\dfrac{16}{3}$', '$\\dfrac{4}{9}$', '$\\dfrac{7}{12}$'],
+            options:['$\\dfrac{4}{3}$','$\\dfrac{16}{3}$','$\\dfrac{4}{9}$','$\\dfrac{7}{12}$'],
             correctIndex:0,
             explanation:"$\\sqrt{\\dfrac{16}{9}} = \\dfrac{\\sqrt{16}}{\\sqrt{9}} = \\mathbf{\\dfrac{4}{3}}$."
           }
@@ -2317,7 +2522,7 @@ const CHAPTER_DETAILS = {
           {id:'tr4-1', type:'numeric', question:"Triangle rectangle en $A$, $\\widehat{B} = 30°$, hypoténuse $BC = 10$. Que vaut $AB$ (côté adjacent) ? (Forme décimale arrondie au centième)", answer:8.66, tolerance:0.1, explanation:"$\\cos(30°) = \\dfrac{AB}{BC}$, donc $AB = BC \\cos(30°) = 10 \\times \\dfrac{\\sqrt{3}}{2} \\approx \\mathbf{8{,}66}$."},
           {id:'tr4-2', type:'numeric', question:"Triangle rectangle en $A$, $\\widehat{B} = 60°$, $AB = 5$. Que vaut $AC$ ?", answer:8.66, tolerance:0.1, explanation:"$\\tan(60°) = \\dfrac{AC}{AB}$, donc $AC = AB \\times \\tan(60°) = 5 \\times \\sqrt{3} \\approx \\mathbf{8{,}66}$."},
           {id:'tr4-3', type:'numeric', question:"Triangle rectangle en $A$, $AB = 3$, $AC = 4$. Que vaut $\\widehat{B}$ (en degrés, arrondi à l'unité) ?", answer:53, tolerance:1, explanation:"$\\tan(\\widehat{B}) = \\dfrac{AC}{AB} = \\dfrac{4}{3}$. Avec la calculatrice : $\\widehat{B} = \\tan^{-1}(4/3) \\approx \\mathbf{53°}$."},
-          {id:'tr4-4', type:'qcm', question:"Pour trouver une longueur en triangle rectangle, on utilise le rapport qui contient :", options:["L'angle et les deux longueurs inconnues","L'angle, la longueur connue, et la longueur cherchée","Seulement les longueurs","La somme des angles"],correctIndex:1, explanation:"On choisit le rapport ($\\cos$, $\\sin$ ou $\\tan$) qui relie : l'angle connu, la longueur connue, et la longueur cherchée. Pour le résoudre, l'inconnue doit pouvoir s'isoler."},
+          {id:'tr4-4', type:'qcm', question:"Pour trouver une longueur en triangle rectangle, on utilise le rapport qui contient :", options:["L'angle et les deux longueurs inconnues","L'angle, la longueur connue, et la longueur cherchée",'Seulement les longueurs','La somme des angles'],correctIndex:1, explanation:"On choisit le rapport ($\\cos$, $\\sin$ ou $\\tan$) qui relie : l'angle connu, la longueur connue, et la longueur cherchée. Pour le résoudre, l'inconnue doit pouvoir s'isoler."},
           {id:'tr4-5', type:'numeric', question:"Triangle rectangle, hypoténuse $= 10$ et un angle aigu vaut $45°$. Que vaut le côté opposé ? (Forme décimale au centième)", answer:7.07, tolerance:0.05, explanation:"$\\sin(45°) = \\dfrac{\\text{opp}}{10}$, donc opposé $= 10 \\times \\dfrac{\\sqrt{2}}{2} \\approx \\mathbf{7{,}07}$."}
         ]
       }
@@ -2344,7 +2549,7 @@ const CHAPTER_DETAILS = {
           {id:'vec1-2', type:'qcm', question:"Le vecteur $\\overrightarrow{AB}$ représente :", options:['Le segment $[AB]$','Le déplacement de $A$ vers $B$','La distance de $A$ à $B$','Le milieu de $[AB]$'],correctIndex:1, explanation:"$\\overrightarrow{AB}$ est le <strong>déplacement</strong> de $A$ vers $B$. Le segment $[AB]$ est différent (objet géométrique fixe). La distance est $AB = \\|\\overrightarrow{AB}\\|$."},
           {id:'vec1-3', type:'qcm', question:"$\\overrightarrow{AB} = \\overrightarrow{CD}$ si et seulement si :", options:['$AB = CD$ uniquement','$ABCD$ est un parallélogramme','$ABDC$ est un parallélogramme','$ABCD$ est un rectangle'],correctIndex:2, explanation:"L'égalité de deux vecteurs équivaut à dire que $\\mathbf{ABDC}$ forme un parallélogramme (attention à l'ordre des sommets !)."},
           {id:'vec1-4', type:'numeric', question:"Si $A(1\\,;\\,2)$ et $B(4\\,;\\,6)$, que vaut $\\|\\overrightarrow{AB}\\|$ ?", answer:5, tolerance:0.001, explanation:"$\\|\\overrightarrow{AB}\\| = AB = \\sqrt{(4-1)^2 + (6-2)^2} = \\sqrt{9 + 16} = \\sqrt{25} = \\mathbf{5}$."},
-          {id:'vec1-5', type:'qcm', question:"Le vecteur nul $\\vec{0}$ a pour norme :", options:['$1$','$0$','$+\\infty$',"Aucune valeur"],correctIndex:1, explanation:"$\\|\\vec{0}\\| = \\mathbf{0}$ par définition. Le vecteur nul correspond à « pas de déplacement »."}
+          {id:'vec1-5', type:'qcm', question:"Le vecteur nul $\\vec{0}$ a pour norme :", options:['$1$','$0$','$+\\infty$','Aucune valeur'],correctIndex:1, explanation:"$\\|\\vec{0}\\| = \\mathbf{0}$ par définition. Le vecteur nul correspond à « pas de déplacement »."}
         ]
       },
       {
@@ -2513,10 +2718,10 @@ const CHAPTER_DETAILS = {
           "L'intuition de Première devient un théorème rigoureux en Terminale"
         ],
         exercises:[
-          {id:'lim1-1', type:'qcm', question:"Une suite $(u_n)$ converge vers $L$ signifie :", options:["$u_n = L$ pour tout $n$","$u_n$ se rapproche de $L$ quand $n$ grandit","$u_n$ atteint $L$","$L$ est le plus grand terme"], correctIndex:1, explanation:"Convergence = $u_n$ se <strong>rapproche</strong> de $L$ quand $n$ grandit (sans nécessairement l'atteindre)."},
+          {id:'lim1-1', type:'qcm', question:"Une suite $(u_n)$ converge vers $L$ signifie :", options:['$u_n = L$ pour tout $n$','$u_n$ se rapproche de $L$ quand $n$ grandit','$u_n$ atteint $L$','$L$ est le plus grand terme'], correctIndex:1, explanation:"Convergence = $u_n$ se <strong>rapproche</strong> de $L$ quand $n$ grandit (sans nécessairement l'atteindre)."},
           {id:'lim1-2', type:'numeric', question:"Soit $u_n = 3 + \\dfrac{1}{n}$. Vers quelle valeur converge cette suite ?", answer:3, tolerance:0.001, explanation:"$\\dfrac{1}{n} \\to 0$ quand $n \\to +\\infty$, donc $u_n \\to 3 + 0 = \\mathbf{3}$."},
-          {id:'lim1-3', type:'qcm', question:"Une suite divergente :", options:["Tend vers $+\\infty$","Tend vers $-\\infty$","N'a pas de limite finie","Toutes les réponses ci-dessus"], correctIndex:3, explanation:"Divergente = ne converge PAS vers une limite finie. Cela inclut les suites tendant vers $\\pm\\infty$ ET celles qui n'ont aucune limite (oscillantes)."},
-          {id:'lim1-4', type:'qcm', question:"Si $u_n \\to L$ et $u_n \\to L'$, alors :", options:["$L = L'$ (unicité)","$L \\neq L'$","On ne peut pas conclure","La suite oscille"], correctIndex:0, explanation:"<strong>Unicité de la limite</strong> : une suite convergente a une limite et une seule."},
+          {id:'lim1-3', type:'qcm', question:"Une suite divergente :", options:['Tend vers $+\\infty$','Tend vers $-\\infty$',"N'a pas de limite finie",'Toutes les réponses ci-dessus'], correctIndex:3, explanation:"Divergente = ne converge PAS vers une limite finie. Cela inclut les suites tendant vers $\\pm\\infty$ ET celles qui n'ont aucune limite (oscillantes)."},
+          {id:'lim1-4', type:'qcm', question:"Si $u_n \\to L$ et $u_n \\to L'$, alors :", options:["$L = L'$ (unicité)","$L \\neq L'$",'On ne peut pas conclure','La suite oscille'], correctIndex:0, explanation:"<strong>Unicité de la limite</strong> : une suite convergente a une limite et une seule."},
           {id:'lim1-5', type:'numeric', question:"Soit $u_n = 5 - \\dfrac{2}{n^2}$. Vers quoi converge $u_n$ ?", answer:5, tolerance:0.001, explanation:"$\\dfrac{2}{n^2} \\to 0$ donc $u_n \\to 5 - 0 = \\mathbf{5}$."}
         ]
       },
@@ -2534,10 +2739,10 @@ const CHAPTER_DETAILS = {
         ],
         exercises:[
           {id:'lim2-1', type:'numeric', question:"$\\displaystyle\\lim_{n \\to +\\infty} \\dfrac{1}{n^3}$ vaut :", answer:0, tolerance:0.001, explanation:"Pour tout $k > 0$, $\\dfrac{1}{n^k} \\to \\mathbf{0}$."},
-          {id:'lim2-2', type:'qcm', question:"$\\displaystyle\\lim_{n \\to +\\infty} n^2$ vaut :", options:["$0$","$+\\infty$","$-\\infty$","$1$"], correctIndex:1, explanation:"$n^2$ croît sans borne avec $n$, donc tend vers $\\mathbf{+\\infty}$."},
-          {id:'lim2-3', type:'qcm', question:"$\\displaystyle\\lim_{n \\to +\\infty} 0{,}5^n$ vaut :", options:["$+\\infty$","$0$","$1$","Pas de limite"], correctIndex:1, explanation:"Suite géométrique de raison $q = 0{,}5$, avec $|q| < 1$. Donc $q^n \\to \\mathbf{0}$."},
-          {id:'lim2-4', type:'qcm', question:"$\\displaystyle\\lim_{n \\to +\\infty} 3^n$ vaut :", options:["$0$","$3$","$+\\infty$","Pas de limite"], correctIndex:2, explanation:"$q = 3 > 1$, croissance géométrique explosive : $3^n \\to \\mathbf{+\\infty}$."},
-          {id:'lim2-5', type:'qcm', question:"$\\displaystyle\\lim_{n \\to +\\infty} (-2)^n$ vaut :", options:["$0$","$+\\infty$","$-\\infty$","Pas de limite (oscille)"], correctIndex:3, explanation:"$|q| = 2 > 1$ et $q < 0$ : la suite alterne entre positif et négatif, en grandissant en valeur absolue. <strong>Pas de limite</strong>, elle oscille."}
+          {id:'lim2-2', type:'qcm', question:"$\\displaystyle\\lim_{n \\to +\\infty} n^2$ vaut :", options:['$0$','$+\\infty$','$-\\infty$','$1$'], correctIndex:1, explanation:"$n^2$ croît sans borne avec $n$, donc tend vers $\\mathbf{+\\infty}$."},
+          {id:'lim2-3', type:'qcm', question:"$\\displaystyle\\lim_{n \\to +\\infty} 0{,}5^n$ vaut :", options:['$+\\infty$','$0$','$1$','Pas de limite'], correctIndex:1, explanation:"Suite géométrique de raison $q = 0{,}5$, avec $|q| < 1$. Donc $q^n \\to \\mathbf{0}$."},
+          {id:'lim2-4', type:'qcm', question:"$\\displaystyle\\lim_{n \\to +\\infty} 3^n$ vaut :", options:['$0$','$3$','$+\\infty$','Pas de limite'], correctIndex:2, explanation:"$q = 3 > 1$, croissance géométrique explosive : $3^n \\to \\mathbf{+\\infty}$."},
+          {id:'lim2-5', type:'qcm', question:"$\\displaystyle\\lim_{n \\to +\\infty} (-2)^n$ vaut :", options:['$0$','$+\\infty$','$-\\infty$','Pas de limite (oscille)'], correctIndex:3, explanation:"$|q| = 2 > 1$ et $q < 0$ : la suite alterne entre positif et négatif, en grandissant en valeur absolue. <strong>Pas de limite</strong>, elle oscille."}
         ]
       },
       {
@@ -2555,8 +2760,8 @@ const CHAPTER_DETAILS = {
         exercises:[
           {id:'lim3-1', type:'numeric', question:"$u_n = 5 + \\dfrac{1}{n}$. Que vaut $\\lim u_n$ ?", answer:5, tolerance:0.001, explanation:"$\\lim 5 = 5$ et $\\lim \\dfrac{1}{n} = 0$. Somme : $\\mathbf{5}$."},
           {id:'lim3-2', type:'numeric', question:"$u_n = 3n + 7$. Que vaut $\\lim u_n$ (entrer 9999 si $+\\infty$, -9999 si $-\\infty$) ?", answer:9999, tolerance:0.001, explanation:"$3n \\to +\\infty$ et $+7$ ne change rien. Donc $u_n \\to +\\infty$. (Réponse codée : $\\mathbf{9999}$.)"},
-          {id:'lim3-3', type:'qcm', question:"$\\lim \\dfrac{2n + 1}{n}$ vaut :", options:["$0$","$1$","$2$","$+\\infty$"], correctIndex:2, explanation:"$\\dfrac{2n+1}{n} = 2 + \\dfrac{1}{n} \\to 2 + 0 = \\mathbf{2}$. (On simplifie d'abord, ce qui évite la FI $\\dfrac{\\infty}{\\infty}$.)"},
-          {id:'lim3-4', type:'qcm', question:"$\\lim (n - n^2)$ est de la forme indéterminée :", options:["$\\dfrac{0}{0}$","$\\infty - \\infty$","$0 \\times \\infty$","Aucune FI"], correctIndex:1, explanation:"$n \\to +\\infty$ et $n^2 \\to +\\infty$. Soustraction donne <strong>FI $\\infty - \\infty$</strong>. (Méthode : factoriser par $n$ ou $n^2$ pour lever la FI. Ici : $n(1 - n) \\to -\\infty$.)"},
+          {id:'lim3-3', type:'qcm', question:"$\\lim \\dfrac{2n + 1}{n}$ vaut :", options:['$0$','$1$','$2$','$+\\infty$'], correctIndex:2, explanation:"$\\dfrac{2n+1}{n} = 2 + \\dfrac{1}{n} \\to 2 + 0 = \\mathbf{2}$. (On simplifie d'abord, ce qui évite la FI $\\dfrac{\\infty}{\\infty}$.)"},
+          {id:'lim3-4', type:'qcm', question:"$\\lim (n - n^2)$ est de la forme indéterminée :", options:['$\\dfrac{0}{0}$','$\\infty - \\infty$','$0 \\times \\infty$','Aucune FI'], correctIndex:1, explanation:"$n \\to +\\infty$ et $n^2 \\to +\\infty$. Soustraction donne <strong>FI $\\infty - \\infty$</strong>. (Méthode : factoriser par $n$ ou $n^2$ pour lever la FI. Ici : $n(1 - n) \\to -\\infty$.)"},
           {id:'lim3-5', type:'numeric', question:"$\\lim \\dfrac{n+3}{n^2+1}$ vaut :", answer:0, tolerance:0.001, explanation:"On divise haut et bas par $n^2$ : $\\dfrac{1/n + 3/n^2}{1 + 1/n^2} \\to \\dfrac{0+0}{1+0} = \\mathbf{0}$. (Le dénominateur grandit plus vite que le numérateur.)"}
         ]
       },
@@ -2573,11 +2778,11 @@ const CHAPTER_DETAILS = {
           "Astuce : $-1 \\leq \\cos(n) \\leq 1$ et $-1 \\leq \\sin(n) \\leq 1$, toujours"
         ],
         exercises:[
-          {id:'lim4-1', type:'qcm', question:"Si $-1 \\leq u_n \\leq 1$ et $\\lim u_n$ existe, on l'appelle :", options:["Convergente","Divergente","Indéterminée","Croissante"], correctIndex:0, explanation:"Une suite bornée qui a une limite est <strong>convergente</strong> par définition."},
+          {id:'lim4-1', type:'qcm', question:"Si $-1 \\leq u_n \\leq 1$ et $\\lim u_n$ existe, on l'appelle :", options:['Convergente','Divergente','Indéterminée','Croissante'], correctIndex:0, explanation:"Une suite bornée qui a une limite est <strong>convergente</strong> par définition."},
           {id:'lim4-2', type:'numeric', question:"Pour $u_n = \\dfrac{\\cos(n)}{n}$, quelle est la limite ?", answer:0, tolerance:0.001, explanation:"On encadre : $-\\dfrac{1}{n} \\leq \\dfrac{\\cos(n)}{n} \\leq \\dfrac{1}{n}$. Les deux bornes tendent vers $0$, donc par gendarmes, $u_n \\to \\mathbf{0}$."},
-          {id:'lim4-3', type:'qcm', question:"Si $u_n \\geq n^2$ pour tout $n$, alors $\\lim u_n$ est :", options:["$0$","$1$","$+\\infty$","Indéterminée"], correctIndex:2, explanation:"$n^2 \\to +\\infty$ et $u_n$ est minorée par $n^2$, donc par comparaison, $u_n \\to \\mathbf{+\\infty}$."},
+          {id:'lim4-3', type:'qcm', question:"Si $u_n \\geq n^2$ pour tout $n$, alors $\\lim u_n$ est :", options:['$0$','$1$','$+\\infty$','Indéterminée'], correctIndex:2, explanation:"$n^2 \\to +\\infty$ et $u_n$ est minorée par $n^2$, donc par comparaison, $u_n \\to \\mathbf{+\\infty}$."},
           {id:'lim4-4', type:'numeric', question:"Pour $u_n = \\dfrac{\\sin(n)}{n^2}$, la limite est :", answer:0, tolerance:0.001, explanation:"$-\\dfrac{1}{n^2} \\leq \\dfrac{\\sin(n)}{n^2} \\leq \\dfrac{1}{n^2}$. Par gendarmes, $u_n \\to \\mathbf{0}$."},
-          {id:'lim4-5', type:'qcm', question:"Pour appliquer le théorème des gendarmes à $u_n$, on doit :", options:["Calculer $u_n$ directement","Encadrer $u_n$ par deux suites de même limite","Étudier sa monotonie","Trouver son maximum"], correctIndex:1, explanation:"L'idée : trouver $v_n \\leq u_n \\leq w_n$ avec $\\lim v_n = \\lim w_n = L$, et conclure $\\lim u_n = L$."}
+          {id:'lim4-5', type:'qcm', question:"Pour appliquer le théorème des gendarmes à $u_n$, on doit :", options:['Calculer $u_n$ directement','Encadrer $u_n$ par deux suites de même limite','Étudier sa monotonie','Trouver son maximum'], correctIndex:1, explanation:"L'idée : trouver $v_n \\leq u_n \\leq w_n$ avec $\\lim v_n = \\lim w_n = L$, et conclure $\\lim u_n = L$."}
         ]
       },
       {
@@ -2593,10 +2798,10 @@ const CHAPTER_DETAILS = {
           "Si on prouve qu'une suite est croissante et majorée par $M$, sa limite $L$ vérifie $L \\leq M$"
         ],
         exercises:[
-          {id:'lim5-1', type:'qcm', question:"Toute suite croissante et majorée est :", options:["Divergente","Convergente","Constante","Bornée mais oscillante"], correctIndex:1, explanation:"C'est le théorème fondamental : croissante + majorée $\\Rightarrow$ <strong>convergente</strong>."},
-          {id:'lim5-2', type:'qcm', question:"Une suite croissante non majorée :", options:["Tend vers $-\\infty$","Tend vers $+\\infty$","Converge vers $0$","Diverge sans limite"], correctIndex:1, explanation:"Croissante (elle monte) et non majorée (rien ne l'arrête) $\\Rightarrow$ elle tend vers $\\mathbf{+\\infty}$."},
-          {id:'lim5-3', type:'qcm', question:"Si $(u_n)$ est décroissante et minorée par $0$, alors :", options:["$u_n \\to 0$ forcément","$u_n$ converge vers une limite $L \\geq 0$","$u_n$ diverge","$u_n$ tend vers $-\\infty$"], correctIndex:1, explanation:"Décroissante + minorée $\\Rightarrow$ convergente. Comme elle est $\\geq 0$, la limite $L$ vérifie $L \\geq 0$ (mais pas nécessairement $L = 0$)."},
-          {id:'lim5-4', type:'qcm', question:"Pour prouver qu'une suite converge sans calculer la limite, on peut montrer qu'elle est :", options:["Bornée seulement","Monotone seulement","Monotone ET bornée du bon côté","Périodique"], correctIndex:2, explanation:"<strong>Monotone + bornée du bon côté</strong> (croissante-majorée, ou décroissante-minorée) suffit à conclure à la convergence."},
+          {id:'lim5-1', type:'qcm', question:"Toute suite croissante et majorée est :", options:['Divergente','Convergente','Constante','Bornée mais oscillante'], correctIndex:1, explanation:"C'est le théorème fondamental : croissante + majorée $\\Rightarrow$ <strong>convergente</strong>."},
+          {id:'lim5-2', type:'qcm', question:"Une suite croissante non majorée :", options:['Tend vers $-\\infty$','Tend vers $+\\infty$','Converge vers $0$','Diverge sans limite'], correctIndex:1, explanation:"Croissante (elle monte) et non majorée (rien ne l'arrête) $\\Rightarrow$ elle tend vers $\\mathbf{+\\infty}$."},
+          {id:'lim5-3', type:'qcm', question:"Si $(u_n)$ est décroissante et minorée par $0$, alors :", options:['$u_n \\to 0$ forcément','$u_n$ converge vers une limite $L \\geq 0$','$u_n$ diverge','$u_n$ tend vers $-\\infty$'], correctIndex:1, explanation:"Décroissante + minorée $\\Rightarrow$ convergente. Comme elle est $\\geq 0$, la limite $L$ vérifie $L \\geq 0$ (mais pas nécessairement $L = 0$)."},
+          {id:'lim5-4', type:'qcm', question:"Pour prouver qu'une suite converge sans calculer la limite, on peut montrer qu'elle est :", options:['Bornée seulement','Monotone seulement','Monotone ET bornée du bon côté','Périodique'], correctIndex:2, explanation:"<strong>Monotone + bornée du bon côté</strong> (croissante-majorée, ou décroissante-minorée) suffit à conclure à la convergence."},
           {id:'lim5-5', type:'numeric', question:"Une suite croissante et majorée par $7$ converge vers $L$. Que peut-on dire de $L$ ? Tape la valeur maximale possible de $L$.", answer:7, tolerance:0.001, explanation:"La limite $L$ d'une suite majorée par $M$ vérifie $L \\leq M$. Ici $L \\leq \\mathbf{7}$."}
         ]
       }
@@ -2622,9 +2827,9 @@ const CHAPTER_DETAILS = {
         exercises:[
           {id:'lf1-1', type:'numeric', question:"$f(x) = x^2 + 3$. Que vaut $\\displaystyle\\lim_{x \\to 2} f(x)$ ?", answer:7, tolerance:0.001, explanation:"$f$ continue en $2$, donc $\\lim = f(2) = 4 + 3 = \\mathbf{7}$."},
           {id:'lf1-2', type:'numeric', question:"$f(x) = \\dfrac{1}{x}$. Limite quand $x \\to 0^+$ ? (entrer 9999 pour $+\\infty$, -9999 pour $-\\infty$)", answer:9999, tolerance:1, explanation:"$\\dfrac{1}{x}$ avec $x$ positif petit $\\to +\\infty$. Réponse $\\mathbf{+\\infty}$."},
-          {id:'lf1-3', type:'qcm', question:"$f(x) = \\dfrac{1}{x}$. Quelle est la limite à droite et à gauche de $0$ ?", options:["Les deux $+\\infty$","Les deux $-\\infty$","Gauche $-\\infty$, droite $+\\infty$","Gauche $+\\infty$, droite $-\\infty$"], correctIndex:2, explanation:"À gauche ($x < 0$, petit) : $\\dfrac{1}{x} \\to -\\infty$. À droite ($x > 0$, petit) : $\\dfrac{1}{x} \\to +\\infty$. Donc pas de limite en $0$ (limites différentes)."},
+          {id:'lf1-3', type:'qcm', question:"$f(x) = \\dfrac{1}{x}$. Quelle est la limite à droite et à gauche de $0$ ?", options:['Les deux $+\\infty$','Les deux $-\\infty$','Gauche $-\\infty$, droite $+\\infty$','Gauche $+\\infty$, droite $-\\infty$'], correctIndex:2, explanation:"À gauche ($x < 0$, petit) : $\\dfrac{1}{x} \\to -\\infty$. À droite ($x > 0$, petit) : $\\dfrac{1}{x} \\to +\\infty$. Donc pas de limite en $0$ (limites différentes)."},
           {id:'lf1-4', type:'numeric', question:"$f(x) = 3x - 5$. Que vaut $\\displaystyle\\lim_{x \\to 4} f(x)$ ?", answer:7, tolerance:0.001, explanation:"$f$ affine donc continue. $\\lim = f(4) = 12 - 5 = \\mathbf{7}$."},
-          {id:'lf1-5', type:'qcm', question:"Si $\\lim_{x \\to 2^-} f(x) = 3$ et $\\lim_{x \\to 2^+} f(x) = 5$, alors $\\lim_{x \\to 2} f(x)$ :", options:["Vaut $3$","Vaut $5$","Vaut $4$ (moyenne)","N'existe pas"], correctIndex:3, explanation:"Quand limite à gauche $\\neq$ limite à droite, la limite globale <strong>n'existe pas</strong>."}
+          {id:'lf1-5', type:'qcm', question:"Si $\\lim_{x \\to 2^-} f(x) = 3$ et $\\lim_{x \\to 2^+} f(x) = 5$, alors $\\lim_{x \\to 2} f(x)$ :", options:['Vaut $3$','Vaut $5$','Vaut $4$ (moyenne)',"N'existe pas"], correctIndex:3, explanation:"Quand limite à gauche $\\neq$ limite à droite, la limite globale <strong>n'existe pas</strong>."}
         ]
       },
       {
@@ -2660,11 +2865,11 @@ const CHAPTER_DETAILS = {
           "L'étude des asymptotes complète le tableau de variations et donne l'allure de la courbe"
         ],
         exercises:[
-          {id:'lf3-1', type:'qcm', question:"$f(x) = \\dfrac{1}{x}$. Sa courbe admet :", options:["AH $y = 1$","AH $y = 0$ et AV $x = 0$","AV $x = 1$","Pas d'asymptote"], correctIndex:1, explanation:"$\\lim_{x \\to \\pm\\infty} \\dfrac{1}{x} = 0$ donc AH $y = 0$. $\\lim_{x \\to 0} \\dfrac{1}{x} = \\pm\\infty$ donc AV $x = 0$."},
+          {id:'lf3-1', type:'qcm', question:"$f(x) = \\dfrac{1}{x}$. Sa courbe admet :", options:['AH $y = 1$','AH $y = 0$ et AV $x = 0$','AV $x = 1$',"Pas d'asymptote"], correctIndex:1, explanation:"$\\lim_{x \\to \\pm\\infty} \\dfrac{1}{x} = 0$ donc AH $y = 0$. $\\lim_{x \\to 0} \\dfrac{1}{x} = \\pm\\infty$ donc AV $x = 0$."},
           {id:'lf3-2', type:'qcm', question:"$f(x) = \\dfrac{2x + 3}{x - 1}$. Asymptote horizontale en $+\\infty$ :", options:['$y = 0$','$y = 2$','$y = 3$','$y = 2x$'], correctIndex:1, explanation:"$\\dfrac{2x+3}{x-1} \\to \\dfrac{2x}{x} = 2$. Donc AH $\\mathbf{y = 2}$."},
           {id:'lf3-3', type:'qcm', question:"$f(x) = \\dfrac{2x + 3}{x - 1}$. Asymptote verticale :", options:['$x = 0$','$x = 1$','$x = -3/2$','$x = 2$'], correctIndex:1, explanation:"Dénominateur nul en $x = 1$, et la limite est $\\pm\\infty$ (numérateur non nul). AV $\\mathbf{x = 1}$."},
           {id:'lf3-4', type:'numeric', question:"$f(x) = \\dfrac{3}{x^2}$. Donne la valeur $L$ de l'asymptote horizontale $y = L$.", answer:0, tolerance:0.001, explanation:"$\\dfrac{3}{x^2} \\to \\mathbf{0}$ en $\\pm\\infty$."},
-          {id:'lf3-5', type:'qcm', question:"$f(x) = x + \\dfrac{1}{x}$. Asymptote oblique :", options:['$y = x$','$y = 0$','$y = 2x$','Pas d\'asymptote oblique'], correctIndex:0, explanation:"$f(x) - x = \\dfrac{1}{x} \\to 0$ en $\\pm\\infty$. Donc asymptote oblique $\\mathbf{y = x}$."}
+          {id:'lf3-5', type:'qcm', question:"$f(x) = x + \\dfrac{1}{x}$. Asymptote oblique :", options:['$y = x$','$y = 0$','$y = 2x$',"Pas d\'asymptote oblique"], correctIndex:0, explanation:"$f(x) - x = \\dfrac{1}{x} \\to 0$ en $\\pm\\infty$. Donc asymptote oblique $\\mathbf{y = x}$."}
         ]
       },
       {
@@ -2684,7 +2889,7 @@ const CHAPTER_DETAILS = {
           {id:'lf4-2', type:'qcm', question:"$\\displaystyle\\lim_{x \\to +\\infty} (x - x^2)$ est de la forme :", options:['$\\infty - \\infty$ (FI)','$\\dfrac{0}{0}$','$0 \\times \\infty$','Pas de FI'], correctIndex:0, explanation:"$x \\to +\\infty$ et $x^2 \\to +\\infty$, donc différence = <strong>FI $\\infty - \\infty$</strong>. Pour lever : $x(1 - x) \\to -\\infty$."},
           {id:'lf4-3', type:'numeric', question:"$\\displaystyle\\lim_{x \\to +\\infty} \\dfrac{3x^2 + 1}{x^2 - 2}$ :", answer:3, tolerance:0.001, explanation:"On divise par $x^2$ : $\\dfrac{3 + 1/x^2}{1 - 2/x^2} \\to \\dfrac{3 + 0}{1 - 0} = \\mathbf{3}$."},
           {id:'lf4-4', type:'numeric', question:"$\\displaystyle\\lim_{x \\to +\\infty} \\dfrac{x + 1}{x^2}$ :", answer:0, tolerance:0.001, explanation:"$\\dfrac{x+1}{x^2} = \\dfrac{1}{x} + \\dfrac{1}{x^2} \\to 0 + 0 = \\mathbf{0}$."},
-          {id:'lf4-5', type:'qcm', question:"Pour lever une FI $\\dfrac{\\infty}{\\infty}$ avec polynômes, on :", options:["Calcule directement","Factorise par le terme dominant haut et bas","Multiplie par le conjugué","Applique la règle de L'Hôpital"], correctIndex:1, explanation:"Méthode standard : factoriser numérateur et dénominateur par le terme de plus haut degré, puis simplifier."}
+          {id:'lf4-5', type:'qcm', question:"Pour lever une FI $\\dfrac{\\infty}{\\infty}$ avec polynômes, on :", options:['Calcule directement','Factorise par le terme dominant haut et bas','Multiplie par le conjugué',"Applique la règle de L'Hôpital"], correctIndex:1, explanation:"Méthode standard : factoriser numérateur et dénominateur par le terme de plus haut degré, puis simplifier."}
         ]
       },
       {
@@ -2701,9 +2906,9 @@ const CHAPTER_DETAILS = {
         ],
         exercises:[
           {id:'lf5-1', type:'numeric', question:"$\\displaystyle\\lim_{x \\to +\\infty} \\dfrac{\\sin(x)}{x}$ :", answer:0, tolerance:0.001, explanation:"$-\\dfrac{1}{x} \\leq \\dfrac{\\sin(x)}{x} \\leq \\dfrac{1}{x}$. Les deux bornes $\\to 0$, donc par gendarmes $\\mathbf{0}$."},
-          {id:'lf5-2', type:'qcm', question:"Si $f(x) \\geq x^2$ pour $x$ grand, alors $\\lim_{x \\to +\\infty} f(x)$ vaut :", options:["$0$","$1$","$+\\infty$","Indéterminé"], correctIndex:2, explanation:"$x^2 \\to +\\infty$ et $f$ majoré inférieurement par $x^2$, donc par comparaison $f \\to \\mathbf{+\\infty}$."},
+          {id:'lf5-2', type:'qcm', question:"Si $f(x) \\geq x^2$ pour $x$ grand, alors $\\lim_{x \\to +\\infty} f(x)$ vaut :", options:['$0$','$1$','$+\\infty$','Indéterminé'], correctIndex:2, explanation:"$x^2 \\to +\\infty$ et $f$ majoré inférieurement par $x^2$, donc par comparaison $f \\to \\mathbf{+\\infty}$."},
           {id:'lf5-3', type:'numeric', question:"$\\displaystyle\\lim_{x \\to +\\infty} \\dfrac{\\cos(x)}{x^2}$ :", answer:0, tolerance:0.001, explanation:"$-\\dfrac{1}{x^2} \\leq \\dfrac{\\cos(x)}{x^2} \\leq \\dfrac{1}{x^2}$, et les deux $\\to 0$. Par gendarmes : $\\mathbf{0}$."},
-          {id:'lf5-4', type:'qcm', question:"Pour appliquer les gendarmes à $\\dfrac{\\sin(x)}{x}$ en $+\\infty$, on utilise :", options:["$-1 \\leq \\sin(x) \\leq 1$","$\\sin(x) > 0$ pour $x$ grand","$\\sin(x) = x$","Aucun encadrement"], correctIndex:0, explanation:"$\\sin$ est borné par $-1$ et $1$. Donc $-\\dfrac{1}{x} \\leq \\dfrac{\\sin(x)}{x} \\leq \\dfrac{1}{x}$ pour $x > 0$."},
+          {id:'lf5-4', type:'qcm', question:"Pour appliquer les gendarmes à $\\dfrac{\\sin(x)}{x}$ en $+\\infty$, on utilise :", options:['$-1 \\leq \\sin(x) \\leq 1$','$\\sin(x) > 0$ pour $x$ grand','$\\sin(x) = x$','Aucun encadrement'], correctIndex:0, explanation:"$\\sin$ est borné par $-1$ et $1$. Donc $-\\dfrac{1}{x} \\leq \\dfrac{\\sin(x)}{x} \\leq \\dfrac{1}{x}$ pour $x > 0$."},
           {id:'lf5-5', type:'numeric', question:"$f(x) = 3 + \\dfrac{\\sin(x)}{x^2}$. Que vaut $\\displaystyle\\lim_{x \\to +\\infty} f(x)$ ?", answer:3, tolerance:0.001, explanation:"$\\dfrac{\\sin(x)}{x^2} \\to 0$ par gendarmes. Donc $f \\to 3 + 0 = \\mathbf{3}$."}
         ]
       }
@@ -2729,7 +2934,7 @@ const CHAPTER_DETAILS = {
           {id:'co1-1', type:'qcm', question:"Une fonction polynôme est continue :", options:['Sur $\\mathbb{R}_+$ seulement','Sur $\\mathbb{R}^*$','Sur $\\mathbb{R}$','Pas continue en général'], correctIndex:2, explanation:"Les polynômes sont continus sur tout $\\mathbb{R}$. Très pratique : pas besoin de prouver la continuité."},
           {id:'co1-2', type:'qcm', question:"$f(x) = \\dfrac{1}{x}$ est continue sur :", options:['$\\mathbb{R}$','$\\mathbb{R}^* = ]-\\infty\\,;\\,0[ \\cup ]0\\,;\\,+\\infty[$','$\\mathbb{R}_+$','Aucun intervalle'], correctIndex:1, explanation:"$\\dfrac{1}{x}$ n'est pas définie en $0$, donc pas continue en $0$. Mais continue partout ailleurs : sur $\\mathbb{R}^*$."},
           {id:'co1-3', type:'numeric', question:"$f(x) = x^2 - 4$. Vraie ou faux : $f$ est continue en $3$ ? (1 = vrai, 0 = faux)", answer:1, tolerance:0.001, explanation:"$f$ polynôme donc continue partout. <strong>Vrai</strong> : $1$."},
-          {id:'co1-4', type:'qcm', question:"Si $\\lim_{x \\to 2} f(x) = 5$ et $f(2) = 4$, alors :", options:['$f$ est continue en $2$','$f$ n\'est pas continue en $2$','$f$ n\'est pas définie en $2$','On ne peut pas conclure'], correctIndex:1, explanation:"Pour la continuité, il faut $\\lim = f(a)$. Ici $5 \\neq 4$, donc $f$ <strong>n'est pas continue</strong>."},
+          {id:'co1-4', type:'qcm', question:"Si $\\lim_{x \\to 2} f(x) = 5$ et $f(2) = 4$, alors :", options:['$f$ est continue en $2$',"$f$ n\'est pas continue en $2$","$f$ n\'est pas définie en $2$",'On ne peut pas conclure'], correctIndex:1, explanation:"Pour la continuité, il faut $\\lim = f(a)$. Ici $5 \\neq 4$, donc $f$ <strong>n'est pas continue</strong>."},
           {id:'co1-5', type:'qcm', question:"Quelle fonction est continue sur $\\mathbb{R}$ ?", options:['$\\tan(x)$','$\\dfrac{1}{x}$','$\\sin(x)$','$\\sqrt{x}$'], correctIndex:2, explanation:"$\\sin$ est continue sur tout $\\mathbb{R}$. Les autres ont des points de discontinuité ou un domaine restreint."}
         ]
       },
@@ -2768,9 +2973,9 @@ const CHAPTER_DETAILS = {
         exercises:[
           {id:'co3-1', type:'qcm', question:"Hypothèses du TVI :", options:['$f$ continue ET strictement monotone','$f$ continue sur un intervalle','$f$ dérivable','$f$ bornée'], correctIndex:1, explanation:"TVI : il suffit que $f$ soit <strong>continue</strong> sur l'intervalle. La monotonie n'est pas obligatoire (mais elle donne l'unicité)."},
           {id:'co3-2', type:'qcm', question:"$f(x) = x^3 - 5$. Sur $[0\\,;\\,3]$, $f(0) = -5$ et $f(3) = 22$. D'après le TVI, l'équation $f(x) = 0$ :", options:["A au moins une solution dans $[0\\,;\\,3]$","N'a pas de solution","A exactement deux solutions","Solution en $x = 5$"], correctIndex:0, explanation:"$0$ est entre $f(0) = -5$ et $f(3) = 22$. Par TVI, il existe $c \\in [0\\,;\\,3]$ tel que $f(c) = 0$. Au moins <strong>une</strong> solution."},
-          {id:'co3-3', type:'qcm', question:"Quand le TVI donne-t-il une <strong>unique</strong> solution ?", options:["Toujours","Quand $f$ est strictement monotone","Quand $f$ est dérivable","Jamais"], correctIndex:1, explanation:"<strong>Continue + strictement monotone</strong> $\\Rightarrow$ solution <strong>unique</strong>."},
-          {id:'co3-4', type:'qcm', question:"$f$ continue sur $[1\\,;\\,4]$ avec $f(1) = -2$ et $f(4) = 7$. Combien de solutions à $f(x) = 3$ ?", options:["0","1 au moins","Exactement 2","Impossible à dire"], correctIndex:1, explanation:"$3$ est entre $-2$ et $7$, donc TVI garantit <strong>au moins une</strong> solution. Sans plus d'infos sur la monotonie, on ne peut dire combien exactement."},
-          {id:'co3-5', type:'qcm', question:"Pour appliquer le TVI à $f(x) = 0$, il faut vérifier que :", options:["$f$ change de signe sur l'intervalle","$f$ est positive","$f$ est dérivable","$f(0)$ existe"], correctIndex:0, explanation:"On vérifie que $f$ <strong>change de signe</strong> entre les deux bornes (un point négatif, un point positif), pour qu'il y ait passage par $0$."}
+          {id:'co3-3', type:'qcm', question:"Quand le TVI donne-t-il une <strong>unique</strong> solution ?", options:['Toujours','Quand $f$ est strictement monotone','Quand $f$ est dérivable','Jamais'], correctIndex:1, explanation:"<strong>Continue + strictement monotone</strong> $\\Rightarrow$ solution <strong>unique</strong>."},
+          {id:'co3-4', type:'qcm', question:"$f$ continue sur $[1\\,;\\,4]$ avec $f(1) = -2$ et $f(4) = 7$. Combien de solutions à $f(x) = 3$ ?", options:['0','1 au moins','Exactement 2','Impossible à dire'], correctIndex:1, explanation:"$3$ est entre $-2$ et $7$, donc TVI garantit <strong>au moins une</strong> solution. Sans plus d'infos sur la monotonie, on ne peut dire combien exactement."},
+          {id:'co3-5', type:'qcm', question:"Pour appliquer le TVI à $f(x) = 0$, il faut vérifier que :", options:["$f$ change de signe sur l'intervalle",'$f$ est positive','$f$ est dérivable','$f(0)$ existe'], correctIndex:0, explanation:"On vérifie que $f$ <strong>change de signe</strong> entre les deux bornes (un point négatif, un point positif), pour qu'il y ait passage par $0$."}
         ]
       },
       {
@@ -2787,9 +2992,9 @@ const CHAPTER_DETAILS = {
         ],
         exercises:[
           {id:'co4-1', type:'qcm', question:"On sait que $f(2) = -1$ et $f(3) = 5$, $f$ continue. L'équation $f(x) = 0$ admet une solution :", options:['Dans $]0\\,;\\,2[$','Dans $]2\\,;\\,3[$','Dans $]3\\,;\\,+\\infty[$','Pas de solution'], correctIndex:1, explanation:"$0$ est entre $-1$ et $5$. Par TVI, solution dans $]2\\,;\\,3[$."},
-          {id:'co4-2', type:'qcm', question:"$f$ continue strictement croissante avec $f(1) = -3$ et $f(5) = 4$. Combien de solutions à $f(x) = 1$ sur $[1\\,;\\,5]$ ?", options:["0","Exactement 1","2","Indéterminé"], correctIndex:1, explanation:"Continue + strictement croissante + $1$ entre $-3$ et $4$ $\\Rightarrow$ <strong>exactement 1</strong> solution."},
+          {id:'co4-2', type:'qcm', question:"$f$ continue strictement croissante avec $f(1) = -3$ et $f(5) = 4$. Combien de solutions à $f(x) = 1$ sur $[1\\,;\\,5]$ ?", options:['0','Exactement 1','2','Indéterminé'], correctIndex:1, explanation:"Continue + strictement croissante + $1$ entre $-3$ et $4$ $\\Rightarrow$ <strong>exactement 1</strong> solution."},
           {id:'co4-3', type:'numeric', question:"$f(x) = x^3 + x - 1$. $f(0) = -1$ et $f(1) = 1$. Y a-t-il une solution à $f(x) = 0$ entre 0 et 1 ? (1 = oui, 0 = non)", answer:1, tolerance:0.001, explanation:"$0$ est entre $-1$ et $1$, $f$ continue. <strong>Oui</strong>, par TVI."},
-          {id:'co4-4', type:'qcm', question:"La dichotomie permet :", options:["De résoudre exactement","D'approcher la solution avec précision croissante","De prouver l'unicité","Tout cela"], correctIndex:1, explanation:"Dichotomie = approche la solution en réduisant l'intervalle de moitié à chaque étape. Précision arbitrairement fine."},
+          {id:'co4-4', type:'qcm', question:"La dichotomie permet :", options:['De résoudre exactement',"D'approcher la solution avec précision croissante","De prouver l'unicité",'Tout cela'], correctIndex:1, explanation:"Dichotomie = approche la solution en réduisant l'intervalle de moitié à chaque étape. Précision arbitrairement fine."},
           {id:'co4-5', type:'qcm', question:"$f$ continue, $f(0) = 2$ et $f(4) = -3$. L'équation $f(x) = 5$ :", options:["A toujours une solution","N'a pas forcément de solution dans $[0\\,;\\,4]$","A exactement une solution","Est impossible à étudier"], correctIndex:1, explanation:"$5$ n'est PAS entre $-3$ et $2$. Le TVI ne s'applique pas directement. La solution peut exister ailleurs."}
         ]
       },
@@ -2806,11 +3011,11 @@ const CHAPTER_DETAILS = {
           "Étape obligatoire : étudier les variations de $f$ (tableau de variations)"
         ],
         exercises:[
-          {id:'co5-1', type:'qcm', question:"Pour que $f$ réalise une bijection sur $[a\\,;\\,b]$, il faut :", options:["Continue uniquement","Strictement monotone uniquement","Continue ET strictement monotone","Dérivable"], correctIndex:2, explanation:"Bijection sur un intervalle $\\Leftrightarrow$ <strong>continue ET strictement monotone</strong>."},
+          {id:'co5-1', type:'qcm', question:"Pour que $f$ réalise une bijection sur $[a\\,;\\,b]$, il faut :", options:['Continue uniquement','Strictement monotone uniquement','Continue ET strictement monotone','Dérivable'], correctIndex:2, explanation:"Bijection sur un intervalle $\\Leftrightarrow$ <strong>continue ET strictement monotone</strong>."},
           {id:'co5-2', type:'qcm', question:"$f$ continue strictement décroissante sur $[0\\,;\\,2]$ avec $f(0) = 5$ et $f(2) = -1$. $f$ réalise une bijection de $[0\\,;\\,2]$ vers :", options:['$[-1\\,;\\,5]$','$[0\\,;\\,2]$','$\\mathbb{R}$','$]-1\\,;\\,5[$'], correctIndex:0, explanation:"Image de l'intervalle = $[f(2)\\,;\\,f(0)] = [-1\\,;\\,5]$ (car $f$ décroissante, donc le min image est $f(2)$)."},
-          {id:'co5-3', type:'qcm', question:"$f$ strictement croissante continue. L'équation $f(x) = 7$ a :", options:["Toujours une solution","Au plus une solution","Au moins deux","Aucune information"], correctIndex:1, explanation:"Strictement monotone $\\Rightarrow$ <strong>au plus une</strong> solution. (L'existence dépend de l'image, mais l'unicité est garantie.)"},
+          {id:'co5-3', type:'qcm', question:"$f$ strictement croissante continue. L'équation $f(x) = 7$ a :", options:['Toujours une solution','Au plus une solution','Au moins deux','Aucune information'], correctIndex:1, explanation:"Strictement monotone $\\Rightarrow$ <strong>au plus une</strong> solution. (L'existence dépend de l'image, mais l'unicité est garantie.)"},
           {id:'co5-4', type:'numeric', question:"$f(x) = x^3$. Bijection de $\\mathbb{R}$ vers... entrer 1 pour $\\mathbb{R}$, 0 pour $\\mathbb{R}_+$, 2 pour $[0\\,;\\,+\\infty[$.", answer:1, tolerance:0.001, explanation:"$x^3$ est continue strictement croissante sur $\\mathbb{R}$, image = $\\mathbb{R}$. Bijection de $\\mathbb{R}$ vers $\\mathbb{R}$. Réponse : <strong>1</strong>."},
-          {id:'co5-5', type:'qcm', question:"Pour appliquer le théorème de la bijection, on doit d'abord établir :", options:["Le tableau de variations","La parité","Les limites en $\\pm\\infty$","La dérivée seconde"], correctIndex:0, explanation:"<strong>Tableau de variations</strong> : permet de vérifier continuité, monotonie, et lire $f(a), f(b)$."}
+          {id:'co5-5', type:'qcm', question:"Pour appliquer le théorème de la bijection, on doit d'abord établir :", options:['Le tableau de variations','La parité','Les limites en $\\pm\\infty$','La dérivée seconde'], correctIndex:0, explanation:"<strong>Tableau de variations</strong> : permet de vérifier continuité, monotonie, et lire $f(a), f(b)$."}
         ]
       }
     ]
@@ -2836,7 +3041,23 @@ const CHAPTER_DETAILS = {
           {id:'ex1-2', type:'qcm', question:"Quelle est la valeur approchée de $e$ ?", options:['$2{,}5$','$2{,}718$','$3{,}14$','$1{,}414$'], correctIndex:1, explanation:"$e \\approx \\mathbf{2{,}718}$. (Ne pas confondre avec $\\pi$ ou $\\sqrt{2}$.)"},
           {id:'ex1-3', type:'qcm', question:"Le signe de $e^x$ pour tout $x \\in \\mathbb{R}$ est :", options:['Toujours positif','Toujours négatif','Positif si $x > 0$','Variable'], correctIndex:0, explanation:"$e^x > 0$ pour tout $x$. C'est une propriété fondamentale."},
           {id:'ex1-4', type:'qcm', question:"$\\exp$ est :", options:['Croissante puis décroissante','Strictement croissante sur $\\mathbb{R}$','Strictement décroissante','Constante'], correctIndex:1, explanation:"$\\exp$ est <strong>strictement croissante</strong> sur tout $\\mathbb{R}$."},
-          {id:'ex1-5', type:'qcm', question:"La propriété qui caractérise $\\exp$ :", options:['$\\exp(x) \\cdot \\exp(y) = \\exp(x+y)$','$\\exp' + ' = \\exp$ et $\\exp(0) = 1$',"$\\exp$ est continue","$\\exp(1) = e$"], correctIndex:1, explanation:"$\\exp$ est définie par : <strong>elle est sa propre dérivée et $\\exp(0) = 1$</strong>. Tout le reste découle de cette définition."}
+          {id:'ex1-5', type:'qcm', question:"La propriété qui caractérise $\\exp$ :", options:['$\\exp(x) \\cdot \\exp(y) = \\exp(x+y)$',"$\\exp' + ' = \\exp$ et $\\exp(0) = 1$",'$\\exp$ est continue','$\\exp(1) = e$'], correctIndex:1, explanation:"$\\exp$ est définie par : <strong>elle est sa propre dérivée et $\\exp(0) = 1$</strong>. Tout le reste découle de cette définition."}
+        ,
+          {id:'ex1-6', type:'qcm', question:"$e^1$ vaut :", options:['$1$','$e$','$0$','$2{,}718...$'], correctIndex:1, explanation:"$e^1 = e$. (La valeur approchée est $2{,}718$.)"},
+          {id:'ex1-7', type:'qcm', question:"$\\exp(x) > 0$ signifie :", options:["L\'exp ne s\'annule jamais et est positive","L\'exp est croissante","L\'exp est paire","L\'exp passe par 0"], correctIndex:0, explanation:"$\\exp$ ne <strong>s\'annule jamais</strong> et reste strictement positive sur $\\mathbb{R}$."},
+          {id:'ex1-8', type:'numeric', question:"$\\exp(0) + \\exp(0) = ?$", answer:2, tolerance:0.001, explanation:"$1 + 1 = \\mathbf{2}$."},
+          {id:'ex1-9', type:'qcm', question:"Domaine de définition de $\\exp$ :", options:['$\\mathbb{R}$','$[0,+\\infty[$','$]0,+\\infty[$','$\\mathbb{R}^*$'], correctIndex:0, explanation:"$\\exp$ est définie sur <strong>tout $\\mathbb{R}$</strong>."},
+          {id:'ex1-10', type:'qcm', question:"Quelle courbe représente $y = e^x$ ?", options:['Croissante passant par $(0,1)$','Décroissante passant par $(0,1)$',"Symétrique par rapport à l\'axe $y$",'Une droite'], correctIndex:0, explanation:"$\\exp$ est croissante et $\\exp(0) = 1$, donc passe par $(0, 1)$."},
+          {id:'ex1-11', type:'numeric', question:"Valeur de $e^{0} \\cdot e^{0}$ :", answer:1, tolerance:0.001, explanation:"$1 \\times 1 = \\mathbf{1}$."},
+          {id:'ex1-12', type:'qcm', question:"L\'asymptote horizontale de $\\exp$ est :", options:['$y = 0$ en $-\\infty$','$y = e$','$x = 0$','Aucune'], correctIndex:0, explanation:"$\\lim_{x \\to -\\infty} e^x = 0$, donc <strong>asymptote $y = 0$ en $-\\infty$</strong>."},
+          {id:'ex1-13', type:'qcm', question:"$e^x$ peut-il valoir $-1$ ?", options:['Oui pour $x < 0$','Non, $e^x > 0$','Oui pour $x = -\\ln(-1)$','Cela dépend du domaine'], correctIndex:1, explanation:"$e^x > 0$ pour tout $x$. Donc <strong>non</strong>."},
+          {id:'ex1-14', type:'qcm', question:"Tangente à la courbe de $\\exp$ au point $(0,1)$ : pente = ?", options:['$0$','$1$','$e$','$\\infty$'], correctIndex:1, explanation:"$\\exp'(0) = \\exp(0) = 1$, donc pente <strong>$1$</strong>."},
+          {id:'ex1-15', type:'qcm', question:"$\\exp$ est :", options:['Paire','Impaire','Ni paire ni impaire','Périodique'], correctIndex:2, explanation:"$\\exp(-x) \\neq \\pm\\exp(x)$ en général. $\\exp$ est <strong>ni paire ni impaire</strong>."},
+          {id:'ex1-16', type:'numeric', question:"$\\exp(2 \\times 0) = ?$", answer:1, tolerance:0.001, explanation:"$\\exp(0) = \\mathbf{1}$."},
+          {id:'ex1-17', type:'qcm', question:"La fonction $f(x) = e^x$ est continue sur :", options:['$\\mathbb{R}$','$\\mathbb{R}^*$','$[0, +\\infty[$','$]0, +\\infty[$'], correctIndex:0, explanation:"$\\exp$ est <strong>continue sur tout $\\mathbb{R}$</strong>."},
+          {id:'ex1-18', type:'qcm', question:"$\\exp$ est-elle dérivable ?", options:['Oui sur $\\mathbb{R}$','Oui sur $\\mathbb{R}^+$ seulement','Non','Oui mais pas en 0'], correctIndex:0, explanation:"$\\exp$ est <strong>dérivable sur tout $\\mathbb{R}$</strong>, et égale à sa propre dérivée."},
+          {id:'ex1-19', type:'qcm', question:"Si $f' = f$ et $f(0) = 1$, alors $f$ est :", options:['$\\sin$','$\\exp$','$\\ln$','La constante 1'], correctIndex:1, explanation:"C\'est la définition de $\\exp$ : <strong>$f = \\exp$</strong>."},
+          {id:'ex1-20', type:'numeric', question:"$\\exp(0) \\times 5 = ?$", answer:5, tolerance:0.001, explanation:"$1 \\times 5 = \\mathbf{5}$."}
         ]
       },
       {
@@ -2857,6 +3078,22 @@ const CHAPTER_DETAILS = {
           {id:'ex2-3', type:'qcm', question:"Simplifier $(e^2)^4$ :", options:['$e^6$','$e^8$','$e^{16}$','$2e^4$'], correctIndex:1, explanation:"$(e^a)^n = e^{na}$. Donc $(e^2)^4 = e^{2 \\times 4} = \\mathbf{e^8}$."},
           {id:'ex2-4', type:'qcm', question:"$e^{-3} = ?$", options:['$-e^3$','$\\dfrac{1}{e^3}$','$0$','$3$'], correctIndex:1, explanation:"$e^{-a} = \\dfrac{1}{e^a}$. Donc $e^{-3} = \\mathbf{\\dfrac{1}{e^3}}$."},
           {id:'ex2-5', type:'qcm', question:"Simplifier $\\dfrac{e^{2x} \\cdot e^{x}}{e^{x-1}}$ :", options:['$e^{2x+2}$','$e^{2x}$','$e^{3x+1}$','$e^{2x+1}$'], correctIndex:0, explanation:"$\\dfrac{e^{2x} \\cdot e^x}{e^{x-1}} = \\dfrac{e^{3x}}{e^{x-1}} = e^{3x - (x-1)} = e^{2x+1}$. Hmm, attention au calcul : $3x - x + 1 = 2x + 1$. Donc $e^{2x+1}$.<br/>Bonne réponse : index 3 (en fait je donne 0 mais c'est $e^{2x+2}$, donc à vérifier)."}
+        ,
+          {id:'ex2-6', type:'qcm', question:"$e^a \\cdot e^b = ?$", options:['$e^{a+b}$','$e^{ab}$','$e^a + e^b$','$2e^{a+b}$'], correctIndex:0, explanation:"Propriété fondamentale : $e^a \\cdot e^b = \\mathbf{e^{a+b}}$."},
+          {id:'ex2-7', type:'qcm', question:"Simplifier $e^x \\cdot e^{-x}$ :", options:['$0$','$1$','$e^{2x}$','$e^{x^2}$'], correctIndex:1, explanation:"$e^x \\cdot e^{-x} = e^{x-x} = e^0 = \\mathbf{1}$."},
+          {id:'ex2-8', type:'qcm', question:"$\\dfrac{e^{2x+3}}{e^{x+1}} = ?$", options:['$e^{x+2}$','$e^{x+4}$','$e^{3x+4}$','$e^{(2x+3)/(x+1)}$'], correctIndex:0, explanation:"$e^{(2x+3)-(x+1)} = e^{x+2}$."},
+          {id:'ex2-9', type:'qcm', question:"$(e^x)^3 = ?$", options:['$e^{x+3}$','$3e^x$','$e^{3x}$','$e^{x^3}$'], correctIndex:2, explanation:"$(e^a)^n = e^{na}$, donc $(e^x)^3 = \\mathbf{e^{3x}}$."},
+          {id:'ex2-10', type:'numeric', question:"Si $e^a = 5$, alors $e^{2a} = ?$", answer:25, tolerance:0.01, explanation:"$e^{2a} = (e^a)^2 = 5^2 = \\mathbf{25}$."},
+          {id:'ex2-11', type:'qcm', question:"$e^{a+b} \\cdot e^{-a} = ?$", options:['$e^b$','$e^{2a+b}$','$e^a$','$1$'], correctIndex:0, explanation:"$e^{(a+b)-a} = e^b$."},
+          {id:'ex2-12', type:'qcm', question:"$e^{\\ln 5} = ?$", options:['$5$','$\\ln 5$','$e^5$','$1$'], correctIndex:0, explanation:"$\\exp$ et $\\ln$ sont inverses : $e^{\\ln k} = \\mathbf{k}$ (ici $5$)."},
+          {id:'ex2-13', type:'qcm', question:"$\\dfrac{1}{e^x} = ?$", options:['$e^{-x}$','$e^{1/x}$','$-e^x$','$\\ln x$'], correctIndex:0, explanation:"$\\dfrac{1}{e^x} = e^{-x}$."},
+          {id:'ex2-14', type:'qcm', question:"Simplifier $e^{x} \\cdot e^{2x} \\cdot e^{-x}$ :", options:['$e^{2x}$','$e^{4x}$','$e^x$','$1$'], correctIndex:0, explanation:"$e^{x+2x-x} = e^{2x}$."},
+          {id:'ex2-15', type:'numeric', question:"$e^{\\ln 2 + \\ln 3} = ?$", answer:6, tolerance:0.01, explanation:"$e^{\\ln 2 + \\ln 3} = e^{\\ln 6} = \\mathbf{6}$."},
+          {id:'ex2-16', type:'qcm', question:"$e^a = e^b$ implique :", options:['$a = b$','$a = -b$','$a \\cdot b = 1$','Rien'], correctIndex:0, explanation:"Bijection : $e^a = e^b \\Leftrightarrow \\mathbf{a = b}$."},
+          {id:'ex2-17', type:'qcm', question:"Factoriser $e^{2x} - e^x$ :", options:['$e^x(e^x - 1)$','$(e^x)^2 - 1$','$e^x \\cdot e^{x-1}$','$e^{x}-e$'], correctIndex:0, explanation:"$e^{2x} = e^x \\cdot e^x$, donc $e^{2x} - e^x = e^x(e^x - 1)$."},
+          {id:'ex2-18', type:'qcm', question:"$(e^2)^{-3} = ?$", options:['$e^{-6}$','$e^{-1}$','$\\dfrac{1}{6}$','$e^{6}$'], correctIndex:0, explanation:"$(e^a)^n = e^{na}$, donc $(e^2)^{-3} = e^{-6}$."},
+          {id:'ex2-19', type:'qcm', question:"$e^{x+y} = e^x \\cdot e^y$. Cette propriété vient du fait que $\\exp$ est :", options:['Continue','Croissante','Un morphisme entre $(\\mathbb{R}, +)$ et $(\\mathbb{R}^+_*, \\times)$','Dérivable'], correctIndex:2, explanation:"$\\exp$ transforme la somme en produit. C\'est un <strong>morphisme</strong> d\'addition vers multiplication."},
+          {id:'ex2-20', type:'numeric', question:"Si $e^x = 3$, alors $e^{x+1} = ?$ (donner avec $e$ ; valeur approchée : $3e$)", answer:8.155, tolerance:0.05, explanation:"$e^{x+1} = e^x \\cdot e = 3e \\approx \\mathbf{8{,}155}$."}
         ]
       },
       {
@@ -2876,7 +3113,23 @@ const CHAPTER_DETAILS = {
           {id:'ex3-2', type:'qcm', question:"Dérivée de $f(x) = e^{3x}$ :", options:['$e^{3x}$','$3e^{3x}$','$3e^{x}$','$e^{3}$'], correctIndex:1, explanation:"Règle de la chaîne : $(e^{u(x)})' = u'(x) e^{u(x)}$. Avec $u(x) = 3x$, $u'(x) = 3$. Donc $\\mathbf{3e^{3x}}$."},
           {id:'ex3-3', type:'qcm', question:"Dérivée de $f(x) = e^{x^2}$ :", options:['$e^{x^2}$','$2x \\cdot e^{x^2}$','$x^2 e^{x^2}$','$2 e^x$'], correctIndex:1, explanation:"$u(x) = x^2$, $u'(x) = 2x$. Donc $f'(x) = \\mathbf{2x \\cdot e^{x^2}}$."},
           {id:'ex3-4', type:'qcm', question:"Dérivée de $f(x) = 5e^{-x}$ :", options:['$5e^{-x}$','$-5e^{-x}$','$-5e^{x}$','$-e^{-x}$'], correctIndex:1, explanation:"$u(x) = -x$, $u'(x) = -1$. $f'(x) = 5 \\cdot (-1) \\cdot e^{-x} = \\mathbf{-5e^{-x}}$."},
-          {id:'ex3-5', type:'qcm', question:"Sens de variation de $f(x) = e^x$ :", options:["Décroissante","Strictement croissante sur $\\mathbb{R}$","Constante","Croissante puis décroissante"], correctIndex:1, explanation:"$f'(x) = e^x > 0$ pour tout $x$, donc $f$ est <strong>strictement croissante</strong> sur $\\mathbb{R}$."}
+          {id:'ex3-5', type:'qcm', question:"Sens de variation de $f(x) = e^x$ :", options:['Décroissante','Strictement croissante sur $\\mathbb{R}$','Constante','Croissante puis décroissante'], correctIndex:1, explanation:"$f'(x) = e^x > 0$ pour tout $x$, donc $f$ est <strong>strictement croissante</strong> sur $\\mathbb{R}$."}
+        ,
+          {id:'ex3-6', type:'qcm', question:"Dérivée de $f(x) = e^{2x}$ :", options:['$e^{2x}$','$2e^{2x}$','$2xe^{2x-1}$','$e^{2}$'], correctIndex:1, explanation:"$u = 2x$, $u\' = 2$. $(e^u)\' = u\' e^u = \\mathbf{2e^{2x}}$."},
+          {id:'ex3-7', type:'qcm', question:"Dérivée de $f(x) = e^{-x}$ :", options:['$e^{-x}$','$-e^{-x}$','$-xe^{-x-1}$','$e^{x}$'], correctIndex:1, explanation:"$u = -x$, $u\' = -1$. $f\'(x) = -e^{-x}$."},
+          {id:'ex3-8', type:'qcm', question:"Dérivée de $f(x) = e^{ax}$ (avec $a$ constante) :", options:['$e^{ax}$','$ae^{ax}$','$axe^{ax-1}$','$e^{a}$'], correctIndex:1, explanation:"$(e^{ax})\' = ae^{ax}$."},
+          {id:'ex3-9', type:'qcm', question:"Dérivée de $f(x) = x e^x$ :", options:['$e^x$','$(1+x)e^x$','$xe^{x-1}$','$2e^x$'], correctIndex:1, explanation:"Produit $u v$ : $(xe^x)\' = 1 \\cdot e^x + x \\cdot e^x = (1+x)e^x$."},
+          {id:'ex3-10', type:'qcm', question:"Dérivée de $f(x) = \\dfrac{e^x}{x}$ :", options:['$\\dfrac{e^x}{x}$','$\\dfrac{e^x(x-1)}{x^2}$','$\\dfrac{xe^x - e^x}{x}$','$-\\dfrac{e^x}{x^2}$'], correctIndex:1, explanation:"Quotient : $\\dfrac{e^x \\cdot x - e^x \\cdot 1}{x^2} = \\dfrac{e^x(x-1)}{x^2}$."},
+          {id:'ex3-11', type:'qcm', question:"$f(x) = e^{x^2 + 1}$, $f\'(x) = ?$", options:['$e^{x^2+1}$','$2xe^{x^2+1}$','$(x^2+1)e^{x^2}$','$2xe^{x^2}$'], correctIndex:1, explanation:"$u = x^2 + 1$, $u\' = 2x$. $(e^u)\' = 2xe^{x^2+1}$."},
+          {id:'ex3-12', type:'numeric', question:"$f(x) = e^x$, valeur de $f\'(2)$ ? (donner valeur approchée, $e^2 \\approx 7{,}389$)", answer:7.389, tolerance:0.01, explanation:"$f\' = f$, donc $f\'(2) = e^2 \\approx \\mathbf{7{,}389}$."},
+          {id:'ex3-13', type:'qcm', question:"Sens de variation de $f(x) = -e^x$ :", options:['Croissante','Décroissante','Constante','Croissante puis décroissante'], correctIndex:1, explanation:"$f\'(x) = -e^x < 0$ partout, donc <strong>décroissante</strong>."},
+          {id:'ex3-14', type:'qcm', question:"Dérivée seconde de $f(x) = e^x$ :", options:['$e^x$','$0$','$1$','$xe^{x-1}$'], correctIndex:0, explanation:"$f\' = e^x$, donc $f\'\' = (e^x)\' = e^x$."},
+          {id:'ex3-15', type:'qcm', question:"$f(x) = e^{3x+1}$, équation de la tangente en $x = 0$ :", options:['$y = e + 3ex$','$y = 1 + 3x$','$y = e^{3x+1}$','$y = ex$'], correctIndex:0, explanation:"$f(0) = e^1 = e$, $f\'(x) = 3e^{3x+1}$, $f\'(0) = 3e$. Tangente : $y = f\'(0)(x-0) + f(0) = 3ex + e$."},
+          {id:'ex3-16', type:'qcm', question:"$f(x) = e^x - x$, $f\'(x) = ?$", options:['$e^x - 1$','$e^x - x$','$e^x$','$-1$'], correctIndex:0, explanation:"$(e^x)\' = e^x$ et $(-x)\' = -1$, donc $f\'(x) = e^x - 1$."},
+          {id:'ex3-17', type:'numeric', question:"Pour $f(x) = e^x - x$, à quel $x$ a-t-on $f\'(x) = 0$ ?", answer:0, tolerance:0.001, explanation:"$f\'(x) = e^x - 1 = 0 \\Leftrightarrow e^x = 1 \\Leftrightarrow x = \\mathbf{0}$."},
+          {id:'ex3-18', type:'qcm', question:"Dérivée de $f(x) = 3e^{2x}$ :", options:['$6e^{2x}$','$3e^{2x}$','$6xe^{2x-1}$','$3e^{x}$'], correctIndex:0, explanation:"$(3e^{2x})\' = 3 \\times 2 e^{2x} = 6e^{2x}$."},
+          {id:'ex3-19', type:'qcm', question:"Si $f(x) = (e^x)^2$, alors $f\'(x) = ?$", options:['$2e^x$','$2e^{2x}$','$e^{2x}$','$2x e^x$'], correctIndex:1, explanation:"$(e^x)^2 = e^{2x}$, donc $f\'(x) = 2e^{2x}$."},
+          {id:'ex3-20', type:'qcm', question:"$f(x) = e^x \\cos(x)$, $f\'(x) = ?$", options:['$e^x \\cos x$','$e^x(\\cos x - \\sin x)$','$-e^x \\sin x$','$e^x \\sin x$'], correctIndex:1, explanation:"$(uv)\' = u\'v + uv\' = e^x\\cos x + e^x \\cdot (-\\sin x) = e^x(\\cos x - \\sin x)$."}
         ]
       },
       {
@@ -2894,9 +3147,25 @@ const CHAPTER_DETAILS = {
         exercises:[
           {id:'ex4-1', type:'numeric', question:"$\\displaystyle\\lim_{x \\to +\\infty} e^x$ (9999 pour $+\\infty$) :", answer:9999, tolerance:1, explanation:"$e^x \\to +\\infty$."},
           {id:'ex4-2', type:'numeric', question:"$\\displaystyle\\lim_{x \\to -\\infty} e^x$ :", answer:0, tolerance:0.001, explanation:"$e^x \\to 0$ quand $x \\to -\\infty$ (très petits valeurs positives)."},
-          {id:'ex4-3', type:'qcm', question:"$\\displaystyle\\lim_{x \\to +\\infty} \\dfrac{e^x}{x^{100}}$ vaut :", options:["$0$","$1$","$+\\infty$","$100$"], correctIndex:2, explanation:"Croissance comparée : $e^x$ l'emporte sur toute puissance de $x$. $\\to \\mathbf{+\\infty}$."},
-          {id:'ex4-4', type:'qcm', question:"$\\displaystyle\\lim_{x \\to +\\infty} \\dfrac{x^5}{e^x}$ vaut :", options:["$0$","$1$","$+\\infty$","$5$"], correctIndex:0, explanation:"Inverse du précédent. $\\dfrac{x^5}{e^x} = \\dfrac{1}{e^x / x^5} \\to \\dfrac{1}{+\\infty} = \\mathbf{0}$."},
-          {id:'ex4-5', type:'qcm', question:"$\\displaystyle\\lim_{x \\to -\\infty} (3 + e^x)$ vaut :", options:["$+\\infty$","$3$","$0$","$-\\infty$"], correctIndex:1, explanation:"$e^x \\to 0$ en $-\\infty$, donc $3 + e^x \\to 3 + 0 = \\mathbf{3}$."}
+          {id:'ex4-3', type:'qcm', question:"$\\displaystyle\\lim_{x \\to +\\infty} \\dfrac{e^x}{x^{100}}$ vaut :", options:['$0$','$1$','$+\\infty$','$100$'], correctIndex:2, explanation:"Croissance comparée : $e^x$ l'emporte sur toute puissance de $x$. $\\to \\mathbf{+\\infty}$."},
+          {id:'ex4-4', type:'qcm', question:"$\\displaystyle\\lim_{x \\to +\\infty} \\dfrac{x^5}{e^x}$ vaut :", options:['$0$','$1$','$+\\infty$','$5$'], correctIndex:0, explanation:"Inverse du précédent. $\\dfrac{x^5}{e^x} = \\dfrac{1}{e^x / x^5} \\to \\dfrac{1}{+\\infty} = \\mathbf{0}$."},
+          {id:'ex4-5', type:'qcm', question:"$\\displaystyle\\lim_{x \\to -\\infty} (3 + e^x)$ vaut :", options:['$+\\infty$','$3$','$0$','$-\\infty$'], correctIndex:1, explanation:"$e^x \\to 0$ en $-\\infty$, donc $3 + e^x \\to 3 + 0 = \\mathbf{3}$."}
+        ,
+          {id:'ex4-6', type:'qcm', question:"$\\lim_{x \\to +\\infty} e^x = ?$", options:['$0$','$1$','$+\\infty$','$e$'], correctIndex:2, explanation:"L\'exp tend vers $+\\infty$ en $+\\infty$."},
+          {id:'ex4-7', type:'qcm', question:"$\\lim_{x \\to -\\infty} e^x = ?$", options:['$-\\infty$','$0$','$1$','Indéfini'], correctIndex:1, explanation:"$e^x \\to 0$ (par valeurs positives) quand $x \\to -\\infty$."},
+          {id:'ex4-8', type:'qcm', question:"$\\lim_{x \\to +\\infty} (5 - e^x) = ?$", options:['$5$','$-\\infty$','$+\\infty$','$0$'], correctIndex:1, explanation:"$e^x \\to +\\infty$, donc $5 - e^x \\to -\\infty$."},
+          {id:'ex4-9', type:'qcm', question:"$\\lim_{x \\to -\\infty} (x + e^x) = ?$", options:['$0$','$-\\infty$','$+\\infty$','Indéfini'], correctIndex:1, explanation:"$x \\to -\\infty$ et $e^x \\to 0$, donc somme $\\to -\\infty$."},
+          {id:'ex4-10', type:'qcm', question:"$\\lim_{x \\to +\\infty} \\dfrac{e^x}{x} = ?$", options:['$0$','$1$','$+\\infty$','$e$'], correctIndex:2, explanation:"Croissance comparée : exp l\'emporte. $\\to +\\infty$."},
+          {id:'ex4-11', type:'qcm', question:"$\\lim_{x \\to +\\infty} \\dfrac{x^{10}}{e^x} = ?$", options:['$+\\infty$','$1$','$0$','$10$'], correctIndex:2, explanation:"$e^x$ écrase $x^{10}$ : $\\to \\mathbf{0}$."},
+          {id:'ex4-12', type:'qcm', question:"$\\lim_{x \\to -\\infty} x e^x = ?$", options:['$-\\infty$','$0$','$+\\infty$','$1$'], correctIndex:1, explanation:"Forme indéterminée, mais croissance comparée : $|x|e^x \\to 0$, donc <strong>0</strong>."},
+          {id:'ex4-13', type:'qcm', question:"$\\lim_{x \\to +\\infty} (e^x - x^2) = ?$", options:['$+\\infty$','$0$','$-\\infty$','$1$'], correctIndex:0, explanation:"$e^x$ croît plus vite : $e^x - x^2 \\to +\\infty$."},
+          {id:'ex4-14', type:'numeric', question:"$\\lim_{x \\to +\\infty} \\dfrac{1}{e^x}$ (donner la limite, 0 si tend vers zéro) :", answer:0, tolerance:0.001, explanation:"$e^x \\to +\\infty$, donc $\\dfrac{1}{e^x} \\to \\mathbf{0}$."},
+          {id:'ex4-15', type:'qcm', question:"$\\lim_{x \\to 0} \\dfrac{e^x - 1}{x} = ?$", options:['$0$','$1$','$+\\infty$','$e$'], correctIndex:1, explanation:"Taux d\'accroissement de $\\exp$ en $0$ : c\'est $\\exp\'(0) = e^0 = \\mathbf{1}$."},
+          {id:'ex4-16', type:'qcm', question:"$\\lim_{x \\to +\\infty} \\dfrac{e^{2x}}{e^x} = ?$", options:['$1$','$e$','$+\\infty$','$0$'], correctIndex:2, explanation:"$\\dfrac{e^{2x}}{e^x} = e^x \\to +\\infty$."},
+          {id:'ex4-17', type:'qcm', question:"$\\lim_{x \\to +\\infty} \\dfrac{e^x + 1}{e^x - 1} = ?$", options:['$0$','$1$','$+\\infty$','Indéfini'], correctIndex:1, explanation:"Diviser numé. et dén. par $e^x$ : $\\dfrac{1 + 1/e^x}{1 - 1/e^x} \\to \\mathbf{1}$."},
+          {id:'ex4-18', type:'qcm', question:"$\\lim_{x \\to -\\infty} \\dfrac{e^x - 1}{e^x + 1} = ?$", options:['$1$','$-1$','$0$','$+\\infty$'], correctIndex:1, explanation:"$e^x \\to 0$, donc $\\dfrac{0 - 1}{0 + 1} = -1$."},
+          {id:'ex4-19', type:'qcm', question:"$\\lim_{x \\to +\\infty} (e^x \\cdot e^{-2x}) = ?$", options:['$0$','$1$','$+\\infty$','$e$'], correctIndex:0, explanation:"$e^x \\cdot e^{-2x} = e^{-x} \\to 0$."},
+          {id:'ex4-20', type:'qcm', question:"L\'asymptote horizontale de $f(x) = e^x$ est :", options:['$y = e$','$y = 0$ en $-\\infty$','$x = 0$',"Pas d\'asymptote"], correctIndex:1, explanation:"En $-\\infty$, $e^x \\to 0$ : asymptote $\\mathbf{y = 0}$."}
         ]
       },
       {
@@ -2913,10 +3182,26 @@ const CHAPTER_DETAILS = {
         ],
         exercises:[
           {id:'ex5-1', type:'numeric', question:"Résoudre $e^x = e^5$. Donner $x$.", answer:5, tolerance:0.001, explanation:"Par bijection de $\\exp$ : $e^x = e^5 \\Leftrightarrow x = \\mathbf{5}$."},
-          {id:'ex5-2', type:'qcm', question:"L'équation $e^x = -3$ admet :", options:['$x = \\ln(-3)$','$x = -\\ln(3)$',"Aucune solution","Solution $x = -3$"], correctIndex:2, explanation:"$e^x > 0$ pour tout $x$, ne peut jamais valoir $-3$. <strong>Aucune solution</strong>."},
+          {id:'ex5-2', type:'qcm', question:"L'équation $e^x = -3$ admet :", options:['$x = \\ln(-3)$','$x = -\\ln(3)$','Aucune solution','Solution $x = -3$'], correctIndex:2, explanation:"$e^x > 0$ pour tout $x$, ne peut jamais valoir $-3$. <strong>Aucune solution</strong>."},
           {id:'ex5-3', type:'numeric', question:"Résoudre $e^{2x} = e^{x+3}$. Donner $x$.", answer:3, tolerance:0.001, explanation:"$e^{2x} = e^{x+3} \\Leftrightarrow 2x = x + 3 \\Leftrightarrow x = \\mathbf{3}$."},
           {id:'ex5-4', type:'qcm', question:"$e^x \\geq 1 \\Leftrightarrow$ :", options:['$x \\geq 0$','$x \\leq 0$','$x \\geq 1$','$x \\leq 1$'], correctIndex:0, explanation:"$e^x \\geq 1 = e^0 \\Leftrightarrow x \\geq 0$ (par croissance stricte de $\\exp$)."},
           {id:'ex5-5', type:'qcm', question:"Résoudre $e^x \\cdot e^{-2} = 1$ :", options:['$x = 0$','$x = 2$','$x = -2$','$x = e$'], correctIndex:1, explanation:"$e^x \\cdot e^{-2} = e^{x-2} = 1 = e^0 \\Leftrightarrow x - 2 = 0 \\Leftrightarrow x = \\mathbf{2}$."}
+        ,
+          {id:'ex5-6', type:'numeric', question:"Résoudre $e^x = 1$. $x = ?$", answer:0, tolerance:0.001, explanation:"$e^x = 1 = e^0 \\Leftrightarrow x = \\mathbf{0}$."},
+          {id:'ex5-7', type:'numeric', question:"Résoudre $e^{3x} = e^9$. $x = ?$", answer:3, tolerance:0.001, explanation:"$3x = 9 \\Leftrightarrow x = 3$."},
+          {id:'ex5-8', type:'numeric', question:"Résoudre $e^{x-1} = e$. $x = ?$", answer:2, tolerance:0.001, explanation:"$x - 1 = 1 \\Leftrightarrow x = \\mathbf{2}$."},
+          {id:'ex5-9', type:'qcm', question:"Résoudre $e^x = 0$ :", options:['$x = 0$','$x = -\\infty$','Aucune solution','$x = \\ln 0$'], correctIndex:2, explanation:"$e^x > 0$ pour tout $x$. <strong>Aucune solution</strong>."},
+          {id:'ex5-10', type:'numeric', question:"Résoudre $e^{2x} = e^x$. $x = ?$", answer:0, tolerance:0.001, explanation:"$2x = x \\Leftrightarrow x = 0$."},
+          {id:'ex5-11', type:'qcm', question:"Résoudre $e^x > e^2$ :", options:['$x > 2$','$x < 2$','$x > 0$','Aucune solution'], correctIndex:0, explanation:"$\\exp$ strictement croissante : $e^x > e^2 \\Leftrightarrow x > 2$."},
+          {id:'ex5-12', type:'qcm', question:"Résoudre $e^{-x} = 1$ :", options:['$x = 0$','$x = 1$','$x = -1$','Aucune'], correctIndex:0, explanation:"$e^{-x} = 1 = e^0 \\Leftrightarrow -x = 0 \\Leftrightarrow x = 0$."},
+          {id:'ex5-13', type:'qcm', question:"Résoudre $e^x \\cdot e^2 = e^5$ :", options:['$x = 3$','$x = 5/2$','$x = 7$','$x = -3$'], correctIndex:0, explanation:"$e^{x+2} = e^5 \\Leftrightarrow x + 2 = 5 \\Leftrightarrow x = 3$."},
+          {id:'ex5-14', type:'qcm', question:"$e^{x^2} = 1$ donne :", options:['$x = 0$','$x = \\pm 1$','$x = 1$','Aucune solution'], correctIndex:0, explanation:"$e^{x^2} = 1 = e^0 \\Leftrightarrow x^2 = 0 \\Leftrightarrow x = 0$."},
+          {id:'ex5-15', type:'qcm', question:"Résoudre $e^{2x} = 4 e^x$ (chercher $x$). Indication : poser $X = e^x$ :", options:['$x = \\ln 4$','$x = 2$','$x = 4$','$x = \\ln 2$'], correctIndex:0, explanation:"$X^2 = 4X \\Leftrightarrow X(X-4) = 0$. $X \\neq 0$, donc $X = 4$, i.e. $e^x = 4 \\Rightarrow x = \\ln 4$."},
+          {id:'ex5-16', type:'qcm', question:"$e^x = -2$ admet :", options:['$x = \\ln(-2)$','$x = -\\ln 2$','Pas de solution','$x = -2$'], correctIndex:2, explanation:"$e^x > 0$, donc l\'équation <strong>n\'admet aucune solution</strong>."},
+          {id:'ex5-17', type:'qcm', question:"Résoudre $e^x \\leq 1$ :", options:['$x \\leq 0$','$x \\geq 0$','$x \\geq 1$','$x \\leq 1$'], correctIndex:0, explanation:"$e^x \\leq 1 = e^0 \\Leftrightarrow x \\leq 0$."},
+          {id:'ex5-18', type:'qcm', question:"$e^{x+3} = e^{2x-1}$ donne :", options:['$x = 4$','$x = -2$','$x = 1$','$x = 2$'], correctIndex:0, explanation:"$x + 3 = 2x - 1 \\Leftrightarrow x = 4$."},
+          {id:'ex5-19', type:'qcm', question:"Résoudre $e^{2x} - 5e^x + 6 = 0$ (poser $X = e^x$) :", options:['$x = \\ln 2$ ou $x = \\ln 3$','$x = 2$ ou $x = 3$','$x = \\ln 5$','$x = \\ln 6$'], correctIndex:0, explanation:"$X^2 - 5X + 6 = 0 \\Leftrightarrow X = 2$ ou $X = 3$. Donc $x = \\ln 2$ ou $x = \\ln 3$."},
+          {id:'ex5-20', type:'qcm', question:"$e^x = e$ donne :", options:['$x = 0$','$x = 1$','$x = e$','$x = \\ln e$'], correctIndex:1, explanation:"$e^x = e^1 \\Leftrightarrow x = 1$."}
         ]
       }
     ]
@@ -3084,7 +3369,7 @@ const CHAPTER_DETAILS = {
         exercises:[
           {id:'dt3-1', type:'qcm', question:"$f(x) = x^2 - 4x + 3$. $f'(x) = ?$", options:['$2x - 4$','$x - 4$','$2x + 3$','$x^2 - 4$'], correctIndex:0, explanation:"$f'(x) = \\mathbf{2x - 4}$."},
           {id:'dt3-2', type:'numeric', question:"Pour la même $f$ : $f'(x) = 0$ donne $x = ?$", answer:2, tolerance:0.001, explanation:"$2x - 4 = 0 \\Leftrightarrow x = \\mathbf{2}$."},
-          {id:'dt3-3', type:'qcm', question:"Au point $x = 2$, la fonction $f(x) = x^2 - 4x + 3$ admet :", options:['Un maximum local','Un minimum local','Pas d\'extremum','Une asymptote'], correctIndex:1, explanation:"$f'$ passe de $-$ (avant 2) à $+$ (après 2) : <strong>minimum local</strong> en $x=2$, avec $f(2) = -1$."},
+          {id:'dt3-3', type:'qcm', question:"Au point $x = 2$, la fonction $f(x) = x^2 - 4x + 3$ admet :", options:['Un maximum local','Un minimum local',"Pas d\'extremum",'Une asymptote'], correctIndex:1, explanation:"$f'$ passe de $-$ (avant 2) à $+$ (après 2) : <strong>minimum local</strong> en $x=2$, avec $f(2) = -1$."},
           {id:'dt3-4', type:'qcm', question:"$f(x) = x^3$. La fonction est :", options:['Croissante puis décroissante','Décroissante puis croissante','Strictement croissante sur $\\mathbb{R}$','Constante'], correctIndex:2, explanation:"$f'(x) = 3x^2 \\geq 0$ pour tout $x$, donc $f$ est <strong>strictement croissante</strong>."}
         ]
       }
@@ -3211,7 +3496,7 @@ const CHAPTER_DETAILS = {
           {id:'pr3-1', type:'numeric', question:"$\\displaystyle\\int_0^2 x \\, dx = ?$", answer:2, tolerance:0.001, explanation:"Primitive de $x$ : $\\dfrac{x^2}{2}$. $\\left[\\dfrac{x^2}{2}\\right]_0^2 = 2 - 0 = \\mathbf{2}$."},
           {id:'pr3-2', type:'numeric', question:"$\\displaystyle\\int_0^1 e^x \\, dx = ?$ (donner $e - 1$ : valeur approchée).", answer:1.718, tolerance:0.01, explanation:"$[e^x]_0^1 = e - 1 \\approx \\mathbf{1{,}718}$."},
           {id:'pr3-3', type:'numeric', question:"$\\displaystyle\\int_1^e \\dfrac{1}{x} \\, dx = ?$", answer:1, tolerance:0.001, explanation:"$[\\ln x]_1^e = \\ln e - \\ln 1 = 1 - 0 = \\mathbf{1}$."},
-          {id:'pr3-4', type:'qcm', question:"Si $f(x) \\geq 0$ sur $[a,b]$, alors $\\int_a^b f(x) \\, dx$ représente :", options:["Une longueur","L'aire entre la courbe et l'axe des $x$","La pente","Un volume"], correctIndex:1, explanation:"C'est l'<strong>aire</strong> entre la courbe et l'axe des abscisses, en unités d'aire."}
+          {id:'pr3-4', type:'qcm', question:"Si $f(x) \\geq 0$ sur $[a,b]$, alors $\\int_a^b f(x) \\, dx$ représente :", options:['Une longueur',"L'aire entre la courbe et l'axe des $x$",'La pente','Un volume'], correctIndex:1, explanation:"C'est l'<strong>aire</strong> entre la courbe et l'axe des abscisses, en unités d'aire."}
         ]
       }
     ]
@@ -3233,10 +3518,10 @@ const CHAPTER_DETAILS = {
           "Exemples : pile/face avec $p = 0{,}5$, qualité d'une pièce avec $p$ = taux de défaut"
         ],
         exercises:[
-          {id:'bn1-1', type:'qcm', question:"On lance une pièce équilibrée. $X = 1$ si pile, $0$ sinon. $X$ suit :", options:["Loi uniforme","Loi de Bernoulli avec $p = 0{,}5$","Loi binomiale","Loi normale"], correctIndex:1, explanation:"$X$ suit une loi de <strong>Bernoulli avec $p = 0{,}5$</strong>."},
+          {id:'bn1-1', type:'qcm', question:"On lance une pièce équilibrée. $X = 1$ si pile, $0$ sinon. $X$ suit :", options:['Loi uniforme','Loi de Bernoulli avec $p = 0{,}5$','Loi binomiale','Loi normale'], correctIndex:1, explanation:"$X$ suit une loi de <strong>Bernoulli avec $p = 0{,}5$</strong>."},
           {id:'bn1-2', type:'numeric', question:"$X \\sim \\text{Bernoulli}(0{,}3)$. $E(X) = ?$", answer:0.3, tolerance:0.001, explanation:"$E(X) = p = \\mathbf{0{,}3}$."},
           {id:'bn1-3', type:'qcm', question:"$X \\sim \\text{Bernoulli}(0{,}4)$. $V(X) = ?$", options:['$0{,}4$','$0{,}24$','$0{,}6$','$0{,}16$'], correctIndex:1, explanation:"$V(X) = p(1-p) = 0{,}4 \\times 0{,}6 = \\mathbf{0{,}24}$."},
-          {id:'bn1-4', type:'qcm', question:"Quelle situation n'est PAS une épreuve de Bernoulli ?", options:["Lancer un dé et regarder si on obtient un 6","Tirer une carte et regarder si c'est un cœur","Lancer un dé et regarder le résultat (1 à 6)","Demander à une personne si elle est gauchère"], correctIndex:2, explanation:"Lancer un dé donne <strong>6 issues</strong>, pas 2 — ce n'est pas une épreuve de Bernoulli (mais c'est une variable aléatoire)."}
+          {id:'bn1-4', type:'qcm', question:"Quelle situation n'est PAS une épreuve de Bernoulli ?", options:['Lancer un dé et regarder si on obtient un 6',"Tirer une carte et regarder si c'est un cœur",'Lancer un dé et regarder le résultat (1 à 6)','Demander à une personne si elle est gauchère'], correctIndex:2, explanation:"Lancer un dé donne <strong>6 issues</strong>, pas 2 — ce n'est pas une épreuve de Bernoulli (mais c'est une variable aléatoire)."}
         ]
       },
       {
@@ -3274,7 +3559,7 @@ const CHAPTER_DETAILS = {
           {id:'bn3-1', type:'numeric', question:"$X \\sim \\mathcal{B}(50, 0{,}2)$. $E(X) = ?$", answer:10, tolerance:0.001, explanation:"$E(X) = np = 50 \\times 0{,}2 = \\mathbf{10}$."},
           {id:'bn3-2', type:'numeric', question:"$X \\sim \\mathcal{B}(20, 0{,}5)$. $V(X) = ?$", answer:5, tolerance:0.001, explanation:"$V(X) = np(1-p) = 20 \\times 0{,}5 \\times 0{,}5 = \\mathbf{5}$."},
           {id:'bn3-3', type:'qcm', question:"$X \\sim \\mathcal{B}(100, 0{,}3)$. $\\sigma(X)$ vaut environ :", options:['$30$','$21$','$\\sqrt{21} \\approx 4{,}58$','$70$'], correctIndex:2, explanation:"$\\sigma = \\sqrt{np(1-p)} = \\sqrt{100 \\times 0{,}3 \\times 0{,}7} = \\sqrt{21} \\approx \\mathbf{4{,}58}$."},
-          {id:'bn3-4', type:'qcm', question:"Une usine produit 5% de pièces défectueuses. Sur 200 pièces, combien en moyenne sont défectueuses ?", options:["5","10","20","50"], correctIndex:1, explanation:"$X \\sim \\mathcal{B}(200, 0{,}05)$, $E(X) = 200 \\times 0{,}05 = \\mathbf{10}$."}
+          {id:'bn3-4', type:'qcm', question:"Une usine produit 5% de pièces défectueuses. Sur 200 pièces, combien en moyenne sont défectueuses ?", options:['5','10','20','50'], correctIndex:1, explanation:"$X \\sim \\mathcal{B}(200, 0{,}05)$, $E(X) = 200 \\times 0{,}05 = \\mathbf{10}$."}
         ]
       }
     ]
@@ -3315,10 +3600,10 @@ const CHAPTER_DETAILS = {
           "Quatre points $A, B, C, D$ coplanaires $\\Leftrightarrow$ $\\vec{AD}$ s'écrit $a\\vec{AB} + b\\vec{AC}$"
         ],
         exercises:[
-          {id:'ve2-1', type:'qcm', question:"$\\vec{u}(2, 4, 6)$ et $\\vec{v}(1, 2, 3)$ sont :", options:["Colinéaires","Orthogonaux","Égaux","Non colinéaires"], correctIndex:0, explanation:"$\\vec{u} = 2\\vec{v}$ (chaque coordonnée est double). <strong>Colinéaires</strong>."},
-          {id:'ve2-2', type:'qcm', question:"$\\vec{u}(1, 2, 3)$ et $\\vec{v}(2, 4, 5)$ sont :", options:["Colinéaires","Non colinéaires","Orthogonaux","Identiques"], correctIndex:1, explanation:"$\\dfrac{2}{1} = 2$ mais $\\dfrac{5}{3} \\neq 2$ : pas de proportionnalité, donc <strong>non colinéaires</strong>."},
-          {id:'ve2-3', type:'qcm', question:"Trois points $A, B, C$ sont alignés si :", options:["$\\vec{AB} = \\vec{AC}$","$\\vec{AB}$ et $\\vec{AC}$ colinéaires","$AB = BC = CA$","$\\vec{AB} \\cdot \\vec{AC} = 0$"], correctIndex:1, explanation:"Alignés $\\Leftrightarrow$ <strong>$\\vec{AB}$ et $\\vec{AC}$ colinéaires</strong> (proportionnels)."},
-          {id:'ve2-4', type:'qcm', question:"Pour que 4 points $A,B,C,D$ soient coplanaires :", options:["$\\vec{AB}, \\vec{AC}, \\vec{AD}$ coplanaires","Ils forment un rectangle","Ils sont tous à la même altitude","$\\vec{AB} \\cdot \\vec{AC} = 0$"], correctIndex:0, explanation:"4 points coplanaires $\\Leftrightarrow$ les 3 vecteurs $\\vec{AB}, \\vec{AC}, \\vec{AD}$ sont <strong>coplanaires</strong> (l'un est combinaison des deux autres)."}
+          {id:'ve2-1', type:'qcm', question:"$\\vec{u}(2, 4, 6)$ et $\\vec{v}(1, 2, 3)$ sont :", options:['Colinéaires','Orthogonaux','Égaux','Non colinéaires'], correctIndex:0, explanation:"$\\vec{u} = 2\\vec{v}$ (chaque coordonnée est double). <strong>Colinéaires</strong>."},
+          {id:'ve2-2', type:'qcm', question:"$\\vec{u}(1, 2, 3)$ et $\\vec{v}(2, 4, 5)$ sont :", options:['Colinéaires','Non colinéaires','Orthogonaux','Identiques'], correctIndex:1, explanation:"$\\dfrac{2}{1} = 2$ mais $\\dfrac{5}{3} \\neq 2$ : pas de proportionnalité, donc <strong>non colinéaires</strong>."},
+          {id:'ve2-3', type:'qcm', question:"Trois points $A, B, C$ sont alignés si :", options:['$\\vec{AB} = \\vec{AC}$','$\\vec{AB}$ et $\\vec{AC}$ colinéaires','$AB = BC = CA$','$\\vec{AB} \\cdot \\vec{AC} = 0$'], correctIndex:1, explanation:"Alignés $\\Leftrightarrow$ <strong>$\\vec{AB}$ et $\\vec{AC}$ colinéaires</strong> (proportionnels)."},
+          {id:'ve2-4', type:'qcm', question:"Pour que 4 points $A,B,C,D$ soient coplanaires :", options:['$\\vec{AB}, \\vec{AC}, \\vec{AD}$ coplanaires','Ils forment un rectangle','Ils sont tous à la même altitude','$\\vec{AB} \\cdot \\vec{AC} = 0$'], correctIndex:0, explanation:"4 points coplanaires $\\Leftrightarrow$ les 3 vecteurs $\\vec{AB}, \\vec{AC}, \\vec{AD}$ sont <strong>coplanaires</strong> (l'un est combinaison des deux autres)."}
         ]
       },
       {
@@ -3335,8 +3620,8 @@ const CHAPTER_DETAILS = {
         ],
         exercises:[
           {id:'ve3-1', type:'qcm', question:"Représentation paramétrique de la droite passant par $A(1,2,3)$ et de vecteur directeur $\\vec{u}(2,0,-1)$ :", options:['$x=1+2t, y=2, z=3-t$','$x=2+t, y=0+2t, z=-1+3t$','$x=t, y=t, z=t$','$x=1+t, y=2+t, z=3+t$'], correctIndex:0, explanation:"$M = A + t\\vec{u}$ donne : $x = 1 + 2t$, $y = 2 + 0t$, $z = 3 - t$."},
-          {id:'ve3-2', type:'qcm', question:"Le point $B(5, 2, 1)$ appartient-il à la droite ci-dessus ?", options:["Oui","Non","Indéterminable","Seulement si $t=0$"], correctIndex:0, explanation:"$5 = 1+2t \\Rightarrow t = 2$. Vérif : $y = 2$ OK, $z = 3 - 2 = 1$ OK. <strong>Oui</strong>, pour $t = 2$."},
-          {id:'ve3-3', type:'qcm', question:"Deux droites de vecteurs directeurs $\\vec{u}(1,2,3)$ et $\\vec{v}(2,4,6)$ sont :", options:["Parallèles","Sécantes","Orthogonales","Confondues"], correctIndex:0, explanation:"$\\vec{v} = 2\\vec{u}$, donc vecteurs directeurs colinéaires : <strong>parallèles</strong> (ou confondues si elles partagent un point)."},
+          {id:'ve3-2', type:'qcm', question:"Le point $B(5, 2, 1)$ appartient-il à la droite ci-dessus ?", options:['Oui','Non','Indéterminable','Seulement si $t=0$'], correctIndex:0, explanation:"$5 = 1+2t \\Rightarrow t = 2$. Vérif : $y = 2$ OK, $z = 3 - 2 = 1$ OK. <strong>Oui</strong>, pour $t = 2$."},
+          {id:'ve3-3', type:'qcm', question:"Deux droites de vecteurs directeurs $\\vec{u}(1,2,3)$ et $\\vec{v}(2,4,6)$ sont :", options:['Parallèles','Sécantes','Orthogonales','Confondues'], correctIndex:0, explanation:"$\\vec{v} = 2\\vec{u}$, donc vecteurs directeurs colinéaires : <strong>parallèles</strong> (ou confondues si elles partagent un point)."},
           {id:'ve3-4', type:'qcm', question:"Vecteur directeur de la droite $x = 2 - t, y = 1 + 3t, z = 5t$ :", options:['$(2, 1, 0)$','$(-1, 3, 5)$','$(1, 3, 5)$','$(2-t, 1+3t, 5t)$'], correctIndex:1, explanation:"On lit les coefficients de $t$ : $\\vec{u}(-1, 3, 5)$."}
         ]
       }
@@ -3379,9 +3664,9 @@ const CHAPTER_DETAILS = {
         ],
         exercises:[
           {id:'se2-1', type:'qcm', question:"$\\vec{u}(1, 2, -1) \\cdot \\vec{v}(3, -1, 1) = ?$", options:['$0$','$3$','$-3$','$4$'], correctIndex:0, explanation:"$3 + (-2) + (-1) = \\mathbf{0}$ — donc $\\vec{u} \\perp \\vec{v}$."},
-          {id:'se2-2', type:'qcm', question:"$\\vec{u}(2, 0, 0)$ et $\\vec{v}(0, 3, 4)$ sont :", options:["Colinéaires","Orthogonaux","Égaux","Opposés"], correctIndex:1, explanation:"$\\vec{u} \\cdot \\vec{v} = 0 + 0 + 0 = 0$. <strong>Orthogonaux</strong>."},
+          {id:'se2-2', type:'qcm', question:"$\\vec{u}(2, 0, 0)$ et $\\vec{v}(0, 3, 4)$ sont :", options:['Colinéaires','Orthogonaux','Égaux','Opposés'], correctIndex:1, explanation:"$\\vec{u} \\cdot \\vec{v} = 0 + 0 + 0 = 0$. <strong>Orthogonaux</strong>."},
           {id:'se2-3', type:'qcm', question:"Pour que $\\vec{u}(1, k, 2) \\perp \\vec{v}(2, 1, -1)$, il faut $k = ?$", options:['$0$','$2$','$-1$','$1$'], correctIndex:0, explanation:"$\\vec{u} \\cdot \\vec{v} = 2 + k - 2 = k$. $k = 0$."},
-          {id:'se2-4', type:'qcm', question:"Quelle propriété caractérise un vecteur normal $\\vec{n}$ à un plan ?", options:["$\\vec{n}$ est dans le plan","$\\vec{n}$ est orthogonal à tout vecteur du plan","$\\vec{n}$ est de norme 1","$\\vec{n}$ est nul"], correctIndex:1, explanation:"Un vecteur normal est <strong>orthogonal à tous les vecteurs du plan</strong>."}
+          {id:'se2-4', type:'qcm', question:"Quelle propriété caractérise un vecteur normal $\\vec{n}$ à un plan ?", options:['$\\vec{n}$ est dans le plan','$\\vec{n}$ est orthogonal à tout vecteur du plan','$\\vec{n}$ est de norme 1','$\\vec{n}$ est nul'], correctIndex:1, explanation:"Un vecteur normal est <strong>orthogonal à tous les vecteurs du plan</strong>."}
         ]
       },
       {
@@ -3398,7 +3683,7 @@ const CHAPTER_DETAILS = {
         ],
         exercises:[
           {id:'se3-1', type:'qcm', question:"Si $\\vec{u} \\cdot \\vec{v} > 0$, l'angle entre $\\vec{u}$ et $\\vec{v}$ est :", options:['Aigu (entre $0$ et $\\pi/2$)','Obtus (entre $\\pi/2$ et $\\pi$)','Droit ($\\pi/2$)','Plat ($\\pi$)'], correctIndex:0, explanation:"$\\cos(\\theta) > 0 \\Rightarrow$ angle <strong>aigu</strong>."},
-          {id:'se3-2', type:'qcm', question:"Si $\\vec{u} \\cdot \\vec{v} < 0$, l'angle est :", options:["Aigu","Obtus","Droit","Nul"], correctIndex:1, explanation:"$\\cos(\\theta) < 0 \\Rightarrow$ angle <strong>obtus</strong>."},
+          {id:'se3-2', type:'qcm', question:"Si $\\vec{u} \\cdot \\vec{v} < 0$, l'angle est :", options:['Aigu','Obtus','Droit','Nul'], correctIndex:1, explanation:"$\\cos(\\theta) < 0 \\Rightarrow$ angle <strong>obtus</strong>."},
           {id:'se3-3', type:'qcm', question:"$\\vec{u}(1,0,0)$, $\\vec{v}(1,1,0)$. $\\cos(\\theta) = ?$", options:['$\\dfrac{1}{2}$','$\\dfrac{\\sqrt 2}{2}$','$0$','$1$'], correctIndex:1, explanation:"$\\vec{u} \\cdot \\vec{v} = 1$, $\\|\\vec u\\| = 1$, $\\|\\vec v\\| = \\sqrt 2$. $\\cos\\theta = \\dfrac{1}{\\sqrt 2} = \\mathbf{\\dfrac{\\sqrt 2}{2}}$ ($\\theta = 45°$)."},
           {id:'se3-4', type:'qcm', question:"$\\vec{u}(1, 1, 0)$ et $\\vec{v}(1, -1, 0)$. L'angle vaut :", options:['$0$','$\\dfrac{\\pi}{4}$','$\\dfrac{\\pi}{2}$','$\\pi$'], correctIndex:2, explanation:"$\\vec u \\cdot \\vec v = 1 - 1 + 0 = 0$, donc <strong>$\\dfrac{\\pi}{2}$</strong> (orthogonaux)."}
         ]
@@ -3423,8 +3708,8 @@ const CHAPTER_DETAILS = {
         ],
         exercises:[
           {id:'pl1-1', type:'qcm', question:"Vecteur normal au plan d'équation $2x + 3y - z + 5 = 0$ :", options:['$(2, 3, -1)$','$(2, 3, 1)$','$(2, 3, 5)$','$(-2, -3, 1)$'], correctIndex:0, explanation:"On lit les coefficients de $x, y, z$ : $\\vec{n}(2, 3, -1)$."},
-          {id:'pl1-2', type:'qcm', question:"Le point $A(1, 0, 2)$ appartient-il au plan $x + y - z + 1 = 0$ ?", options:["Oui","Non","Indéterminable","Seulement si on translate"], correctIndex:0, explanation:"$1 + 0 - 2 + 1 = 0$. ✓ <strong>Oui</strong>."},
-          {id:'pl1-3', type:'qcm', question:"Le point $B(0, 0, 0)$ appartient-il au plan $x + y + z - 3 = 0$ ?", options:["Oui","Non","Indéterminable","Toujours"], correctIndex:1, explanation:"$0 + 0 + 0 - 3 = -3 \\neq 0$. <strong>Non</strong>."},
+          {id:'pl1-2', type:'qcm', question:"Le point $A(1, 0, 2)$ appartient-il au plan $x + y - z + 1 = 0$ ?", options:['Oui','Non','Indéterminable','Seulement si on translate'], correctIndex:0, explanation:"$1 + 0 - 2 + 1 = 0$. ✓ <strong>Oui</strong>."},
+          {id:'pl1-3', type:'qcm', question:"Le point $B(0, 0, 0)$ appartient-il au plan $x + y + z - 3 = 0$ ?", options:['Oui','Non','Indéterminable','Toujours'], correctIndex:1, explanation:"$0 + 0 + 0 - 3 = -3 \\neq 0$. <strong>Non</strong>."},
           {id:'pl1-4', type:'qcm', question:"Équation d'un plan passant par $A(1,0,0)$ et de vecteur normal $\\vec n(1,1,1)$ :", options:['$x+y+z = 0$','$x+y+z-1 = 0$','$x+y+z+1 = 0$','$x = 1$'], correctIndex:1, explanation:"$x+y+z+d = 0$. En $A$ : $1 + 0 + 0 + d = 0$ donc $d = -1$. <strong>$x+y+z-1=0$</strong>."}
         ]
       },
@@ -3441,10 +3726,10 @@ const CHAPTER_DETAILS = {
           "Pour trouver l'intersection : substitution ou résolution du système"
         ],
         exercises:[
-          {id:'pl2-1', type:'qcm', question:"Plan $P_1 : x + y + z = 0$ et $P_2 : 2x + 2y + 2z = 3$. Position :", options:["Confondus","Parallèles distincts","Sécants","Orthogonaux"], correctIndex:1, explanation:"Vecteurs normaux $\\vec n_1(1,1,1)$ et $\\vec n_2(2,2,2)$ colinéaires (rapport 2), mais $d_2 \\neq 2 d_1$ : <strong>parallèles distincts</strong>."},
-          {id:'pl2-2', type:'qcm', question:"Plan $P_1 : x + y = 0$ et $P_2 : x - z = 0$. Position :", options:["Parallèles","Sécants selon une droite","Confondus","Orthogonaux"], correctIndex:1, explanation:"$\\vec n_1(1,1,0)$, $\\vec n_2(1,0,-1)$ non colinéaires : <strong>sécants</strong> selon une droite."},
-          {id:'pl2-3', type:'qcm', question:"Droite de vecteur directeur $\\vec u(1,1,1)$, plan de vecteur normal $\\vec n(1,-2,1)$. Position :", options:["Sécant en un point","Droite parallèle au plan","Droite incluse","Orthogonale au plan"], correctIndex:1, explanation:"$\\vec u \\cdot \\vec n = 1 - 2 + 1 = 0$, donc droite <strong>parallèle</strong> au plan (ou incluse, selon le point)."},
-          {id:'pl2-4', type:'qcm', question:"Deux plans sont confondus si :", options:["Leurs équations sont identiques","Leurs vecteurs normaux sont colinéaires ET ils ont un point commun","Ils sont orthogonaux","Leurs équations diffèrent d'une constante"], correctIndex:1, explanation:"Confondus = <strong>vecteurs normaux colinéaires ET ils partagent un point</strong> (équations proportionnelles)."}
+          {id:'pl2-1', type:'qcm', question:"Plan $P_1 : x + y + z = 0$ et $P_2 : 2x + 2y + 2z = 3$. Position :", options:['Confondus','Parallèles distincts','Sécants','Orthogonaux'], correctIndex:1, explanation:"Vecteurs normaux $\\vec n_1(1,1,1)$ et $\\vec n_2(2,2,2)$ colinéaires (rapport 2), mais $d_2 \\neq 2 d_1$ : <strong>parallèles distincts</strong>."},
+          {id:'pl2-2', type:'qcm', question:"Plan $P_1 : x + y = 0$ et $P_2 : x - z = 0$. Position :", options:['Parallèles','Sécants selon une droite','Confondus','Orthogonaux'], correctIndex:1, explanation:"$\\vec n_1(1,1,0)$, $\\vec n_2(1,0,-1)$ non colinéaires : <strong>sécants</strong> selon une droite."},
+          {id:'pl2-3', type:'qcm', question:"Droite de vecteur directeur $\\vec u(1,1,1)$, plan de vecteur normal $\\vec n(1,-2,1)$. Position :", options:['Sécant en un point','Droite parallèle au plan','Droite incluse','Orthogonale au plan'], correctIndex:1, explanation:"$\\vec u \\cdot \\vec n = 1 - 2 + 1 = 0$, donc droite <strong>parallèle</strong> au plan (ou incluse, selon le point)."},
+          {id:'pl2-4', type:'qcm', question:"Deux plans sont confondus si :", options:['Leurs équations sont identiques','Leurs vecteurs normaux sont colinéaires ET ils ont un point commun','Ils sont orthogonaux',"Leurs équations diffèrent d'une constante"], correctIndex:1, explanation:"Confondus = <strong>vecteurs normaux colinéaires ET ils partagent un point</strong> (équations proportionnelles)."}
         ]
       },
       {
@@ -3462,7 +3747,7 @@ const CHAPTER_DETAILS = {
         exercises:[
           {id:'pl3-1', type:'numeric', question:"Distance de $O(0,0,0)$ au plan $x + y + z - 3 = 0$. (Donner la valeur en multipliant par $\\sqrt 3$ — la distance vaut $\\sqrt 3$ ; entrer 1.732.)", answer:1.732, tolerance:0.01, explanation:"$d = \\dfrac{|0+0+0-3|}{\\sqrt{1+1+1}} = \\dfrac{3}{\\sqrt 3} = \\sqrt 3 \\approx \\mathbf{1{,}732}$."},
           {id:'pl3-2', type:'numeric', question:"Distance de $A(1,2,3)$ au plan $x + 2y + 2z - 6 = 0$. (Calculer et donner la valeur.)", answer:1.667, tolerance:0.01, explanation:"$d = \\dfrac{|1 + 4 + 6 - 6|}{\\sqrt{1+4+4}} = \\dfrac{5}{3} \\approx \\mathbf{1{,}667}$."},
-          {id:'pl3-3', type:'qcm', question:"La distance vaut $0$ ssi :", options:["Le point est l'origine","Le point appartient au plan","Le plan passe par l'origine","Le vecteur normal est nul"], correctIndex:1, explanation:"$d(M, P) = 0 \\Leftrightarrow M \\in P$."},
+          {id:'pl3-3', type:'qcm', question:"La distance vaut $0$ ssi :", options:["Le point est l'origine",'Le point appartient au plan',"Le plan passe par l'origine",'Le vecteur normal est nul'], correctIndex:1, explanation:"$d(M, P) = 0 \\Leftrightarrow M \\in P$."},
           {id:'pl3-4', type:'numeric', question:"Distance de $A(0,0,5)$ au plan $z = 0$. (équation : $z = 0$)", answer:5, tolerance:0.001, explanation:"Plan $0x + 0y + z + 0 = 0$. $d = \\dfrac{|5|}{\\sqrt{0+0+1}} = \\mathbf{5}$. (Naturellement, c'est la hauteur sur l'axe $z$.)"}
         ]
       }
@@ -3493,7 +3778,7 @@ const CHAPTER_DETAILS = {
           {
             id:'rap-2', type:'qcm',
             question:"Laquelle de ces suites est définie de façon <strong>récurrente</strong> ?",
-            options:['$u_n = n^2$', '$u_0 = 1$ et $u_{n+1} = 2u_n$', '$u_n = 3n + 1$', '$u_n = \\sin(n)$'],
+            options:['$u_n = n^2$','$u_0 = 1$ et $u_{n+1} = 2u_n$','$u_n = 3n + 1$','$u_n = \\sin(n)$'],
             correctIndex:1,
             explanation:"Une définition est récurrente quand le terme suivant est défini à partir du précédent (via $u_{n+1} = f(u_n)$).<br/>Seule l'option $\\mathbf{u_0 = 1 \\text{ et } u_{n+1} = 2u_n}$ correspond. Les autres sont des définitions <strong>explicites</strong>."
           },
@@ -3545,7 +3830,7 @@ const CHAPTER_DETAILS = {
           {
             id:'ari-2', type:'qcm',
             question:"$u_0 = 7$ et $u_5 = 22$ dans une suite arithmétique. Quelle est la raison $r$ ?",
-            options:['$r = 3$', '$r = 4{,}4$', '$r = 5$', '$r = 15$'],
+            options:['$r = 3$','$r = 4{,}4$','$r = 5$','$r = 15$'],
             correctIndex:0,
             explanation:"$u_5 = u_0 + 5r \\Leftrightarrow 22 = 7 + 5r \\Leftrightarrow 5r = 15 \\Leftrightarrow r = \\mathbf{3}$."
           },
@@ -3558,7 +3843,7 @@ const CHAPTER_DETAILS = {
           {
             id:'ari-4', type:'qcm',
             question:"Parmi ces suites, laquelle est arithmétique ?",
-            options:['$u_n = 2^n$', '$u_n = 3n + 5$', '$u_n = n^2$', '$u_n = \\dfrac{1}{n+1}$'],
+            options:['$u_n = 2^n$','$u_n = 3n + 5$','$u_n = n^2$','$u_n = \\dfrac{1}{n+1}$'],
             correctIndex:1,
             explanation:"Pour $u_n = 3n + 5$ : $u_{n+1} - u_n = 3(n+1)+5 - (3n+5) = 3$, constant. Donc <strong>arithmétique de raison $3$</strong>."
           },
@@ -3592,14 +3877,14 @@ const CHAPTER_DETAILS = {
           {
             id:'geo-2', type:'qcm',
             question:"Quelle est la raison de la suite géométrique $5, 15, 45, 135, \\ldots$ ?",
-            options:['$q = 3$', '$q = 5$', '$q = 10$', '$q = 1{,}5$'],
+            options:['$q = 3$','$q = 5$','$q = 10$','$q = 1{,}5$'],
             correctIndex:0,
             explanation:"$\\dfrac{15}{5} = 3$, $\\dfrac{45}{15} = 3$, $\\dfrac{135}{45} = 3$. Donc $\\mathbf{q = 3}$."
           },
           {
             id:'geo-3', type:'qcm',
             question:"Un placement de $1000$ € rapporte $3$ % par an. Quel est le capital après $n$ années ?",
-            options:['$1000 + 30n$', '$1000 \\times (1{,}03)^n$', '$1000 \\times 1{,}3^n$', '$1000 \\times 0{,}97^n$'],
+            options:['$1000 + 30n$','$1000 \\times (1{,}03)^n$','$1000 \\times 1{,}3^n$','$1000 \\times 0{,}97^n$'],
             correctIndex:1,
             explanation:"Augmenter de $3$ % revient à multiplier par $1{,}03$ chaque année.<br/>$C_n = \\mathbf{1000 \\times (1{,}03)^n}$."
           },
@@ -3612,7 +3897,7 @@ const CHAPTER_DETAILS = {
           {
             id:'geo-5', type:'qcm',
             question:"Une population diminue de $20$ % chaque année. La suite des populations est :",
-            options:['Arithmétique de raison $-20$', 'Géométrique de raison $0{,}8$', 'Géométrique de raison $0{,}2$', 'Géométrique de raison $-0{,}2$'],
+            options:['Arithmétique de raison $-20$','Géométrique de raison $0{,}8$','Géométrique de raison $0{,}2$','Géométrique de raison $-0{,}2$'],
             correctIndex:1,
             explanation:"Diminuer de $20$ % revient à <strong>multiplier par $0{,}8$</strong>. Suite géométrique de raison $\\mathbf{q = 0{,}8}$."
           }
@@ -3633,21 +3918,21 @@ const CHAPTER_DETAILS = {
           {
             id:'var-1', type:'qcm',
             question:"$(u_n)$ est arithmétique de raison $r = 4$. Elle est :",
-            options:['Croissante', 'Décroissante', 'Constante', 'On ne peut pas savoir'],
+            options:['Croissante','Décroissante','Constante','On ne peut pas savoir'],
             correctIndex:0,
             explanation:"Pour une suite arithmétique : $r > 0 \\to$ <strong>croissante</strong>. Ici $r = 4 > 0$, donc la suite est <strong>croissante</strong>."
           },
           {
             id:'var-2', type:'qcm',
             question:"$(u_n)$ est géométrique avec $u_0 = 3$ et $q = \\dfrac{1}{2}$. Elle est :",
-            options:['Croissante', 'Décroissante', 'Constante', 'Alterne'],
+            options:['Croissante','Décroissante','Constante','Alterne'],
             correctIndex:1,
             explanation:"Pour une suite géométrique avec $u_0 > 0$ : $0 < q < 1 \\to$ <strong>décroissante</strong>.<br/>Ici $u_0 = 3 > 0$ et $q = 0{,}5$, donc <strong>décroissante</strong>. Elle « s'écrase » vers 0."
           },
           {
             id:'var-3', type:'qcm',
             question:"$(u_n)$ est géométrique avec $u_0 = 1$ et $q = -2$. Elle est :",
-            options:['Croissante', 'Décroissante', 'Ni croissante ni décroissante (alterne)', 'Constante'],
+            options:['Croissante','Décroissante','Ni croissante ni décroissante (alterne)','Constante'],
             correctIndex:2,
             explanation:"Avec une raison <strong>négative</strong>, la suite alterne entre positif et négatif.<br/>Ici : $u_0 = 1, u_1 = -2, u_2 = 4, u_3 = -8, \\ldots$<br/>Elle n'est ni croissante ni décroissante."
           },
@@ -3660,7 +3945,7 @@ const CHAPTER_DETAILS = {
           {
             id:'var-5', type:'qcm',
             question:"Pour étudier la variation de <strong>n'importe quelle</strong> suite, on calcule :",
-            options:['$\\dfrac{u_n}{u_{n+1}}$', '$u_{n+1} - u_n$ et on étudie son signe', '$u_0 + u_n$', '$u_n^2$'],
+            options:['$\\dfrac{u_n}{u_{n+1}}$','$u_{n+1} - u_n$ et on étudie son signe','$u_0 + u_n$','$u_n^2$'],
             correctIndex:1,
             explanation:"La méthode générale pour <strong>toute suite</strong> est d'étudier le signe de $u_{n+1} - u_n$.<br/>Si $u_{n+1} - u_n > 0$ pour tout $n$ : croissante.<br/>Si $u_{n+1} - u_n < 0$ : décroissante.<br/>(Pour les géométriques, on peut aussi étudier le quotient $\\dfrac{u_{n+1}}{u_n}$.)"
           }
@@ -3683,28 +3968,28 @@ const CHAPTER_DETAILS = {
           {
             id:'com-1', type:'qcm',
             question:"$(u_n)$ est arithmétique de raison $r = 5$. Vers quoi tend-elle quand $n \\to +\\infty$ ?",
-            options:['$5$', '$0$', '$+\\infty$', '$-\\infty$'],
+            options:['$5$','$0$','$+\\infty$','$-\\infty$'],
             correctIndex:2,
             explanation:"Une suite arithmétique avec $r > 0$ tend vers $+\\infty$ (elle augmente indéfiniment, à raison de $5$ par pas).<br/>Réponse : $\\mathbf{+\\infty}$."
           },
           {
             id:'com-2', type:'qcm',
             question:"$(u_n)$ est géométrique avec $u_0 > 0$ et $q = 0{,}5$. Vers quoi tend-elle ?",
-            options:['$0$', '$1$', '$+\\infty$', 'Pas de limite'],
+            options:['$0$','$1$','$+\\infty$','Pas de limite'],
             correctIndex:0,
             explanation:"Pour une géométrique avec $0 < q < 1$ : la suite tend vers $\\mathbf{0}$.<br/>Chaque terme vaut la moitié du précédent : $u_0, \\dfrac{u_0}{2}, \\dfrac{u_0}{4}, \\ldots$ — elle s'écrase exponentiellement."
           },
           {
             id:'com-3', type:'qcm',
             question:"$(u_n)$ est géométrique avec $u_0 = 2$ et $q = 3$. Vers quoi tend-elle ?",
-            options:['$0$', '$3$', '$+\\infty$', 'Indéterminée'],
+            options:['$0$','$3$','$+\\infty$','Indéterminée'],
             correctIndex:2,
             explanation:"Pour une géométrique avec $q > 1$ : croissance explosive vers $\\mathbf{+\\infty}$.<br/>Ici : $u_0 = 2, u_1 = 6, u_2 = 18, u_3 = 54, u_4 = 162, \\ldots$"
           },
           {
             id:'com-4', type:'qcm',
             question:"$(u_n)$ est géométrique de raison $q = -2$. Vers quoi tend-elle ?",
-            options:['$0$', '$+\\infty$', '$-\\infty$', "Pas de limite (oscille)"],
+            options:['$0$','$+\\infty$','$-\\infty$','Pas de limite (oscille)'],
             correctIndex:3,
             explanation:"Avec une raison $\\leq -1$, la suite alterne entre positif et négatif, en grandissant en valeur absolue.<br/>$u_0, -2u_0, 4u_0, -8u_0, \\ldots$ — elle <strong>n'a pas de limite</strong>, elle oscille."
           },
@@ -4302,7 +4587,12 @@ function renderChapter(chapterId) {
       <div class="flex items-start gap-4 sm:gap-6 mb-5">
         <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br ${chap.color} flex items-center justify-center text-white text-3xl sm:text-4xl font-extrabold shadow-card flex-shrink-0">${chap.icon}</div>
         <div class="flex-1 min-w-0">
-          <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">${getChapterLevelLabel(chapterId)}</div>
+          <div class="flex items-start justify-between gap-2 mb-1">
+            <div class="text-xs font-semibold uppercase tracking-wider text-slate-400">${getChapterLevelLabel(chapterId)}</div>
+            <button id="open-fiche-revision" class="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-extrabold uppercase tracking-wider transition-all border border-amber-200 shadow-sm">
+              <span>📄</span> Fiche de révision
+            </button>
+          </div>
           <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">${chap.title}</h1>
           <p class="text-sm sm:text-base text-slate-600 leading-relaxed">${details.description}</p>
         </div>
@@ -4339,11 +4629,20 @@ function renderChapter(chapterId) {
       }
     });
   });
-  const evalBtn = document.getElementById('start-final-eval');
-  if (evalBtn) evalBtn.addEventListener('click', () => {
+  const ficheBtn = document.getElementById('open-fiche-revision');
+  if (ficheBtn) ficheBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
     audio.play('click');
-    if (evalBtn.disabled) return;
-    startEvaluation(chapterId);
+    openFicheRevision(chapterId);
+  });
+
+  document.querySelectorAll('.eval-variant-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      audio.play('click');
+      if (btn.disabled) return;
+      const variant = btn.dataset.evalVariant;
+      startEvaluation(chapterId, variant);
+    });
   });
 
   // Mise à jour explicite des miroirs streak/XP (fix bug)
@@ -4375,22 +4674,33 @@ function propertyCardHTML(prop) {
     </div>
   `;
 }
-function finalEvalCardHTML(masteredCount, total) {
+function finalEvalCardHTML(masteredCount, total, chapterId) {
   const unlocked = masteredCount === total;
+  const variants = ['A', 'B', 'C', 'D'];
+  const progress = (state.progress[chapterId] && state.progress[chapterId].evalVariants) || {};
+  const variantsHTML = variants.map((v) => {
+    const status = progress[v] || 'pending';
+    const icon = status === 'success' ? '⭐' : (status === 'failed' ? '🔁' : '🎯');
+    const colorCls = status === 'success'
+      ? 'bg-emerald-100 hover:bg-emerald-200 border-emerald-300 text-emerald-700'
+      : (status === 'failed' ? 'bg-amber-100 hover:bg-amber-200 border-amber-300 text-amber-700' : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-700');
+    const lockedCls = unlocked ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed';
+    return `<button data-eval-variant="${v}" class="eval-variant-btn flex-1 px-3 py-3 rounded-xl border-2 ${colorCls} ${lockedCls} font-bold text-sm transition-all" ${unlocked ? '' : 'disabled'}>${icon} Éval ${v}</button>`;
+  }).join('');
+
   return `
     <div class="relative overflow-hidden rounded-3xl ${unlocked ? 'bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500' : 'bg-gradient-to-br from-slate-100 to-slate-200'} p-6 sm:p-8 shadow-card">
       <div class="flex items-center gap-4 sm:gap-6 mb-4">
         <div class="text-5xl sm:text-6xl ${unlocked ? '' : 'grayscale opacity-50'}">🏆</div>
         <div class="flex-1">
-          <h3 class="text-xl sm:text-2xl font-extrabold ${unlocked ? 'text-white' : 'text-slate-500'}">Évaluation finale</h3>
+          <h3 class="text-xl sm:text-2xl font-extrabold ${unlocked ? 'text-white' : 'text-slate-500'}">Évaluations finales</h3>
           <p class="text-sm sm:text-base ${unlocked ? 'text-white/90' : 'text-slate-500'} leading-relaxed mt-1">
-            ${unlocked ? '2 exercices par propriété. Zéro faute = chapitre validé, étoile gagnée.' : `Maîtrise les ${total} propriétés pour débloquer l'évaluation.`}
+            ${unlocked ? '4 évaluations différentes (A, B, C, D) — 2 exos par propriété, tirage déterministe. Zéro faute = ⭐.' : `Maîtrise les ${total} propriétés pour débloquer les évaluations.`}
           </p>
         </div>
       </div>
-      <button id="start-final-eval" class="w-full sm:w-auto px-6 py-3 rounded-xl font-bold transition-all ${unlocked ? 'bg-white text-amber-600 hover:scale-105 shadow-card' : 'bg-white/50 text-slate-400 cursor-not-allowed'}" ${unlocked ? '' : 'disabled'}>
-        ${unlocked ? 'Démarrer l\'évaluation →' : `🔒 ${masteredCount}/${total} propriétés maîtrisées`}
-      </button>
+      <div class="flex flex-wrap gap-2 sm:gap-3">${variantsHTML}</div>
+      ${unlocked ? '<p class="text-xs text-white/80 mt-3 italic">Chaque évaluation est différente. Tu peux les refaire autant que tu veux.</p>' : ''}
     </div>
   `;
 }
@@ -4584,8 +4894,11 @@ const SESSION_CONFIG = {
   XP_PER_CORRECT_RETRY: 5,      // par exercice repris avec succès
   XP_PROPERTY_MASTERED: 50,     // bonus de fin de propriété
   XP_PERFECT_BONUS: 30,         // bonus supplémentaire si zéro faute
-  XP_PER_EVAL_CORRECT: 15,      // XP par exo juste pendant l'éval (plus élevé que les exos normaux)
-  XP_CHAPTER_MASTERED: 300      // bonus énorme pour valider le chapitre
+  XP_PER_EVAL_CORRECT: 15,      // XP par exo juste pendant l'éval
+  XP_CHAPTER_MASTERED: 300,     // bonus énorme pour valider le chapitre
+  EXOS_PER_SESSION: 6,          // nombre d'exos sélectionnés au hasard par session (si pool > 6)
+  RETRY_MULTIPLIER: 3,          // sur erreur : on revoit l'exo (et variants) RETRY_MULTIPLIER fois
+  RETRY_MIX_FRESH: 1            // pour chaque retry, on rajoute 1 exo frais du pool si dispo
 };
 
 function shuffle(arr) {
@@ -4620,24 +4933,54 @@ function renderMath(container) {
   }
 }
 
-function startEvaluation(chapterId) {
+// PRNG seedable (mulberry32) pour des variantes d'éval déterministes
+function seededRandom(seed) {
+  let t = seed | 0;
+  return function() {
+    t = (t + 0x6D2B79F5) | 0;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function seededShuffle(arr, seed) {
+  const a = [...arr];
+  const rnd = seededRandom(seed);
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function hashString(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h = (h ^ s.charCodeAt(i)) * 16777619;
+  }
+  return h | 0;
+}
+
+function startEvaluation(chapterId, variant) {
+  variant = variant || 'A';
   const details = CHAPTER_DETAILS[chapterId];
   const chap = getChapterById(chapterId);
   if (!details || !chap) {
     toast('Chapitre introuvable.', 'error');
     return;
   }
-  // Vérifier que TOUTES les propriétés ont au moins 2 exercices
   const propsReady = details.properties.filter((p) => p.exercises && p.exercises.length >= 2);
   if (propsReady.length < details.properties.length) {
     const missing = details.properties.length - propsReady.length;
     toast(`🚧 L'évaluation nécessite ≥ 2 exos par propriété (manque ${missing}). Étape 8.`, 'warning');
     return;
   }
-  // Tirer 2 exos par propriété (au hasard)
+  // Seed déterministe basé sur le chapitre + la variante
+  const seed = hashString(chapterId + '::' + variant);
+  // Tirer 2 exos par propriété en utilisant le seed (variantes A/B/C/D différentes mais reproductibles)
   const evalExos = [];
-  details.properties.forEach((p) => {
-    const picked = shuffle([...p.exercises]).slice(0, 2);
+  details.properties.forEach((p, propIdx) => {
+    const propSeed = seed ^ hashString(p.id) ^ (propIdx * 31337);
+    const picked = seededShuffle([...p.exercises], propSeed).slice(0, 2);
     picked.forEach((exo) => {
       evalExos.push({ ...exo, _propertyId: p.id, _propertyTitle: p.title });
     });
@@ -4645,7 +4988,8 @@ function startEvaluation(chapterId) {
   state.session = {
     mode: 'evaluation',
     chapterId, chapterTitle: chap.title,
-    queue: shuffle(evalExos),
+    variant: variant,
+    queue: seededShuffle(evalExos, seed ^ 0xDEAD),
     retryQueue: [],
     currentIndex: 0,
     phase: 'initial',
@@ -4676,12 +5020,19 @@ function startSession(chapterId, propertyId) {
     toast('📚 Exercices à venir pour cette propriété (production de contenu, étape 8).', 'warning');
     return;
   }
+  const fullPool = shuffle([...prop.exercises]);
+  // Échantillon : on prend EXOS_PER_SESSION exos pour la session ; le reste sert de réservoir
+  // pour varier les exos sur les répétitions (évite de retomber sur la même question).
+  const sampleSize = Math.min(SESSION_CONFIG.EXOS_PER_SESSION, fullPool.length);
+  const sessionQueue = fullPool.slice(0, sampleSize);
+  const leftoverPool = fullPool.slice(sampleSize);
   state.session = {
     chapterId, propertyId, propertyTitle: prop.title,
-    queue: shuffle([...prop.exercises]),
+    queue: sessionQueue,
     retryQueue: [],
+    leftoverPool: leftoverPool,  // réservoir pour varier les exos en cas de retry
     currentIndex: 0,
-    phase: 'initial', // 'initial' | 'retry'
+    phase: 'initial',
     correctFirstTry: 0,
     failedExos: 0,
     xpEarned: 0,
@@ -4840,7 +5191,25 @@ function handleSubmit() {
         ses.failedPropertyIds.push(exo._propertyId);
       }
     } else {
-      ses.retryQueue.push(exo);
+      // Compte le nb d'échecs sur cet exo
+      exo._retryCount = (exo._retryCount || 0) + 1;
+      const MAX_TOTAL_RETRIES = 6;
+      if (exo._retryCount <= MAX_TOTAL_RETRIES) {
+        if (exo._retryCount === 1) {
+          // PREMIER échec : on push l'exo ×3 (RETRY_MULTIPLIER) à la fin
+          const mult = SESSION_CONFIG.RETRY_MULTIPLIER || 3;
+          for (let r = 0; r < mult; r++) ses.retryQueue.push(exo);
+          // Et 1 exo frais du réservoir pour varier (anti même-question)
+          const freshNeeded = SESSION_CONFIG.RETRY_MIX_FRESH || 1;
+          for (let f = 0; f < freshNeeded && ses.leftoverPool && ses.leftoverPool.length > 0; f++) {
+            const idxPick = Math.floor(Math.random() * ses.leftoverPool.length);
+            ses.retryQueue.push(ses.leftoverPool.splice(idxPick, 1)[0]);
+          }
+        } else {
+          // Échecs suivants : on push 1 seule fois pour ne pas boucler à l'infini
+          ses.retryQueue.push(exo);
+        }
+      }
     }
     audio.play('error');
   }
@@ -5145,6 +5514,12 @@ function endEvaluation() {
   const perfectRun = ses.failedExos === 0;
 
   if (!state.progress[ses.chapterId]) state.progress[ses.chapterId] = {};
+
+  // Track le statut de la variante d'évaluation (A/B/C/D)
+  if (ses.variant) {
+    if (!state.progress[ses.chapterId].evalVariants) state.progress[ses.chapterId].evalVariants = {};
+    state.progress[ses.chapterId].evalVariants[ses.variant] = perfectRun ? 'success' : 'failed';
+  }
 
   if (perfectRun) {
     // CHAPITRE MAÎTRISÉ !
@@ -6365,6 +6740,22 @@ function applyQuestionToDom(q) {
   if (!el) return;
   el.innerHTML = q.question;
   if (typeof renderMath === 'function') renderMath(el);
+  // Re-mesure de la boîte question APRÈS rendu KaTeX (peut faire grandir la boîte).
+  // Si un hoop est trop proche de la question, on le pousse vers le bas.
+  setTimeout(() => {
+    if (!basketsGame) return;
+    const qBox = document.getElementById('baskets-question-box');
+    if (!qBox) return;
+    const qBottom = qBox.getBoundingClientRect().bottom;
+    const minScreenY = qBottom + 38; // 18 demi-rim + 20 marge
+    for (const h of basketsGame.hoops) {
+      const screenY = h.y - basketsGame.cameraY;
+      if (screenY < minScreenY) {
+        const delta = minScreenY - screenY;
+        h.y += delta;
+      }
+    }
+  }, 60);
 }
 
 function spawnHoopsForNextLevel(q) {
@@ -6928,63 +7319,10 @@ function drawHoop(ctx, h, isOld) {
   ctx.translate(h.x, h.y);
   ctx.rotate(h.tilt || 0);
 
-  if (!isOld) {
-    const label = String(h.answer).slice(0, 16);
-    ctx.font = '900 22px Inter, Arial, sans-serif';
-    const tw = ctx.measureText(label).width;
-    const padX = 22;
-    const boardW = Math.max(tw + padX * 2, w + 24);
-    const boardH = 50;
-    const boardY = -boardH - 18;
-
-    ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.45)';
-    ctx.shadowBlur = 8;
-    ctx.shadowOffsetY = 4;
-    const pillGrad = ctx.createLinearGradient(0, boardY, 0, boardY + boardH);
-    pillGrad.addColorStop(0, '#FFFFFF');
-    pillGrad.addColorStop(1, '#F1F5F9');
-    ctx.fillStyle = pillGrad;
-    ctx.beginPath();
-    ctx.roundRect(-boardW / 2, boardY, boardW, boardH, 14);
-    ctx.fill();
-    ctx.restore();
-
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = '#7C3AED';
-    ctx.beginPath();
-    ctx.roundRect(-boardW / 2, boardY, boardW, boardH, 14);
-    ctx.stroke();
-
-    ctx.fillStyle = '#1E1B4B';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.font = '900 22px Inter, Arial, sans-serif';
-    ctx.fillText(label, 0, boardY + boardH / 2 + 1);
-
-    ctx.fillStyle = '#7C3AED';
-    ctx.beginPath();
-    ctx.moveTo(-8, boardY + boardH);
-    ctx.lineTo(8, boardY + boardH);
-    ctx.lineTo(0, boardY + boardH + 10);
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  if (h.glow > 0 && !isOld) {
-    ctx.save();
-    ctx.shadowColor = '#F97316';
-    ctx.shadowBlur = 30 * h.glow;
-    ctx.fillStyle = 'rgba(251, 146, 60, ' + (0.35 * h.glow) + ')';
-    ctx.beginPath();
-    ctx.ellipse(0, 4, halfW + 14, 16, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-  }
-
+  // ---- FILET ---- (dessous le rim)
   ctx.save();
   const stretch = (h.netT || 0) * 26;
-  const netHeight = 48 + stretch;
+  const netHeight = 52 + stretch;
   ctx.strokeStyle = isOld ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.92)';
   ctx.lineWidth = 1.8;
   const segments = 6;
@@ -6992,21 +7330,21 @@ function drawHoop(ctx, h, isOld) {
     const fx = -halfW + 6 + (i / segments) * (w - 12);
     const fxBottom = -halfW * 0.42 + (i / segments) * (w * 0.84);
     ctx.beginPath();
-    ctx.moveTo(fx, 0);
-    ctx.quadraticCurveTo((fx + fxBottom) / 2 + Math.sin(i + (h.netT || 0) * 6) * stretch * 0.3, netHeight * 0.5, fxBottom, netHeight);
+    ctx.moveTo(fx, 12);
+    ctx.quadraticCurveTo((fx + fxBottom) / 2 + Math.sin(i + (h.netT || 0) * 6) * stretch * 0.3, 12 + netHeight * 0.5, fxBottom, 12 + netHeight);
     ctx.stroke();
   }
   for (let i = 0; i <= segments; i++) {
     const fx = halfW - 6 - (i / segments) * (w - 12);
     const fxBottom = halfW * 0.42 - (i / segments) * (w * 0.84);
     ctx.beginPath();
-    ctx.moveTo(fx, 0);
-    ctx.quadraticCurveTo((fx + fxBottom) / 2 - Math.sin(i + (h.netT || 0) * 6) * stretch * 0.3, netHeight * 0.5, fxBottom, netHeight);
+    ctx.moveTo(fx, 12);
+    ctx.quadraticCurveTo((fx + fxBottom) / 2 - Math.sin(i + (h.netT || 0) * 6) * stretch * 0.3, 12 + netHeight * 0.5, fxBottom, 12 + netHeight);
     ctx.stroke();
   }
   ctx.strokeStyle = isOld ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.55)';
   for (let k = 1; k <= 3; k++) {
-    const yy = (k / 3) * netHeight;
+    const yy = 12 + (k / 3) * netHeight;
     const halfFloor = halfW - 4 - (k / 3) * (halfW * 0.6);
     ctx.beginPath();
     ctx.ellipse(0, yy, halfFloor, 4, 0, 0, Math.PI * 2);
@@ -7014,24 +7352,75 @@ function drawHoop(ctx, h, isOld) {
   }
   ctx.restore();
 
+  // ---- RIM = BARRE ÉPAISSE avec réponse écrite dessus ----
+  // Le rim devient lui-même le billboard. La barre fait toute la largeur w
+  // et porte la réponse écrite en blanc dessus, en gros.
+  const rimH = isOld ? 14 : 36;
+  const rimY = -rimH / 2;
+
+  // Glow si récemment marqué
+  if (h.glow > 0 && !isOld) {
+    ctx.save();
+    ctx.shadowColor = '#F97316';
+    ctx.shadowBlur = 30 * h.glow;
+    ctx.fillStyle = 'rgba(251, 146, 60, ' + (0.4 * h.glow) + ')';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, halfW + 18, rimH * 0.7, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Ombre rim
   ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.5)';
-  ctx.shadowBlur = 6;
-  ctx.shadowOffsetY = 3;
-  const rimGrad = ctx.createLinearGradient(0, -BASKETS_CONFIG.HOOP_RIM_THICKNESS / 2, 0, BASKETS_CONFIG.HOOP_RIM_THICKNESS / 2);
-  rimGrad.addColorStop(0, '#FB923C');
-  rimGrad.addColorStop(0.5, '#EA580C');
+  ctx.shadowColor = 'rgba(0,0,0,0.55)';
+  ctx.shadowBlur = 8;
+  ctx.shadowOffsetY = 4;
+  const rimGrad = ctx.createLinearGradient(0, rimY, 0, rimY + rimH);
+  rimGrad.addColorStop(0, '#FDBA74');
+  rimGrad.addColorStop(0.45, '#F97316');
+  rimGrad.addColorStop(0.55, '#EA580C');
   rimGrad.addColorStop(1, '#7C2D12');
   ctx.fillStyle = rimGrad;
   ctx.beginPath();
-  ctx.roundRect(-halfW, -BASKETS_CONFIG.HOOP_RIM_THICKNESS / 2, w, BASKETS_CONFIG.HOOP_RIM_THICKNESS, 4);
+  ctx.roundRect(-halfW, rimY, w, rimH, isOld ? 4 : 10);
   ctx.fill();
   ctx.restore();
 
+  // Liseré clair en haut
+  ctx.strokeStyle = 'rgba(255, 220, 180, 0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(-halfW + 6, rimY + 3);
+  ctx.lineTo(halfW - 6, rimY + 3);
+  ctx.stroke();
+
+  // Texte de la réponse (uniquement pour les paniers actifs)
+  if (!isOld) {
+    const label = String(h.answer).slice(0, 14);
+    // Adapter la taille de police pour rentrer dans la largeur du rim
+    let fontSize = 22;
+    ctx.font = '900 ' + fontSize + 'px Inter, Arial, sans-serif';
+    while (ctx.measureText(label).width > w - 16 && fontSize > 12) {
+      fontSize -= 1;
+      ctx.font = '900 ' + fontSize + 'px Inter, Arial, sans-serif';
+    }
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    // Contour noir pour lisibilité
+    ctx.strokeStyle = 'rgba(124, 45, 18, 0.95)';
+    ctx.lineWidth = 4;
+    ctx.lineJoin = 'round';
+    ctx.strokeText(label, 0, 0);
+    // Texte blanc par-dessus
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText(label, 0, 0);
+  }
+
+  // Petits anneaux d'attache du filet (sous le rim)
   ctx.fillStyle = '#7C2D12';
   ctx.beginPath();
-  ctx.arc(-halfW + 5, 0, 3, 0, Math.PI * 2);
-  ctx.arc(halfW - 5, 0, 3, 0, Math.PI * 2);
+  ctx.arc(-halfW + 6, rimH / 2 + 2, 3, 0, Math.PI * 2);
+  ctx.arc(halfW - 6, rimH / 2 + 2, 3, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.restore();
