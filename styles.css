@@ -1,0 +1,583 @@
+/* =====================================================================
+   PTS-Maths — styles custom (complémentaires à Tailwind)
+   ===================================================================== */
+
+html { scroll-behavior: smooth; }
+button, [role="button"], a { -webkit-tap-highlight-color: transparent; }
+
+::selection { background-color: rgba(91, 108, 255, 0.25); color: #0F172A; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(15, 23, 42, 0.15); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(15, 23, 42, 0.3); }
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Transitions douces entre écrans */
+.screen { transition: opacity 0.3s ease; }
+.screen.hidden { display: none !important; }
+
+/* Apparitions douces */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+#chapters-grid > * { animation: fadeInUp 0.45s ease-out backwards; }
+#chapters-grid > *:nth-child(1) { animation-delay: 0.05s; }
+#chapters-grid > *:nth-child(2) { animation-delay: 0.10s; }
+#chapters-grid > *:nth-child(3) { animation-delay: 0.15s; }
+#chapters-grid > *:nth-child(4) { animation-delay: 0.20s; }
+#chapters-grid > *:nth-child(5) { animation-delay: 0.25s; }
+#chapters-grid > *:nth-child(6) { animation-delay: 0.30s; }
+
+#chapter-content > * { animation: fadeInUp 0.45s ease-out backwards; }
+#chapter-content > *:nth-child(1) { animation-delay: 0.05s; }
+#chapter-content > *:nth-child(2) { animation-delay: 0.15s; }
+#chapter-content > *:nth-child(3) { animation-delay: 0.25s; }
+
+#shop-content > * { animation: fadeInUp 0.45s ease-out backwards; }
+#shop-content > *:nth-child(1) { animation-delay: 0.05s; }
+#shop-content > *:nth-child(2) { animation-delay: 0.10s; }
+#shop-content > *:nth-child(3) { animation-delay: 0.15s; }
+#shop-content > *:nth-child(4) { animation-delay: 0.20s; }
+#shop-content > *:nth-child(5) { animation-delay: 0.25s; }
+
+#studio-content > * { animation: fadeInUp 0.45s ease-out backwards; }
+#studio-content > *:nth-child(1) { animation-delay: 0.05s; }
+#studio-content > *:nth-child(2) { animation-delay: 0.10s; }
+#studio-content > *:nth-child(3) { animation-delay: 0.15s; }
+#studio-content > *:nth-child(4) { animation-delay: 0.20s; }
+
+#exercise-content > * { animation: fadeInUp 0.45s ease-out backwards; }
+#exercise-content > *:nth-child(1) { animation-delay: 0.05s; }
+#exercise-content > *:nth-child(2) { animation-delay: 0.15s; }
+#exercise-content > *:nth-child(3) { animation-delay: 0.25s; }
+#exercise-content > *:nth-child(4) { animation-delay: 0.35s; }
+
+/* Pulse rouge ou vert lors du feedback */
+@keyframes correctFlash {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+  100% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
+}
+@keyframes wrongShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+/* ===== ANIMATION SANS FAUTE ===== */
+@keyframes trophyBounce {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  25% { transform: translateY(-12px) rotate(-6deg); }
+  50% { transform: translateY(0) rotate(0); }
+  75% { transform: translateY(-12px) rotate(6deg); }
+}
+.animate-trophy { animation: trophyBounce 1.8s ease-in-out infinite; display: inline-block; }
+
+@keyframes heroPulse {
+  0%, 100% { box-shadow: 0 0 80px -10px rgba(251, 191, 36, 0.6); }
+  50% { box-shadow: 0 0 120px -10px rgba(251, 191, 36, 0.9); }
+}
+.perfect-hero { animation: heroPulse 2.4s ease-in-out infinite; }
+
+.perfect-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.perfect-stars span {
+  position: absolute;
+  font-size: 24px;
+  opacity: 0;
+  animation: starFloat 3s ease-out infinite;
+}
+.perfect-stars span:nth-child(1) { top: 10%; left: 10%;  animation-delay: 0.0s; }
+.perfect-stars span:nth-child(2) { top: 20%; right: 15%; animation-delay: 0.5s; }
+.perfect-stars span:nth-child(3) { bottom: 25%; left: 18%; animation-delay: 1.0s; }
+.perfect-stars span:nth-child(4) { top: 50%; right: 8%;  animation-delay: 1.5s; }
+.perfect-stars span:nth-child(5) { bottom: 15%; right: 22%; animation-delay: 2.0s; }
+.perfect-stars span:nth-child(6) { top: 35%; left: 22%; animation-delay: 2.5s; }
+@keyframes starFloat {
+  0%   { opacity: 0; transform: translateY(0) scale(0.6); }
+  40%  { opacity: 1; transform: translateY(-30px) scale(1); }
+  100% { opacity: 0; transform: translateY(-80px) scale(0.6); }
+}
+
+#property-content > * { animation: fadeInUp 0.45s ease-out backwards; }
+#property-content > *:nth-child(1) { animation-delay: 0.05s; }
+#property-content > *:nth-child(2) { animation-delay: 0.10s; }
+#property-content > *:nth-child(3) { animation-delay: 0.20s; }
+#property-content > *:nth-child(4) { animation-delay: 0.30s; }
+#property-content > *:nth-child(5) { animation-delay: 0.40s; }
+#property-content > *:nth-child(6) { animation-delay: 0.50s; }
+
+/* aspect-video utility (au cas où Tailwind CDN ne l'expose pas) */
+.aspect-video { aspect-ratio: 16 / 9; }
+
+/* Home — apparition des éléments */
+#home-screen > div > * { animation: fadeInUp 0.6s ease-out backwards; }
+#home-screen #home-streak { animation-delay: 0.05s; }
+#home-screen .w-20 { animation-delay: 0.15s; }
+#home-screen h1 { animation-delay: 0.25s; }
+#home-screen #home-title { animation-delay: 0.30s; }
+#home-screen #home-tagline { animation-delay: 0.35s; }
+#home-screen .grid { animation-delay: 0.45s; }
+#home-screen #home-cta { animation-delay: 0.55s; }
+#home-screen .mt-8 { animation-delay: 0.65s; }
+
+/* Bounce lent */
+@keyframes bounce-slow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.animate-bounce-slow { animation: bounce-slow 1.5s ease-in-out infinite; }
+
+/* Symboles flottants */
+.floating-symbols span {
+  position: absolute;
+  font-size: 84px;
+  font-weight: 800;
+  color: #4F46E5;
+  opacity: 0.06;
+  animation: float 8s ease-in-out infinite;
+  font-family: 'Inter', serif;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-30px) rotate(8deg); }
+}
+
+/* Pulse CTA */
+@keyframes ctaPulse {
+  0%, 100% { box-shadow: 0 0 60px -10px rgba(79, 70, 229, 0.5); }
+  50%      { box-shadow: 0 0 80px -10px rgba(79, 70, 229, 0.75); }
+}
+#home-cta { animation: ctaPulse 2.4s ease-in-out infinite; }
+
+/* Onboarding steps */
+.ob-step { animation: fadeInUp 0.4s ease-out; }
+
+/* =====================================================================
+   FONDS D'ÉCRAN — appliqués sur <body> (visible sur tous les écrans)
+   ===================================================================== */
+
+/* Default — Aurore */
+body[data-wallpaper="default"] {
+  background:
+    radial-gradient(circle at 25% 10%, rgba(91, 108, 255, 0.25), transparent 50%),
+    radial-gradient(circle at 75% 90%, rgba(236, 72, 153, 0.20), transparent 50%),
+    linear-gradient(180deg, #EEF0FF 0%, #FFFFFF 50%, #FDF2F8 100%);
+  background-attachment: fixed;
+}
+body[data-wallpaper="default"] .floating-symbols span { color: #4F46E5; }
+
+/* Minuit */
+body[data-wallpaper="midnight"] {
+  background:
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 60% 70%, white, transparent),
+    radial-gradient(1.5px 1.5px at 80% 20%, white, transparent),
+    radial-gradient(1px 1px at 30% 80%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 50% 40%, white, transparent),
+    radial-gradient(1.5px 1.5px at 10% 60%, white, transparent),
+    radial-gradient(1px 1px at 45% 15%, white, transparent),
+    linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #312E81 100%);
+  background-attachment: fixed;
+}
+body[data-wallpaper="midnight"] #home-screen h1,
+body[data-wallpaper="midnight"] #home-screen #home-tagline { color: #F1F5F9; }
+body[data-wallpaper="midnight"] #home-screen #home-name { color: #A4AFFF; }
+body[data-wallpaper="midnight"] #home-screen .floating-symbols span { color: #A4AFFF; opacity: 0.10; }
+
+/* Sunset */
+body[data-wallpaper="sunset"] {
+  background:
+    radial-gradient(circle at 70% 10%, rgba(251, 191, 36, 0.35), transparent 55%),
+    radial-gradient(circle at 30% 70%, rgba(236, 72, 153, 0.35), transparent 55%),
+    linear-gradient(160deg, #FED7AA 0%, #FBCFE8 45%, #DDD6FE 100%);
+  background-attachment: fixed;
+}
+body[data-wallpaper="sunset"] .floating-symbols span { color: #BE185D; opacity: 0.10; }
+
+/* Forêt */
+body[data-wallpaper="forest"] {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.30), transparent 55%),
+    radial-gradient(circle at 80% 80%, rgba(6, 95, 70, 0.30), transparent 55%),
+    linear-gradient(180deg, #D1FAE5 0%, #ECFDF5 50%, #F0FDF4 100%);
+  background-attachment: fixed;
+}
+body[data-wallpaper="forest"] .floating-symbols span { color: #047857; opacity: 0.10; }
+
+/* Fonds custom (image) — un voile blanc sur les écrans avec contenu pour la lisibilité */
+body[data-wallpaper^="custom-"] #dashboard-screen,
+body[data-wallpaper^="custom-"] #chapter-screen,
+body[data-wallpaper^="custom-"] #shop-screen,
+body[data-wallpaper^="custom-"] #studio-screen {
+  background: rgba(248, 250, 252, 0.85);
+  backdrop-filter: blur(2px);
+}
+
+/* Le mode Minuit sombre demande aussi un voile léger sur les écrans à cartes */
+body[data-wallpaper="midnight"] #dashboard-screen,
+body[data-wallpaper="midnight"] #chapter-screen,
+body[data-wallpaper="midnight"] #shop-screen,
+body[data-wallpaper="midnight"] #studio-screen {
+  background: rgba(248, 250, 252, 0.92);
+}
+
+/* Tous les autres écrans doivent être transparents pour laisser voir le wallpaper du body */
+#dashboard-screen, #chapter-screen, #shop-screen, #studio-screen {
+  background: transparent;
+}
+
+/* =====================================================================
+   PREVIEWS DES FONDS DANS LA BOUTIQUE
+   ===================================================================== */
+.wp-preview { border: 1px solid rgba(15, 23, 42, 0.06); }
+.wp-default {
+  background:
+    radial-gradient(circle at 30% 30%, rgba(91, 108, 255, 0.35), transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(236, 72, 153, 0.30), transparent 50%),
+    linear-gradient(180deg, #EEF0FF 0%, #FDF2F8 100%);
+}
+.wp-midnight {
+  background:
+    radial-gradient(1px 1px at 30% 40%, white, transparent),
+    radial-gradient(1px 1px at 70% 60%, white, transparent),
+    radial-gradient(1.5px 1.5px at 50% 20%, white, transparent),
+    linear-gradient(135deg, #0F172A 0%, #312E81 100%);
+}
+.wp-sunset {
+  background:
+    radial-gradient(circle at 70% 10%, rgba(251, 191, 36, 0.50), transparent 55%),
+    radial-gradient(circle at 30% 70%, rgba(236, 72, 153, 0.50), transparent 55%),
+    linear-gradient(160deg, #FED7AA 0%, #FBCFE8 50%, #DDD6FE 100%);
+}
+.wp-forest {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.45), transparent 55%),
+    radial-gradient(circle at 80% 80%, rgba(6, 95, 70, 0.45), transparent 55%),
+    linear-gradient(180deg, #D1FAE5 0%, #F0FDF4 100%);
+}
+
+/* =====================================================================
+   MODE SOMBRE — appliqué via body[data-theme="dark"]
+   Override des classes Tailwind utilisées dans le projet.
+   ===================================================================== */
+
+body[data-theme="dark"] {
+  color-scheme: dark;
+  color: #E2E8F0;
+}
+
+/* Body background dark uniforme — sauf wallpaper image custom ou Minuit */
+body[data-theme="dark"][data-wallpaper="default"],
+body[data-theme="dark"][data-wallpaper="sunset"],
+body[data-theme="dark"][data-wallpaper="forest"] {
+  background: linear-gradient(180deg, #0F172A 0%, #1E1B4B 100%) !important;
+}
+
+/* Surfaces blanches → slate-800 */
+body[data-theme="dark"] .bg-white { background-color: #1E293B !important; }
+
+/* Sticky headers (bg-white/80) */
+body[data-theme="dark"] header.bg-white\/80,
+body[data-theme="dark"] .bg-white\/80 { background-color: rgba(15, 23, 42, 0.85) !important; }
+
+/* Voiles des écrans à cartes sous wallpaper Minuit / custom */
+body[data-theme="dark"][data-wallpaper="midnight"] #dashboard-screen,
+body[data-theme="dark"][data-wallpaper="midnight"] #chapter-screen,
+body[data-theme="dark"][data-wallpaper="midnight"] #shop-screen,
+body[data-theme="dark"][data-wallpaper="midnight"] #studio-screen,
+body[data-theme="dark"][data-wallpaper="midnight"] #property-screen,
+body[data-theme="dark"][data-wallpaper^="custom-"] #dashboard-screen,
+body[data-theme="dark"][data-wallpaper^="custom-"] #chapter-screen,
+body[data-theme="dark"][data-wallpaper^="custom-"] #shop-screen,
+body[data-theme="dark"][data-wallpaper^="custom-"] #studio-screen,
+body[data-theme="dark"][data-wallpaper^="custom-"] #property-screen {
+  background: rgba(15, 23, 42, 0.85) !important;
+}
+
+/* Fonds gris clairs → slate plus sombres */
+body[data-theme="dark"] .bg-slate-50 { background-color: #0F172A !important; }
+body[data-theme="dark"] .bg-slate-100 { background-color: #334155 !important; }
+
+/* Couleurs douces des cartes pastel — on sombrifie */
+body[data-theme="dark"] .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.15) !important; }
+body[data-theme="dark"] .bg-orange-50  { background-color: rgba(245, 158, 11, 0.15) !important; }
+body[data-theme="dark"] .bg-brand-50   { background-color: rgba(91, 108, 255, 0.18) !important; }
+body[data-theme="dark"] .bg-pink-50    { background-color: rgba(236, 72, 153, 0.15) !important; }
+body[data-theme="dark"] .bg-purple-50  { background-color: rgba(168, 85, 247, 0.15) !important; }
+body[data-theme="dark"] .bg-amber-50   { background-color: rgba(245, 158, 11, 0.15) !important; }
+body[data-theme="dark"] .bg-emerald-100 { background-color: rgba(16, 185, 129, 0.25) !important; }
+body[data-theme="dark"] .bg-amber-100  { background-color: rgba(245, 158, 11, 0.25) !important; }
+body[data-theme="dark"] .bg-slate-200  { background-color: #475569 !important; }
+body[data-theme="dark"] .bg-pink-100   { background-color: rgba(236, 72, 153, 0.25) !important; }
+body[data-theme="dark"] .bg-brand-100  { background-color: rgba(91, 108, 255, 0.25) !important; }
+body[data-theme="dark"] .bg-purple-100 { background-color: rgba(168, 85, 247, 0.25) !important; }
+
+/* Gradients pastel des previews boutique */
+body[data-theme="dark"] .from-slate-50.to-white { background: linear-gradient(to bottom right, #1E293B, #334155) !important; }
+body[data-theme="dark"] .from-amber-50.to-orange-50 { background: linear-gradient(to bottom right, rgba(245,158,11,0.15), rgba(249,115,22,0.15)) !important; }
+body[data-theme="dark"] .from-pink-50.to-rose-50 { background: linear-gradient(to bottom right, rgba(236,72,153,0.15), rgba(244,63,94,0.15)) !important; }
+body[data-theme="dark"] .from-purple-50.via-pink-50.to-amber-50 { background: linear-gradient(to bottom right, rgba(168,85,247,0.18), rgba(236,72,153,0.18), rgba(245,158,11,0.18)) !important; }
+body[data-theme="dark"] .from-purple-100.via-pink-100.to-amber-100 { background: linear-gradient(to bottom right, rgba(168,85,247,0.25), rgba(236,72,153,0.25), rgba(245,158,11,0.25)) !important; }
+
+/* Voile sombre derrière modales */
+body[data-theme="dark"] .bg-ink\/50 { background-color: rgba(0, 0, 0, 0.7) !important; }
+
+/* Textes — du sombre vers le clair */
+body[data-theme="dark"] .text-ink        { color: #F1F5F9 !important; }
+body[data-theme="dark"] .text-slate-700  { color: #CBD5E1 !important; }
+body[data-theme="dark"] .text-slate-600  { color: #94A3B8 !important; }
+body[data-theme="dark"] .text-slate-500  { color: #94A3B8 !important; }
+body[data-theme="dark"] .text-slate-400  { color: #64748B !important; }
+body[data-theme="dark"] .text-slate-300  { color: #475569 !important; }
+
+/* Textes colorés — on garde mais on éclaircit un peu pour le contraste */
+body[data-theme="dark"] .text-brand-600  { color: #A4AFFF !important; }
+body[data-theme="dark"] .text-brand-700  { color: #C7CFFF !important; }
+body[data-theme="dark"] .text-emerald-700 { color: #6EE7B7 !important; }
+body[data-theme="dark"] .text-amber-700  { color: #FCD34D !important; }
+body[data-theme="dark"] .text-orange-700 { color: #FDBA74 !important; }
+body[data-theme="dark"] .text-orange-600 { color: #FB923C !important; }
+body[data-theme="dark"] .text-pink-700   { color: #F9A8D4 !important; }
+body[data-theme="dark"] .text-purple-700 { color: #C4B5FD !important; }
+
+/* Bordures */
+body[data-theme="dark"] .border-slate-100,
+body[data-theme="dark"] .border-slate-200 { border-color: #334155 !important; }
+body[data-theme="dark"] .border-orange-200 { border-color: rgba(249,115,22,0.4) !important; }
+body[data-theme="dark"] .border-emerald-200 { border-color: rgba(16,185,129,0.4) !important; }
+body[data-theme="dark"] .border-brand-200  { border-color: rgba(91,108,255,0.4) !important; }
+body[data-theme="dark"] .border-amber-200  { border-color: rgba(245,158,11,0.4) !important; }
+body[data-theme="dark"] .border-purple-100 { border-color: rgba(168,85,247,0.3) !important; }
+body[data-theme="dark"] .border-red-200    { border-color: rgba(239,68,68,0.4) !important; }
+
+/* Inputs / textarea */
+body[data-theme="dark"] input,
+body[data-theme="dark"] textarea {
+  background-color: #1E293B !important;
+  color: #F1F5F9 !important;
+  border-color: #475569 !important;
+}
+body[data-theme="dark"] input::placeholder,
+body[data-theme="dark"] textarea::placeholder { color: #64748B !important; }
+body[data-theme="dark"] input:focus,
+body[data-theme="dark"] textarea:focus { border-color: #7B85FF !important; }
+
+/* Badge titre sur home */
+body[data-theme="dark"] .home-title-badge {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Floating symbols (mode dark) */
+body[data-theme="dark"] .floating-symbols span { color: #A4AFFF; opacity: 0.10; }
+
+/* Scrollbar dark */
+body[data-theme="dark"] ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); }
+body[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
+
+/* Selection */
+body[data-theme="dark"] ::selection { background-color: rgba(164, 175, 255, 0.35); color: #F1F5F9; }
+
+/* Hover sur cartes en dark — un peu plus subtil */
+body[data-theme="dark"] .hover\:bg-slate-100:hover { background-color: #334155 !important; }
+body[data-theme="dark"] .hover\:bg-slate-50:hover  { background-color: #1E293B !important; }
+body[data-theme="dark"] .hover\:bg-brand-50:hover  { background-color: rgba(91, 108, 255, 0.18) !important; }
+
+/* ===== Dark mode — célébrations & gradients vibrants ===== */
+/* On assombrit légèrement les gros gradients de célébration pour ne pas brûler les yeux la nuit */
+body[data-theme="dark"] .perfect-hero,
+body[data-theme="dark"] section.bg-gradient-to-br.from-amber-400,
+body[data-theme="dark"] section.bg-gradient-to-br.from-brand-500,
+body[data-theme="dark"] section.bg-gradient-to-br.from-emerald-500,
+body[data-theme="dark"] section.bg-gradient-to-br.from-orange-400 {
+  filter: brightness(0.82) saturate(0.95);
+}
+
+/* Boutons blancs DANS les célébrations dorées : on les laisse blancs (lisibilité sur fond doré) */
+body[data-theme="dark"] section.bg-gradient-to-br.from-amber-400 .bg-white,
+body[data-theme="dark"] section.bg-gradient-to-br.from-brand-500 .bg-white,
+body[data-theme="dark"] section.bg-gradient-to-br.from-emerald-500 .bg-white,
+body[data-theme="dark"] section.bg-gradient-to-br.from-orange-400 .bg-white,
+body[data-theme="dark"] .perfect-hero .bg-white {
+  background-color: #FFFFFF !important;
+}
+
+/* Texte amber-600 sur boutons blancs des célébrations : on garde le doré sombre */
+body[data-theme="dark"] section.bg-gradient-to-br.from-amber-400 .text-amber-600,
+body[data-theme="dark"] .perfect-hero .text-amber-600 {
+  color: #D97706 !important;
+}
+body[data-theme="dark"] section.bg-gradient-to-br.from-brand-500 .text-brand-600 {
+  color: #4F46E5 !important;
+}
+
+/* Cartes blanches DANS l'écran de failure (orange) — voile sombre pour cohérence */
+body[data-theme="dark"] section.space-y-2 .bg-white,
+body[data-theme="dark"] .bg-orange-200 + .bg-white { background-color: #1E293B !important; }
+
+/* =====================================================================
+   SPRINT MATHÉMATIQUE — animations route + voiture
+   ===================================================================== */
+
+#racing-screen {
+  background: linear-gradient(to bottom, #93C5FD 0%, #BFDBFE 50%, #78716C 50%, #57534E 100%);
+}
+
+.race-road {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) perspective(400px) rotateX(35deg);
+  width: 300%;
+  height: 60vh;
+  background:
+    linear-gradient(to bottom, transparent 0%, #44403C 10%, #292524 100%);
+  z-index: 1;
+}
+
+.race-road-line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) perspective(400px) rotateX(35deg);
+  width: 8px;
+  height: 60vh;
+  background: repeating-linear-gradient(
+    to bottom,
+    #FBBF24 0,
+    #FBBF24 30px,
+    transparent 30px,
+    transparent 60px
+  );
+  animation: roadScroll 0.6s linear infinite;
+  z-index: 2;
+}
+
+#racing-screen.boost .race-road-line {
+  animation-duration: 0.2s;
+}
+
+@keyframes roadScroll {
+  from { background-position: 0 0; }
+  to { background-position: 0 60px; }
+}
+
+.race-car {
+  position: absolute;
+  bottom: 28vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  animation: carBob 0.4s ease-in-out infinite alternate;
+  filter: drop-shadow(0 8px 12px rgba(0,0,0,0.4));
+}
+
+@keyframes carBob {
+  from { transform: translateX(-50%) translateY(0); }
+  to { transform: translateX(-50%) translateY(-3px); }
+}
+
+#racing-screen.boost .race-car {
+  animation: carBoost 0.4s ease-out;
+}
+
+@keyframes carBoost {
+  0% { transform: translateX(-50%) translateY(0) scale(1); }
+  50% { transform: translateX(-50%) translateY(-12px) scale(1.05); filter: drop-shadow(0 16px 16px rgba(0,0,0,0.5)) brightness(1.15); }
+  100% { transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+/* Input shake si input invalide */
+@keyframes inputShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+.shake-input {
+  animation: inputShake 0.4s ease-in-out;
+  border-color: #EF4444 !important;
+}
+
+/* Lignes de vitesse sur les côtés */
+#racing-screen::before,
+#racing-screen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 5;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 40px,
+    rgba(255,255,255,0.3) 40px,
+    rgba(255,255,255,0.3) 50px
+  );
+  animation: speedLines 0.4s linear infinite;
+}
+#racing-screen::before { left: 0; }
+#racing-screen::after { right: 0; }
+#racing-screen.boost::before,
+#racing-screen.boost::after { animation-duration: 0.15s; }
+
+@keyframes speedLines {
+  from { background-position: 0 0; }
+  to { background-position: 0 50px; }
+}
+
+/* Dark mode racing — un peu plus sombre */
+body[data-theme="dark"] #racing-screen {
+  background: linear-gradient(to bottom, #1E3A8A 0%, #1E40AF 50%, #1C1917 50%, #0C0A09 100%);
+}
+body[data-theme="dark"] .race-road {
+  background: linear-gradient(to bottom, transparent 0%, #1C1917 10%, #0C0A09 100%);
+}
+
+/* Bloc IA Gemini feedback en dark */
+body[data-theme="dark"] .from-purple-50.via-pink-50.to-amber-50 {
+  background: linear-gradient(to bottom right, rgba(168,85,247,0.18), rgba(236,72,153,0.18), rgba(245,158,11,0.18)) !important;
+}
+
+/* Gradient text — préserver lisibilité en dark */
+body[data-theme="dark"] .bg-clip-text.text-transparent {
+  filter: brightness(1.4);
+}
+
+/* =====================================================================
+   TITRES COLORÉS
+   ===================================================================== */
+.home-title-badge {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  margin-top: 0.5rem;
+}
+body[data-wallpaper="midnight"] .home-title-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+}
