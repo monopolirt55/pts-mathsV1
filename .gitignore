@@ -1,0 +1,20 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs / temp
+*.log
+.cache/
+node_modules/
+
+# Fichiers de transfert internes
+PROJECT_STATE.md.bak
+HANDOVER.md.bak
